@@ -14,12 +14,10 @@ Title::~Title()
 
 void Title::start()
 {
-	utility::debugLog("Tittle: start");
 	addEntity(std::make_shared<Entity>("test", "test"))
 		->addComponent(std::make_shared<TestComponent>());
 }
 
 void Title::end()
 {
-	utility::debugLog("Tittle: end");
 }

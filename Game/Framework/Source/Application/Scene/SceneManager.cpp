@@ -9,11 +9,9 @@ std::unordered_map<std::string, std::unique_ptr<AScene>> SceneManager::m_Scenes 
 
 void SceneManager::Change(const std::string & next)
 {
-	utility::debugLog("change1");
 	if (!m_CurrentName.empty())m_Scenes[m_CurrentName]->end();
 	m_CurrentName = next;
 	m_Scenes[m_CurrentName]->start();
-	utility::debugLog("change2");
 }
 
 void SceneManager::Add(std::unique_ptr<AScene> scene)
@@ -23,12 +21,10 @@ void SceneManager::Add(std::unique_ptr<AScene> scene)
 
 void SceneManager::AddRemoveEntity(const std::weak_ptr<Entity>& entity)
 {
-	utility::debugLog("SceneManager::addRemoveEntity");
 	m_Scenes[m_CurrentName]->addRemoveEntity(entity);
 }
 
 void SceneManager::RemoveEntity()
 {
-	utility::debugLog("SceneManager::removeEntity");
 	m_Scenes[m_CurrentName]->removeEntity();
 }

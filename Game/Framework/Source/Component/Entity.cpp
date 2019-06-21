@@ -15,12 +15,10 @@ Entity::Entity(const std::string & tag, const std::string & name)
 
 Entity::~Entity()
 {
-	utility::debugLog("Entity::~Entity");
 }
 
 Entity* Entity::addComponent(const std::shared_ptr<AComponent>& component)
 {
-	utility::debugLog("addComponent");
 	m_Components.emplace_back(component);
 	component->setEntity(shared_from_this());
 	component->setTask(component);

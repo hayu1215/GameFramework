@@ -51,7 +51,7 @@ bool Application::init()
 	ResourceManager::Create();
 
 	ResourceManager::Instance().loadShader<TextureShader>("Texture.hlsl");
-	ResourceManager::Instance().loadTexture("blue.png");
+	//ResourceManager::Instance().loadTexture("blue.png");
 	//ResourceManager::Instance().loadTexture("red.png");
 
 	TaskManager::Create();
@@ -66,7 +66,6 @@ bool Application::init()
 void Application::run(HINSTANCE hInstance)
 {
 	m_hInstance = hInstance;
-	//if (!init())return;
 	ShowWindow(m_hWnd, SW_SHOW);
 	UpdateWindow(m_hWnd);
 

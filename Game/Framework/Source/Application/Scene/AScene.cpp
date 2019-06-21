@@ -20,9 +20,7 @@ Entity * AScene::addEntity(std::shared_ptr<Entity>entitiy)
 
 void AScene::addRemoveEntity(const std::weak_ptr<Entity>& removeEntity)
 {
-	utility::debugLog("addRemoveEntity1");
 	m_RemoveEntities.emplace_back(removeEntity);
-	utility::debugLog("addRemoveEntity2");
 }
 
 void AScene::removeEntity()
