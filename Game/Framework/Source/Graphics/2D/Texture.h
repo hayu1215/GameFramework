@@ -4,6 +4,7 @@
 #include<wrl/client.h>
 #include<string>
 #include<Framework/Source/Device/D3d11.h>
+#include<Framework/Source/Utility/Math/Vector2.h>
 
 using namespace Microsoft::WRL;
 
@@ -14,7 +15,8 @@ public:
 	Texture(const std::string&);
 	~Texture();
 
-	std::pair<float, float> getSize();
+	//std::pair<float, float> getSize();
+	Vector2 getSize();
 	ComPtr<ID3D11ShaderResourceView> getShaderResourceView();
 
 private:

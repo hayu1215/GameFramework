@@ -1,19 +1,16 @@
-#include"Spritebatch.h"
+#include "Spritebatch.h"
 #include<algorithm>
 #include<Framework/Source/Device/D3d11.h>
-#include<Framework/Source/Application/Resource/ResourceManager.h>
 #include<Framework/Source/Utility/Judge.h>
+#include<Framework/Source/Application/Resource/ResourceManager.h>
 #include<Framework/Source/Utility/Constant.h>
 
 Spritebatch::Spritebatch()
 {
-	createVertexBuffer();
 }
 
-Spritebatch::Spritebatch(std::shared_ptr<Camera>camera) :
-	m_pCamera(camera)
+Spritebatch::Spritebatch(std::shared_ptr<Camera>)
 {
-	createVertexBuffer();
 }
 
 Spritebatch::~Spritebatch()
@@ -22,111 +19,17 @@ Spritebatch::~Spritebatch()
 
 void Spritebatch::begin()
 {
-	begin(SortMode::Deferred);
 }
 
-void Spritebatch::begin(const SortMode &sortMode)
+void Spritebatch::begin(const SortMode & sortMode)
 {
-	begin(sortMode, false);
+	m_SortMode = sortMode;
 }
 
-void Spritebatch::begin(const SortMode & sortMode, bool isUI)
+void Spritebatch::end(const std::string& shaderName)
 {
-	m_CurrentMode = sortMode;
-	m_IsUI = isUI;
-
-	D3d11::Instance().getDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-
-	//バーテックスバッファーをセット
-	UINT stride = sizeof(TextureVertex);
-	UINT offset = 0;
-	D3d11::Instance().getDeviceContext()->IASetVertexBuffers(0, 1, m_pVertexBuffer.GetAddressOf(), &stride, &offset);
-}
-
-void Spritebatch::end()
-{
-	if (m_DrawTextures.empty())return;
-
-	switch (m_CurrentMode)
-	{
-	case SortMode::Deferred:
-		deferredEnd();
-		break;
-	case SortMode::Texture:
-		textureEnd();
-		break;
-	case SortMode::BackToFront:
-		backToFrontEnd();
-		break;
-	case SortMode::FrontToBack:
-		frontToBackEnd();
-		break;
-	default:
-		break;
-	}
-	clearDrawList();
-}
-
-#pragma region draw
-
-void Spritebatch::draw(std::string textureName, Vector3 position)
-{
-	TextureInfo info;
-	info.textureName = textureName;
-	info.position = position;
-	m_DrawTextures.push_back(info);
-}
-
-void Spritebatch::draw(std::string textureName, Vector3 position, Vector4 color)
-{
-	TextureInfo info;
-	info.textureName = textureName;
-	info.position = position;
-	info.color = color;
-	m_DrawTextures.push_back(info);
-}
-
-void Spritebatch::draw(std::string textureName, Vector3 position, Vector4 uv, Vector4 color)
-{
-	TextureInfo info;
-	info.textureName = textureName;
-	info.position = position;
-	info.uv = uv;
-	info.color = color;
-	m_DrawTextures.push_back(info);
-}
-
-void Spritebatch::draw(std::string textureName, Vector3 position, Vector2 scale, Vector4 color)
-{
-	TextureInfo info;
-	info.textureName = textureName;
-	info.position = position;
-	info.scale = scale;
-	info.color = color;
-	m_DrawTextures.push_back(info);
-}
-
-void Spritebatch::draw(std::string textureName, Vector3 position, float angle, Vector2 orgin, Vector4 color)
-{
-	TextureInfo info;
-	info.textureName = textureName;
-	info.position = position;
-	info.angle = angle;
-	info.orgin = orgin;
-	info.color = color;
-	m_DrawTextures.push_back(info);
-}
-
-void Spritebatch::draw(std::string textureName, Vector3 position, Vector2 scale, float angle, Vector2 orgin, Vector4 color)
-{
-	TextureInfo info;
-	info.textureName = textureName;
-	info.position = position;
-	info.scale = scale;
-	info.angle = angle;
-	info.orgin = orgin;
-	info.color = color;
-	m_DrawTextures.push_back(info);
+	setInfo(shaderName);
+	flushBatch();
 }
 
 void Spritebatch::draw(std::string textureName, Vector3 position, Vector2 scale, float angle, Vector2 orgin, Vector4 uv, Vector4 color)
@@ -142,150 +45,295 @@ void Spritebatch::draw(std::string textureName, Vector3 position, Vector2 scale,
 	m_DrawTextures.push_back(info);
 }
 
-#pragma endregion
-
-void Spritebatch::setCamera(std::shared_ptr<Camera> camera)
-{
-	m_pCamera = camera;
-}
-
-void Spritebatch::clearDrawList()
-{
-	//m_AlphaDrawTextures.clear();
-	m_DrawTextures.clear();
-}
-
 void Spritebatch::createVertexBuffer()
 {
-	float halfw = 0.5f;
-	float halfh = 0.5f;
-	TextureVertex vertices[] =
-	{
-		Vector3(-halfw,halfh,0),Vector2(0,0),//頂点1,
-		Vector3(halfw,halfh,0), Vector2(1,0),//頂点2
-		Vector3(-halfw,-halfh,0),Vector2(0,1), //頂点3
-		Vector3(halfw,-halfh,0),Vector2(1,1), //頂点4
-	};
-
 	//バーテックスバッファーの宣言
 	D3D11_BUFFER_DESC bd;
 
 	//バーテックスバッファーの定義
-	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(TextureVertex) * 4;
+	bd.Usage = D3D11_USAGE_DYNAMIC;
+	bd.ByteWidth = sizeof(TextureVertex) * MAX_BATCH_SIZE * VERTICES_SPRITE;
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bd.CPUAccessFlags = 0;
-	bd.MiscFlags = 0;
+	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	//bd.MiscFlags = 0;
 
-	//頂点バッファのサブリソースの定義
-	D3D11_SUBRESOURCE_DATA initData;
-	initData.pSysMem = vertices;
-
-	HRESULT result = D3d11::Instance().getDevice()->CreateBuffer(&bd, &initData, m_pVertexBuffer.GetAddressOf());
+	HRESULT result = D3d11::Instance().getDevice()->CreateBuffer(&bd, nullptr, m_pVertexBuffer.GetAddressOf());
 	utility::checkError(result, "バーテックスバッファーの作成失敗");
 }
 
-void Spritebatch::deferredEnd()
+void Spritebatch::createIndexBuffer()
 {
-	for (const auto& e : m_DrawTextures) {
-		setInfo(e.textureName, e.shaderName);
-		draw(e);
-	}
+	D3D11_BUFFER_DESC bd;
+	bd.ByteWidth = sizeof(short) * MAX_BATCH_SIZE * INDICES_SPRITE;
+	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	bd.Usage = D3D11_USAGE_DEFAULT;
+
+	auto indexValues = createIndexValue();//直接書いてもよさそうだけどとりあえずこれ
+
+	D3D11_SUBRESOURCE_DATA indexDataDesc;
+	indexDataDesc.pSysMem = indexValues.data();
+	D3d11::Instance().getDevice()->CreateBuffer(&bd, &indexDataDesc, m_pIndexBuffer.GetAddressOf());
 }
 
-void Spritebatch::textureEnd()
+void Spritebatch::createConstantBuffer()
 {
-	setInfo(m_DrawTextures[0].textureName, m_DrawTextures[0].shaderName);
-	//最初に登録した情報（画像、シェーダー）ですべて描画する
-	for (const auto& e : m_DrawTextures) {
-		draw(e);
-	}
+	//コンスタントバッファー作成
+	D3D11_BUFFER_DESC bd;
+	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bd.ByteWidth = sizeof(Matrix4);
+	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	bd.MiscFlags = 0;
+	bd.StructureByteStride = 0;
+	bd.Usage = D3D11_USAGE_DEFAULT;
+
+	HRESULT result = D3d11::Instance().getDevice()->CreateBuffer(&bd, nullptr, m_pConstantBuffer.GetAddressOf());
+	if (utility::checkError(result, "コンスタントバッファー作成失敗"));
 }
 
-void Spritebatch::backToFrontEnd()
+std::vector<short> Spritebatch::createIndexValue()
 {
-	auto action = [](const TextureInfo& t1, const TextureInfo&t2)
+	std::vector<short> indices;
+
+	indices.reserve(MAX_BATCH_SIZE * INDICES_SPRITE);
+
+	for (size_t j = 0; j < MAX_BATCH_SIZE * VERTICES_SPRITE; j += VERTICES_SPRITE)
 	{
-		return t1 > t2;
-	};
-	std::sort(m_DrawTextures.begin(), m_DrawTextures.end(), action);
-	for (const auto& e : m_DrawTextures) {
-		setInfo(e.textureName, e.shaderName);
-		draw(e);
+		short i = static_cast<short>(j);
+
+		indices.push_back(i);
+		indices.push_back(i + 1);
+		indices.push_back(i + 2);
+
+		indices.push_back(i + 1);
+		indices.push_back(i + 3);
+		indices.push_back(i + 2);
 	}
+
+	return indices;
 }
 
-void Spritebatch::frontToBackEnd()
+void Spritebatch::setInfo(const std::string& shaderName)
 {
-	auto action = [](const TextureInfo& t1, const TextureInfo&t2)
-	{
-		return t1 < t2;
-	};
-	std::sort(m_DrawTextures.begin(), m_DrawTextures.end(), action);
-	for (const auto& e : m_DrawTextures) {
-		setInfo(e.textureName, e.shaderName);
-		draw(e);
-	}
-}
+	auto deviceContext = D3d11::Instance().getDeviceContext();
 
-void Spritebatch::setInfo(const std::string textureName, const std::string shaderName)
-{
 	//頂点インプットレイアウトをセット
-	D3d11::Instance().getDeviceContext()->IASetInputLayout(ResourceManager::Instance().findShader(shaderName)->getInputLayout().Get());
+	deviceContext->IASetInputLayout(ResourceManager::Instance().findShader(shaderName)->getInputLayout().Get());
 
 	//使用するシェーダーの登録
-	D3d11::Instance().getDeviceContext()->VSSetShader(ResourceManager::Instance().findShader(shaderName)->getVertexShader().Get(), NULL, 0);
-	D3d11::Instance().getDeviceContext()->PSSetShader(ResourceManager::Instance().findShader(shaderName)->getPixelShader().Get(), NULL, 0);
+	deviceContext->VSSetShader(ResourceManager::Instance().findShader(shaderName)->getVertexShader().Get(), nullptr, 0);
+	deviceContext->PSSetShader(ResourceManager::Instance().findShader(shaderName)->getPixelShader().Get(), nullptr, 0);
 
-	D3d11::Instance().getDeviceContext()->VSSetConstantBuffers(0, 1, ResourceManager::Instance().findShader(shaderName)->getConstantBuffer().GetAddressOf());
-	D3d11::Instance().getDeviceContext()->PSSetConstantBuffers(0, 1, ResourceManager::Instance().findShader(shaderName)->getConstantBuffer().GetAddressOf());
+	//コンスタントバッファに関しては違う処理が必要かも
+	//deviceContext->UpdateSubresource()
+	deviceContext->VSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
+	deviceContext->PSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
+	//deviceContext->VSSetConstantBuffers(0, 1, ResourceManager::Instance().findShader(shaderName)->getConstantBuffer().GetAddressOf());
+	//deviceContext->PSSetConstantBuffers(0, 1, ResourceManager::Instance().findShader(shaderName)->getConstantBuffer().GetAddressOf());
 
 	//テクスチャーをシェーダーに渡す
-	D3d11::Instance().getDeviceContext()->PSSetSamplers(0, 1, ResourceManager::Instance().findShader(shaderName)->getSamplerState().GetAddressOf());
+	deviceContext->PSSetSamplers(0, 1, ResourceManager::Instance().findShader(shaderName)->getSamplerState().GetAddressOf());
 
-	ID3D11ShaderResourceView* srv = ResourceManager::Instance().findTexture(textureName)->getShaderResourceView().Get();
-	D3d11::Instance().getDeviceContext()->PSSetShaderResources(0, 1, &srv);
+	//バーテックスバッファーをセット
+	UINT stride = sizeof(TextureVertex);
+	UINT offset = 0;
+	deviceContext->IASetVertexBuffers(0, 1, m_pVertexBuffer.GetAddressOf(), &stride, &offset);
+
+	//インデックスバッファをセット
+	deviceContext->IASetIndexBuffer(m_pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+
+	//カスタムシェーダよぶならここ
 }
 
-void Spritebatch::draw(const TextureInfo &info)
+void Spritebatch::flushBatch()
 {
-	Matrix4 mView = m_pCamera.lock()->getView();
-	if (m_IsUI)mView = Matrix4::identity;
+	if (m_DrawTextures.empty())return;
+	sortSprites();
+	std::string batchTextureName = "";
+	unsigned int batchStart = 0;
 
-	//元の頂点のZの値が0未満か1より大きいと、カメラ空間の外にあると判断される
-    // プロジェクショントランスフォーム（射影変換）
-	Matrix4 mProj = {
-		2.0f / (float)(WINDOW_WIDTH), 0.0f, 0.0f, 0.0f,
-		0.0f, 2.0f / (float)(WINDOW_HEIGHT), 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f
+	//一週目素通り　もう少しきれいなループにしたい、
+	for (unsigned int pos = 0; pos < m_DrawTextures.size(); pos++)
+	{
+		std::string textureName = m_SortTextures[pos]->textureName;
+
+		if (textureName != batchTextureName)
+		{
+			if (pos > batchStart)
+			{
+				renderBatch(m_SortTextures[batchStart], pos - batchStart);
+			}
+
+			batchTextureName = textureName;
+			batchStart = pos;
+		}
+	}
+
+	renderBatch(m_SortTextures[batchStart], m_DrawTextures.size() - batchStart);
+
+	m_DrawTextures.clear();
+	m_SortTextures.clear();
+}
+
+void Spritebatch::sortSprites()
+{
+	growSortSprites();
+
+	switch (m_SortMode)
+	{
+	case SortMode::Texture:
+		std::sort(m_SortTextures.begin(), m_SortTextures.end(),
+			[](TextureInfo const* x, TextureInfo const* y) -> bool
+			{
+				return x->textureName < y->textureName;
+			});
+		break;
+
+	case SortMode::BackToFront:
+		std::sort(m_SortTextures.begin(), m_SortTextures.end(),
+			[](TextureInfo const* x, TextureInfo const* y) -> bool
+		{
+			return x->position.z > y->position.z;
+		});
+		break;
+
+	case SortMode::FrontToBack:
+		std::sort(m_SortTextures.begin(), m_SortTextures.end(),
+			[](TextureInfo const* x, TextureInfo const* y) -> bool
+		{
+			return x->position.z < y->position.z;
+		});
+		break;
+
+	default:
+		break;
+	}
+}
+
+void Spritebatch::growSortSprites()
+{
+	unsigned int size = m_SortTextures.size();
+	m_SortTextures.resize(size);
+
+	for (unsigned int i = 0; i < size; i++)
+	{
+		m_SortTextures[i] = &m_DrawTextures[i];
+	}
+}
+
+void Spritebatch::renderBatch(TextureInfo* info, unsigned int count)
+{
+	ID3D11ShaderResourceView* texture = ResourceManager::Instance().findTexture((*info).textureName)->getShaderResourceView().Get();
+	auto deviceContext = D3d11::Instance().getDeviceContext();
+	deviceContext->PSSetShaderResources(0, 1, &texture);
+
+	while (count > 0)
+	{
+		//vertexBufferPosition調べる
+		unsigned int batchSize = count;
+
+		unsigned int remainingSpace = MAX_BATCH_SIZE - m_VertexBufferPos;
+
+		Vector2 textureSize = ResourceManager::Instance().findTexture(info->textureName)->getSize();
+
+		if (batchSize > remainingSpace)
+		{
+			if (remainingSpace < MIN_BATCH_SIZE)
+			{
+				//余裕がない場合、または過度に小さいバッチを送信しようとしている場合は、頂点バッファの先頭に戻ります。
+				m_VertexBufferPos = 0;
+
+				batchSize = std::min<unsigned int>(count, MAX_BATCH_SIZE);
+			}
+			else
+			{
+				batchSize = remainingSpace;
+			}
+		}
+
+
+		//D3D11_MAP mapType = (m_VertexBufferPos == 0) ? D3D11_MAP_WRITE_DISCARD : D3D11_MAP_WRITE_NO_OVERWRITE;
+		D3D11_MAP mapType = D3D11_MAP_WRITE_DISCARD;
+
+		D3D11_MAPPED_SUBRESOURCE mappedBuffer;
+
+		deviceContext->Map(m_pVertexBuffer.Get(), 0, mapType, 0, &mappedBuffer);
+
+		auto vertices = static_cast<TextureVertex*>(mappedBuffer.pData) + m_VertexBufferPos * VERTICES_SPRITE;
+
+		for (unsigned int i = 0; i < batchSize; i++)
+		{
+			renderSprite(info, vertices, textureSize);
+			vertices += VERTICES_SPRITE;
+		}
+
+		deviceContext->Unmap(m_pVertexBuffer.Get(), 0);
+
+		//コンスタントバッファ
+		D3D11_MAPPED_SUBRESOURCE pData;
+		SimpleConstantBuffer cb;
+
+		HRESULT result = deviceContext->Map(m_pConstantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData);
+		if (!utility::checkError(result, "DeviceContextのMapの失敗"))
+		{
+			Matrix4 view = Matrix4::identity;
+
+			Matrix4 proj = {
+				2.0f / (float)(WINDOW_WIDTH), 0.0f, 0.0f, 0.0f,
+				0.0f, 2.0f / (float)(WINDOW_HEIGHT), 0.0f, 0.0f,
+				0.0f, 0.0f, 1.0f, 0.0f,
+				0.0f, 0.0f, 0.0f, 1.0f
+			};
+
+			cb.matrix4 = view * proj;
+			memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
+			deviceContext->Unmap(m_pConstantBuffer.Get(), 0);
+		}
+
+		auto startIndex = static_cast<UINT>(m_VertexBufferPos * INDICES_SPRITE);
+		auto indexCount = static_cast<UINT>(batchSize * INDICES_SPRITE);
+
+		deviceContext->DrawIndexed(indexCount, startIndex, 0);
+
+		m_VertexBufferPos += batchSize;
+		info += batchSize;
+		count -= batchSize;
+	}
+}
+
+void Spritebatch::renderSprite(TextureInfo const* info, TextureVertex* vertices, const Vector2& textureSize)
+{
+	Matrix4 scale;
+	scale = Matrix4::Scale(info->scale.x*textureSize.x, info->scale.y*textureSize.y, 1.0f);
+
+	Matrix4 beginTranslation;
+	beginTranslation = Matrix4::Translation(-info->orgin.x, -info->orgin.y, 0);
+
+	Matrix4 rotate;
+	rotate = Matrix4::RotationFromAxisZ(info->angle);
+
+	Matrix4 endTranslation;
+	endTranslation = Matrix4::Translation(info->orgin.x, info->orgin.y, 0);
+
+	Matrix4 translation;
+	translation = Matrix4::Translation(info->position.x, info->position.y, info->position.z);
+
+	Matrix4 world = scale * beginTranslation * rotate * endTranslation * translation;
+
+	float halfw = 0.5f;
+	float halfh = 0.5f;
+
+	std::pair<Vector3, Vector2>initialData[] =
+	{
+		{ Vector3(-halfw,halfh,0),Vector2(0,0) },
+		{ Vector3(halfw,halfh,0), Vector2(1,0) },
+		{ Vector3(-halfw,-halfh,0),Vector2(0,1) },
+		{ Vector3(halfw,-halfh,0),Vector2(1,1) }
 	};
 
-	//ワールド変換
-	Matrix4 mWorld;
-
-	Matrix4 mScale;
-	mScale = Matrix4::Scale(info.scale.x*ResourceManager::Instance().findTexture(info.textureName)->getSize().first, 
-		                    info.scale.y*ResourceManager::Instance().findTexture(info.textureName)->getSize().second, 
-		                    1.0f);
-
-	Matrix4 mBeginTranslation;
-	mBeginTranslation = Matrix4::Translation(-info.orgin.x, -info.orgin.y, 0);
-
-	Matrix4 mRotate;
-	mRotate = Matrix4::RotationFromAxisZ(info.angle);
-
-	Matrix4 mEndTranslation;
-	mEndTranslation = Matrix4::Translation(info.orgin.x, info.orgin.y, 0);
-
-	Matrix4 mTranslation;
-	mTranslation = Matrix4::Translation(info.position.x, info.position.y, info.position.z);
-
-	mWorld = mScale * mBeginTranslation * mRotate * mEndTranslation * mTranslation;
-
-	Matrix4 wvp = mWorld * mView * mProj;
-	wvp = wvp.transpose();
-	ResourceManager::Instance().findShader(info.shaderName)->passConstantBuffer(D3d11::Instance().getDeviceContext(), wvp, info.color.w, info.uv);
-
-	D3d11::Instance().getDeviceContext()->Draw(4, 0);
+	for (unsigned int i = 0; i < VERTICES_SPRITE; i++)
+	{
+		vertices[i].pos = Vector3::Transform(initialData[i].first, world);
+		vertices[i].tex = Vector2(initialData[i].second.x * info->uv.z, initialData[i].second.y * info->uv.w) + Vector2(info->uv.x, info->uv.y);
+		vertices[i].color = info->color;
+	}
 }

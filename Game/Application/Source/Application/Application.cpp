@@ -1,6 +1,6 @@
 #include"Application.h"
 #include<Framework/Source/Application/Window/Window.h>
-#include<Framework/Source/Graphics/2D/Spritebatch.h>
+#include<Framework/Source/Graphics/2D/SpritebatchOld.h>
 #include<Framework/Source/Graphics/2D/Camera.h>
 #include<Framework/Source/Utility/Judge.h>
 #include<Framework/Source/Utility/Constant.h>
@@ -21,7 +21,7 @@ Application::Application():
 {
 	init();
 	m_pCamera = std::make_shared<Camera>();
-	m_pSpritebatch = std::make_unique<Spritebatch>(m_pCamera);
+	m_pSpritebatchOld = std::make_unique<SpritebatchOld>(m_pCamera);
 }
 
 Application::~Application()
@@ -114,10 +114,10 @@ void Application::loop()
 	//static float angle2 = 0;
 	//angle2 += 0.04;
 
-	//m_pSpritebatch->begin(SortMode::BackToFront);
-	//m_pSpritebatch->draw("blue.png", Vector3(0, 0, 0), angle, Vector2(0, 0), Vector4(1, 1, 1, 0.5f));
-	//m_pSpritebatch->draw("red.png", Vector3(0, 0, 0.5f), Vector2(0.5f, 0.5f), angle2, Vector2(0, 0), Vector4(1, 1, 1, 0.5f));
-	//m_pSpritebatch->end();
+	//m_pSpritebatchOld->begin(SortMode::BackToFront);
+	//m_pSpritebatchOld->draw("blue.png", Vector3(0, 0, 0), angle, Vector2(0, 0), Vector4(1, 1, 1, 0.5f));
+	//m_pSpritebatchOld->draw("red.png", Vector3(0, 0, 0.5f), Vector2(0.5f, 0.5f), angle2, Vector2(0, 0), Vector4(1, 1, 1, 0.5f));
+	//m_pSpritebatchOld->end();
 
 	TaskManager::Instance().removeTask();
 	SceneManager::RemoveEntity();

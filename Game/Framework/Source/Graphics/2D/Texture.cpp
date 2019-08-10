@@ -30,9 +30,14 @@ Texture::Texture(const std::string &name)
 Texture::~Texture()
 {}
 
-std::pair<float, float> Texture::getSize()
+//std::pair<float, float> Texture::getSize()
+//{
+//	return std::make_pair(m_Width, m_Height);
+//}
+
+Vector2 Texture::getSize()
 {
-	return std::make_pair(m_Width, m_Height);
+	return Vector2(m_Width, m_Height);
 }
 
 ComPtr<ID3D11ShaderResourceView> Texture::getShaderResourceView()

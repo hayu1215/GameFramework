@@ -1,4 +1,5 @@
 #include"Vector3.h"
+#include"Matrix4.h"
 #include<iomanip>
 #include"Mathf.h"
 
@@ -79,14 +80,14 @@ Vector3 Vector3::Normalize(const Vector3 & v)
 //	return v.Normalized();
 //}
 //
-//Vector3 Vector3_S::Transform(const Vector3 & v, const Matrix4 & m)
-//{
-//	float x = v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0] + m.m[3][0];
-//	float y = v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1] + m.m[3][1];
-//	float z = v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2] + m.m[3][2];
-//
-//	return { x, y, z };
-//}
+Vector3 Vector3::Transform(const Vector3 & v, const Matrix4 & m)
+{
+	float x = v.x * m.m[0][0] + v.y * m.m[1][0] + v.z * m.m[2][0] + m.m[3][0];
+	float y = v.x * m.m[0][1] + v.y * m.m[1][1] + v.z * m.m[2][1] + m.m[3][1];
+	float z = v.x * m.m[0][2] + v.y * m.m[1][2] + v.z * m.m[2][2] + m.m[3][2];
+
+	return { x, y, z };
+}
 //
 //Vector3 Vector3_S::TransformNormal(const Vector3 & v, const Matrix4 & m)
 //{

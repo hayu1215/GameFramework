@@ -2,6 +2,8 @@
 
 #include<iostream>
 
+struct Matrix4;
+
 struct Vector3
 {
 	float x, y, z;
@@ -48,8 +50,8 @@ struct Vector3
 	//正規化した値を返します
 	static Vector3 Normalize(const Vector3& v);
 
-	////行列を用いて座標を変換します
-	//Vector3 Transform(const Vector3& v, const Matrix4& m);
+	//行列を用いて座標を変換します
+	static Vector3 Transform(const Vector3& v, const Matrix4& m);
 
 	////行列を用いて座標を変換します（拡大縮小と回転のみ）
 	//Vector3 TransformNormal(const Vector3& v, const Matrix4& m);

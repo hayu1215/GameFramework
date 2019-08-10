@@ -26,14 +26,12 @@ enum struct SortMode
 	FrontToBack = 3,
 
 	//ソートしないで直ちに描画(Drawが呼ばれた瞬間に描画)
-	//Immediate = 4
+	Immediate = 4
 };
 
 struct TextureInfo
 {
-	std::string shaderName = "Texture.hlsl";
 	std::string textureName;
-	//Texture texture;
 	Vector4 color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
 	Vector4 uv = Vector4(0, 0, 1.0f, 1.0f);
 	Vector3 position;
@@ -41,19 +39,25 @@ struct TextureInfo
 	Vector2 orgin = Vector2(0, 0);
 	float angle = 0;
 
-	bool operator>(const TextureInfo& info) const {
-		return position.z > info.position.z;
-	}
-	bool operator<(const TextureInfo& info) const {
-		return position.z < info.position.z;
-	}
+	//bool operator>(const TextureInfo& info) const {
+	//	return position.z > info.position.z;
+	//}
+	//bool operator<(const TextureInfo& info) const {
+	//	return position.z < info.position.z;
+	//}
 };
 
 //頂点の構造体
 struct TextureVertex
 {
-	Vector3 Pos; //位置
-	Vector2 vTex; //テクスチャー座標
+	Vector3 pos;
+	Vector2 tex;
+	Vector4 color;
+};
+
+struct SimpleConstantBuffer
+{
+	Matrix4 matrix4;
 };
 
 class Spritebatch
@@ -65,33 +69,35 @@ public:
 
 	void begin();
 	void begin(const SortMode &sortMode);
-	void begin(const SortMode &sortMode, bool isUI);
-	void end();
-
-	void draw(std::string textureName, Vector3 position);
-	void draw(std::string textureName, Vector3 position, Vector4 color);
-	void draw(std::string textureName, Vector3 position, Vector4 uv, Vector4 color);
-	void draw(std::string textureName, Vector3 position, Vector2 scale, Vector4 color);
-	void draw(std::string textureName, Vector3 position, float angle, Vector2 orgin, Vector4 color);
-	void draw(std::string textureName, Vector3 position, Vector2 scale, float angle, Vector2 orgin, Vector4 color);
+	void end(const std::string& shaderName);
 	void draw(std::string textureName, Vector3 position, Vector2 scale, float angle, Vector2 orgin, Vector4 uv, Vector4 color);
-
-	void setCamera(std::shared_ptr<Camera>);
 
 private:
 	void createVertexBuffer();
-	void deferredEnd();
-	void textureEnd();
-	void backToFrontEnd();
-	void frontToBackEnd();
-	void setInfo(const std::string textureName, const std::string shaderName);
-	void draw(const TextureInfo &info);
-	void clearDrawList();
+	void createIndexBuffer();
+	void createConstantBuffer();
+	std::vector<short> createIndexValue();
+	void setInfo(const std::string& shaderName);
+	void flushBatch();
+	void sortSprites();
+	void growSortSprites();
+	void renderBatch(TextureInfo*info, unsigned int count);
+	void renderSprite(TextureInfo const* info, TextureVertex* vertices, const Vector2& textureSize);
 
 private:
-	SortMode m_CurrentMode;
-	std::weak_ptr<Camera>m_pCamera;
-	std::vector<TextureInfo>m_DrawTextures;
+	const unsigned int MAX_BATCH_SIZE = 2048;
+	const unsigned int MIN_BATCH_SIZE = 128;
+	const unsigned int QUEUE_SIZE = 64;
+	const unsigned int VERTICES_SPRITE = 4;
+	const unsigned int INDICES_SPRITE = 6;
+
+	SortMode m_SortMode;
+	std::weak_ptr<Camera> m_pCamera;
+	std::vector<TextureInfo> m_DrawTextures;
+	std::vector<TextureInfo*> m_SortTextures;
+	ComPtr<ID3D11Buffer> m_pConstantBuffer;
 	ComPtr<ID3D11Buffer> m_pVertexBuffer;
-	bool m_IsUI;
+	ComPtr<ID3D11Buffer> m_pIndexBuffer;
+	unsigned int m_VertexBufferPos; //この名前嫌　veretxのposなのにスプライト1枚に対して１しか増えない
+
 };

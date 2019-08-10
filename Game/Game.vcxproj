@@ -39,6 +39,7 @@
     <ClCompile Include="Framework\Source\Device\Sound\XAudio.cpp" />
     <ClCompile Include="Framework\Source\Graphics\2D\Camera.cpp" />
     <ClCompile Include="Framework\Source\Graphics\2D\Spritebatch.cpp" />
+    <ClCompile Include="Framework\Source\Graphics\2D\SpritebatchOld.cpp" />
     <ClCompile Include="Framework\Source\Graphics\2D\Texture.cpp" />
     <ClCompile Include="Framework\Source\Application\Resource\Loader\TextureLoader\WICTextureLoader.cpp" />
     <ClCompile Include="Framework\Source\Graphics\Shader\SimpleShader.cpp" />
@@ -77,6 +78,7 @@
     <ClInclude Include="Framework\Source\Device\Sound\XAudio.h" />
     <ClInclude Include="Framework\Source\Graphics\2D\Camera.h" />
     <ClInclude Include="Framework\Source\Graphics\2D\Spritebatch.h" />
+    <ClInclude Include="Framework\Source\Graphics\2D\SpritebatchOld.h" />
     <ClInclude Include="Framework\Source\Graphics\2D\Texture.h" />
     <ClInclude Include="Framework\Source\Application\Resource\Loader\TextureLoader\WICTextureLoader.h" />
     <ClInclude Include="Framework\Source\Graphics\Shader\IShader.h" />
