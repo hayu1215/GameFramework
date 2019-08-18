@@ -7,10 +7,16 @@
 
 Spritebatch::Spritebatch()
 {
+	createVertexBuffer();
+	createIndexBuffer();
+	createConstantBuffer();
 }
 
 Spritebatch::Spritebatch(std::shared_ptr<Camera>)
 {
+	createVertexBuffer();
+	createIndexBuffer();
+	createConstantBuffer();
 }
 
 Spritebatch::~Spritebatch()
@@ -86,7 +92,20 @@ void Spritebatch::createConstantBuffer()
 	bd.StructureByteStride = 0;
 	bd.Usage = D3D11_USAGE_DEFAULT;
 
-	HRESULT result = D3d11::Instance().getDevice()->CreateBuffer(&bd, nullptr, m_pConstantBuffer.GetAddressOf());
+	//やり方あってるかはわからん、コンスタントバッファの初期値の設定
+	Matrix4 view = Matrix4::identity;
+	Matrix4 proj = {
+		2.0f / (float)(WINDOW_WIDTH), 0.0f, 0.0f, 0.0f,
+		0.0f, 2.0f / (float)(WINDOW_HEIGHT), 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
+
+	SimpleConstantBuffer cb[] = {{view * proj}};
+	D3D11_SUBRESOURCE_DATA dataDesc;
+	dataDesc.pSysMem = cb;
+
+	HRESULT result = D3d11::Instance().getDevice()->CreateBuffer(&bd, &dataDesc, m_pConstantBuffer.GetAddressOf());
 	if (utility::checkError(result, "コンスタントバッファー作成失敗"));
 }
 
@@ -126,9 +145,7 @@ void Spritebatch::setInfo(const std::string& shaderName)
 	//コンスタントバッファに関しては違う処理が必要かも
 	//deviceContext->UpdateSubresource()
 	deviceContext->VSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
-	deviceContext->PSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
-	//deviceContext->VSSetConstantBuffers(0, 1, ResourceManager::Instance().findShader(shaderName)->getConstantBuffer().GetAddressOf());
-	//deviceContext->PSSetConstantBuffers(0, 1, ResourceManager::Instance().findShader(shaderName)->getConstantBuffer().GetAddressOf());
+	//deviceContext->PSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
 
 	//テクスチャーをシェーダーに渡す
 	deviceContext->PSSetSamplers(0, 1, ResourceManager::Instance().findShader(shaderName)->getSamplerState().GetAddressOf());
@@ -220,7 +237,7 @@ void Spritebatch::growSortSprites()
 	}
 }
 
-void Spritebatch::renderBatch(TextureInfo* info, unsigned int count)
+void Spritebatch::renderBatch(TextureInfo* info, size_t count)
 {
 	ID3D11ShaderResourceView* texture = ResourceManager::Instance().findTexture((*info).textureName)->getShaderResourceView().Get();
 	auto deviceContext = D3d11::Instance().getDeviceContext();
@@ -269,25 +286,25 @@ void Spritebatch::renderBatch(TextureInfo* info, unsigned int count)
 		deviceContext->Unmap(m_pVertexBuffer.Get(), 0);
 
 		//コンスタントバッファ
-		D3D11_MAPPED_SUBRESOURCE pData;
-		SimpleConstantBuffer cb;
+		//D3D11_MAPPED_SUBRESOURCE pData;
+		//SimpleConstantBuffer cb;
 
-		HRESULT result = deviceContext->Map(m_pConstantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData);
-		if (!utility::checkError(result, "DeviceContextのMapの失敗"))
-		{
-			Matrix4 view = Matrix4::identity;
+		//HRESULT result = deviceContext->Map(m_pConstantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData);
+		//if (!utility::checkError(result, "DeviceContextのMapの失敗"))
+		//{
+		//	Matrix4 view = Matrix4::identity;
 
-			Matrix4 proj = {
-				2.0f / (float)(WINDOW_WIDTH), 0.0f, 0.0f, 0.0f,
-				0.0f, 2.0f / (float)(WINDOW_HEIGHT), 0.0f, 0.0f,
-				0.0f, 0.0f, 1.0f, 0.0f,
-				0.0f, 0.0f, 0.0f, 1.0f
-			};
+		//	Matrix4 proj = {
+		//		2.0f / (float)(WINDOW_WIDTH), 0.0f, 0.0f, 0.0f,
+		//		0.0f, 2.0f / (float)(WINDOW_HEIGHT), 0.0f, 0.0f,
+		//		0.0f, 0.0f, 1.0f, 0.0f,
+		//		0.0f, 0.0f, 0.0f, 1.0f
+		//	};
 
-			cb.matrix4 = view * proj;
-			memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
-			deviceContext->Unmap(m_pConstantBuffer.Get(), 0);
-		}
+		//	cb.matrix4 = view * proj;
+		//	memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
+		//	deviceContext->Unmap(m_pConstantBuffer.Get(), 0);
+		//}
 
 		auto startIndex = static_cast<UINT>(m_VertexBufferPos * INDICES_SPRITE);
 		auto indexCount = static_cast<UINT>(batchSize * INDICES_SPRITE);
@@ -302,6 +319,7 @@ void Spritebatch::renderBatch(TextureInfo* info, unsigned int count)
 
 void Spritebatch::renderSprite(TextureInfo const* info, TextureVertex* vertices, const Vector2& textureSize)
 {
+	//2次元の拡大縮小、回転、平行移動をしたい（今は3次元）
 	Matrix4 scale;
 	scale = Matrix4::Scale(info->scale.x*textureSize.x, info->scale.y*textureSize.y, 1.0f);
 

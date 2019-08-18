@@ -85,11 +85,11 @@ private:
 	void renderSprite(TextureInfo const* info, TextureVertex* vertices, const Vector2& textureSize);
 
 private:
-	const unsigned int MAX_BATCH_SIZE = 2048;
-	const unsigned int MIN_BATCH_SIZE = 128;
-	const unsigned int QUEUE_SIZE = 64;
-	const unsigned int VERTICES_SPRITE = 4;
-	const unsigned int INDICES_SPRITE = 6;
+	const unsigned short MAX_BATCH_SIZE = 2048;
+	const unsigned short MIN_BATCH_SIZE = 128;
+	const unsigned short QUEUE_SIZE = 64;
+	const unsigned short VERTICES_SPRITE = 4;
+	const unsigned short INDICES_SPRITE = 6;
 
 	SortMode m_SortMode;
 	std::weak_ptr<Camera> m_pCamera;
@@ -98,6 +98,6 @@ private:
 	ComPtr<ID3D11Buffer> m_pConstantBuffer;
 	ComPtr<ID3D11Buffer> m_pVertexBuffer;
 	ComPtr<ID3D11Buffer> m_pIndexBuffer;
-	unsigned int m_VertexBufferPos; //この名前嫌　veretxのposなのにスプライト1枚に対して１しか増えない
+	size_t m_VertexBufferPos; //この名前嫌　veretxのposなのにスプライト1枚に対して１しか増えない
 
 };
