@@ -8,16 +8,6 @@
 
 class SpriteShader :public SimpleShader
 {
-	//シェーダー用のコンスタントバッファーのアプリ側構造体 もちろんシェーダー内のコンスタントバッファーと一致している必要あり
-	struct SIMPLESHADER_CONSTANT_BUFFER
-	{
-		Matrix4 mWVP;
-		Vector4 vColor;
-		Vector4 fAlpha;
-		Vector4 vUv;
-		//float fAlpha;
-	};
-
 public:
 	SpriteShader();
 	SpriteShader(std::string name);

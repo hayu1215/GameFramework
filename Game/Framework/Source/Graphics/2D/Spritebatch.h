@@ -81,7 +81,7 @@ private:
 	void flushBatch();
 	void sortSprites();
 	void growSortSprites();
-	void renderBatch(TextureInfo*info, unsigned int count);
+	void renderBatch(TextureInfo*info, size_t count);
 	void renderSprite(TextureInfo const* info, TextureVertex* vertices, const Vector2& textureSize);
 
 private:
