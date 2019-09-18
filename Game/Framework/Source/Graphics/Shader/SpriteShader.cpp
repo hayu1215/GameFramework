@@ -35,15 +35,15 @@ bool SpriteShader::load(ID3D11Device* device, const std::string &name)
 	result = D3DCompileFromFile(wname.c_str(), nullptr, nullptr, "VS", "vs_5_0", 0, 0, pCompiledShader.GetAddressOf(), nullptr);
 	if (utility::checkError(result, "hlsl読み込み失敗"))return false;
 
-	result = device->CreateVertexShader(pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), NULL, m_pVertexShader.GetAddressOf());
+	result = device->CreateVertexShader(pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), nullptr, m_pVertexShader.GetAddressOf());
 	if (utility::checkError(result, "バーテックスシェーダー作成失敗"))return false;
 
 	//頂点インプットレイアウトを定義	
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
-		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "COLOR", 0, DXGI_FORMAT_R32G32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
 	UINT numElements = sizeof(layout) / sizeof(layout[0]);
 
@@ -53,7 +53,7 @@ bool SpriteShader::load(ID3D11Device* device, const std::string &name)
 	result = D3DCompileFromFile(wname.c_str(), nullptr, nullptr, "PS", "ps_5_0", 0, 0, pCompiledShader.GetAddressOf(), nullptr);
 	if (utility::checkError(result, "hlsl読み込み失敗"))return false;
 
-	result = device->CreatePixelShader(pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), NULL, m_pPixelShader.GetAddressOf());
+	result = device->CreatePixelShader(pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), nullptr, m_pPixelShader.GetAddressOf());
 	if (utility::checkError(result, "ピクセルシェーダー作成失敗"))return false;
 
 	return true;

@@ -14,8 +14,8 @@ TestScene::~TestScene()
 
 void TestScene::start()
 {
-	addEntity(std::make_shared<Entity>("test", "test"))
-		->addComponent(std::make_shared<TestComponent>());
+	//addEntity(std::make_shared<Entity>("test", "test"))
+	//	->addComponent(std::make_shared<TestComponent>());
 }
 
 void TestScene::end()

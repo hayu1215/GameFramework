@@ -12,7 +12,8 @@ Spritebatch::Spritebatch()
 	createConstantBuffer();
 }
 
-Spritebatch::Spritebatch(std::shared_ptr<Camera>)
+Spritebatch::Spritebatch(std::shared_ptr<Camera>camera)
+	:m_pCamera(camera)
 {
 	createVertexBuffer();
 	createIndexBuffer();
@@ -25,6 +26,7 @@ Spritebatch::~Spritebatch()
 
 void Spritebatch::begin()
 {
+	m_SortMode = SortMode::BackToFront;
 }
 
 void Spritebatch::begin(const SortMode & sortMode)
@@ -61,7 +63,7 @@ void Spritebatch::createVertexBuffer()
 	bd.ByteWidth = sizeof(TextureVertex) * MAX_BATCH_SIZE * VERTICES_SPRITE;
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	//bd.MiscFlags = 0;
+	bd.MiscFlags = 0;
 
 	HRESULT result = D3d11::Instance().getDevice()->CreateBuffer(&bd, nullptr, m_pVertexBuffer.GetAddressOf());
 	utility::checkError(result, "バーテックスバッファーの作成失敗");
@@ -73,12 +75,21 @@ void Spritebatch::createIndexBuffer()
 	bd.ByteWidth = sizeof(short) * MAX_BATCH_SIZE * INDICES_SPRITE;
 	bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.CPUAccessFlags = 0;
+	bd.MiscFlags = 0;
+	//bd.StructureByteStride = 0;
 
 	auto indexValues = createIndexValue();//直接書いてもよさそうだけどとりあえずこれ
 
 	D3D11_SUBRESOURCE_DATA indexDataDesc;
 	indexDataDesc.pSysMem = indexValues.data();
-	D3d11::Instance().getDevice()->CreateBuffer(&bd, &indexDataDesc, m_pIndexBuffer.GetAddressOf());
+	//indexDataDesc.SysMemPitch = 0;
+	//indexDataDesc.SysMemSlicePitch = 0;
+	HRESULT result = D3d11::Instance().getDevice()->CreateBuffer(&bd, &indexDataDesc, m_pIndexBuffer.GetAddressOf());
+	utility::checkError(result, "インデックスバッファーの作成失敗");
+
+	//D3d11::Instance().getDevice()->CreateBuffer(&bd, nullptr, m_pIndexBuffer.GetAddressOf());
+	//D3d11::Instance().getDeviceContext()->UpdateSubresource(m_pIndexBuffer.Get(), 0, nullptr, indexValues.data(), 0, 0);
 }
 
 void Spritebatch::createConstantBuffer()
@@ -86,14 +97,18 @@ void Spritebatch::createConstantBuffer()
 	//コンスタントバッファー作成
 	D3D11_BUFFER_DESC bd;
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	bd.ByteWidth = sizeof(Matrix4);
-	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	bd.ByteWidth = sizeof(SimpleConstantBuffer);
+	bd.CPUAccessFlags = 0;//D3D11_CPU_ACCESS_WRITE;
 	bd.MiscFlags = 0;
 	bd.StructureByteStride = 0;
 	bd.Usage = D3D11_USAGE_DEFAULT;
+	//bd.Usage = D3D11_USAGE_DYNAMIC;
+
+	HRESULT result = D3d11::Instance().getDevice()->CreateBuffer(&bd, nullptr, m_pConstantBuffer.GetAddressOf());
+	if (utility::checkError(result, "コンスタントバッファー作成失敗"));
 
 	//やり方あってるかはわからん、コンスタントバッファの初期値の設定
-	Matrix4 view = Matrix4::identity;
+	Matrix4 view = m_pCamera.lock()->getView();
 	Matrix4 proj = {
 		2.0f / (float)(WINDOW_WIDTH), 0.0f, 0.0f, 0.0f,
 		0.0f, 2.0f / (float)(WINDOW_HEIGHT), 0.0f, 0.0f,
@@ -101,12 +116,9 @@ void Spritebatch::createConstantBuffer()
 		0.0f, 0.0f, 0.0f, 1.0f
 	};
 
-	SimpleConstantBuffer cb[] = {{view * proj}};
-	D3D11_SUBRESOURCE_DATA dataDesc;
-	dataDesc.pSysMem = cb;
-
-	HRESULT result = D3d11::Instance().getDevice()->CreateBuffer(&bd, &dataDesc, m_pConstantBuffer.GetAddressOf());
-	if (utility::checkError(result, "コンスタントバッファー作成失敗"));
+	SimpleConstantBuffer cb;
+	cb.matrix4 = (view * proj).transpose();
+	D3d11::Instance().getDeviceContext()->UpdateSubresource(m_pConstantBuffer.Get(), 0, nullptr, &cb, 0, 0);
 }
 
 std::vector<short> Spritebatch::createIndexValue()
@@ -135,6 +147,8 @@ void Spritebatch::setInfo(const std::string& shaderName)
 {
 	auto deviceContext = D3d11::Instance().getDeviceContext();
 
+	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
 	//頂点インプットレイアウトをセット
 	deviceContext->IASetInputLayout(ResourceManager::Instance().findShader(shaderName)->getInputLayout().Get());
 
@@ -143,7 +157,6 @@ void Spritebatch::setInfo(const std::string& shaderName)
 	deviceContext->PSSetShader(ResourceManager::Instance().findShader(shaderName)->getPixelShader().Get(), nullptr, 0);
 
 	//コンスタントバッファに関しては違う処理が必要かも
-	//deviceContext->UpdateSubresource()
 	deviceContext->VSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
 	//deviceContext->PSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
 
@@ -158,6 +171,12 @@ void Spritebatch::setInfo(const std::string& shaderName)
 	//インデックスバッファをセット
 	deviceContext->IASetIndexBuffer(m_pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
 
+	//理由まだ調べてない
+	if (deviceContext->GetType() == D3D11_DEVICE_CONTEXT_DEFERRED)
+	{
+		m_VertexBufferPos = 0;
+	}
+
 	//カスタムシェーダよぶならここ
 }
 
@@ -167,25 +186,26 @@ void Spritebatch::flushBatch()
 	sortSprites();
 	std::string batchTextureName = "";
 	unsigned int batchStart = 0;
+	auto a = m_DrawTextures.size();
 
 	//一週目素通り　もう少しきれいなループにしたい、
-	for (unsigned int pos = 0; pos < m_DrawTextures.size(); pos++)
+	for (unsigned int i = 0; i < m_DrawTextures.size(); i++)
 	{
-		std::string textureName = m_SortTextures[pos]->textureName;
+		std::string textureName = m_SortTextures[i]->textureName;
 
 		if (textureName != batchTextureName)
 		{
-			if (pos > batchStart)
+			if (i > batchStart)
 			{
-				renderBatch(m_SortTextures[batchStart], pos - batchStart);
+				renderBatch(&m_SortTextures[batchStart], i - batchStart);
 			}
 
 			batchTextureName = textureName;
-			batchStart = pos;
+			batchStart = i;
 		}
 	}
 
-	renderBatch(m_SortTextures[batchStart], m_DrawTextures.size() - batchStart);
+	renderBatch(&m_SortTextures[batchStart], m_DrawTextures.size() - batchStart);
 
 	m_DrawTextures.clear();
 	m_SortTextures.clear();
@@ -228,7 +248,7 @@ void Spritebatch::sortSprites()
 
 void Spritebatch::growSortSprites()
 {
-	unsigned int size = m_SortTextures.size();
+	unsigned int size = m_DrawTextures.size();
 	m_SortTextures.resize(size);
 
 	for (unsigned int i = 0; i < size; i++)
@@ -237,9 +257,9 @@ void Spritebatch::growSortSprites()
 	}
 }
 
-void Spritebatch::renderBatch(TextureInfo* info, size_t count)
+void Spritebatch::renderBatch(TextureInfo** info, size_t count)
 {
-	ID3D11ShaderResourceView* texture = ResourceManager::Instance().findTexture((*info).textureName)->getShaderResourceView().Get();
+	ID3D11ShaderResourceView* texture = ResourceManager::Instance().findTexture((*info)->textureName)->getShaderResourceView().Get();
 	auto deviceContext = D3d11::Instance().getDeviceContext();
 	deviceContext->PSSetShaderResources(0, 1, &texture);
 
@@ -250,7 +270,7 @@ void Spritebatch::renderBatch(TextureInfo* info, size_t count)
 
 		unsigned int remainingSpace = MAX_BATCH_SIZE - m_VertexBufferPos;
 
-		Vector2 textureSize = ResourceManager::Instance().findTexture(info->textureName)->getSize();
+		Vector2 textureSize = ResourceManager::Instance().findTexture((*info)->textureName)->getSize();
 
 		if (batchSize > remainingSpace)
 		{
@@ -268,8 +288,8 @@ void Spritebatch::renderBatch(TextureInfo* info, size_t count)
 		}
 
 
-		//D3D11_MAP mapType = (m_VertexBufferPos == 0) ? D3D11_MAP_WRITE_DISCARD : D3D11_MAP_WRITE_NO_OVERWRITE;
-		D3D11_MAP mapType = D3D11_MAP_WRITE_DISCARD;
+		D3D11_MAP mapType = (m_VertexBufferPos == 0) ? D3D11_MAP_WRITE_DISCARD : D3D11_MAP_WRITE_NO_OVERWRITE;
+		//D3D11_MAP mapType = D3D11_MAP_WRITE_DISCARD;
 
 		D3D11_MAPPED_SUBRESOURCE mappedBuffer;
 
@@ -279,7 +299,7 @@ void Spritebatch::renderBatch(TextureInfo* info, size_t count)
 
 		for (unsigned int i = 0; i < batchSize; i++)
 		{
-			renderSprite(info, vertices, textureSize);
+			renderSprite(info[i], vertices, textureSize);
 			vertices += VERTICES_SPRITE;
 		}
 
@@ -317,7 +337,7 @@ void Spritebatch::renderBatch(TextureInfo* info, size_t count)
 	}
 }
 
-void Spritebatch::renderSprite(TextureInfo const* info, TextureVertex* vertices, const Vector2& textureSize)
+void Spritebatch::renderSprite(TextureInfo * info, TextureVertex* vertices, const Vector2& textureSize)
 {
 	//2次元の拡大縮小、回転、平行移動をしたい（今は3次元）
 	Matrix4 scale;
@@ -333,7 +353,7 @@ void Spritebatch::renderSprite(TextureInfo const* info, TextureVertex* vertices,
 	endTranslation = Matrix4::Translation(info->orgin.x, info->orgin.y, 0);
 
 	Matrix4 translation;
-	translation = Matrix4::Translation(info->position.x, info->position.y, info->position.z);
+	translation = Matrix4::Translation(info->position.x, info->position.y, 0);
 
 	Matrix4 world = scale * beginTranslation * rotate * endTranslation * translation;
 

@@ -1,7 +1,7 @@
 Texture2D texDecal: register(t0);//テクスチャーは レジスターt(n)
 SamplerState samLinear : register(s0);//サンプラーはレジスターs(n)
 
-cbuffer global
+cbuffer global : register(b0)
 {
 	matrix wvp;
 };
@@ -13,10 +13,17 @@ struct VS_Input
 	float4 Color : COLOR;
 };
 
-typedef VS_Input VS_Output;
-typedef VS_Input PS_Input;
+struct VS_Output
+{
+	float4 Pos : SV_POSITION;
+	float2 Tex : TEXCOORD;
+	float4 Color : COLOR;
+};
 
-VS_Output VS( VS_Input inout )
+typedef VS_Input PS_Input;
+typedef VS_Output PS_Output;
+
+VS_Output VS( VS_Input input )
 {
 	VS_Output output = (VS_Output)0;
 	output.Pos = mul(input.Pos,wvp);

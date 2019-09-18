@@ -43,6 +43,7 @@
     <ClCompile Include="Framework\Source\Graphics\2D\Texture.cpp" />
     <ClCompile Include="Framework\Source\Application\Resource\Loader\TextureLoader\WICTextureLoader.cpp" />
     <ClCompile Include="Framework\Source\Graphics\Shader\SimpleShader.cpp" />
+    <ClCompile Include="Framework\Source\Graphics\Shader\SpriteShader.cpp" />
     <ClCompile Include="Framework\Source\Graphics\Shader\TextureShader.cpp" />
     <ClCompile Include="Framework\Source\Utility\Judge.cpp" />
     <ClCompile Include="Framework\Source\Utility\Math\Mathf.cpp" />
@@ -83,6 +84,7 @@
     <ClInclude Include="Framework\Source\Application\Resource\Loader\TextureLoader\WICTextureLoader.h" />
     <ClInclude Include="Framework\Source\Graphics\Shader\IShader.h" />
     <ClInclude Include="Framework\Source\Graphics\Shader\SimpleShader.h" />
+    <ClInclude Include="Framework\Source\Graphics\Shader\SpriteShader.h" />
     <ClInclude Include="Framework\Source\Graphics\Shader\TextureShader.h" />
     <ClInclude Include="Framework\Source\Utility\Constant.h" />
     <ClInclude Include="Framework\Source\Utility\Judge.h" />
@@ -96,6 +98,12 @@
     <ClInclude Include="Framework\Source\Utility\Timer\FPSTimer.h" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Framework\Resource\Shader\SpritebatchShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="Framework\Resource\Shader\Texture.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>

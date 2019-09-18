@@ -80,7 +80,8 @@ bool D3d11::init(const HWND &pcd)
 	ZeroMemory(&dc, sizeof(dc));
 	dc.DepthEnable = true;
 	dc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-	dc.DepthFunc = D3D11_COMPARISON_LESS;
+	//dc.DepthFunc = D3D11_COMPARISON_LESS;
+	dc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
 	dc.StencilEnable = false;
 
 	result = m_pDevice->CreateDepthStencilState(&dc, m_pDepthStencilState.GetAddressOf());

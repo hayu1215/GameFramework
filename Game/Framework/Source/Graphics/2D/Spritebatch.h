@@ -81,8 +81,8 @@ private:
 	void flushBatch();
 	void sortSprites();
 	void growSortSprites();
-	void renderBatch(TextureInfo*info, size_t count);
-	void renderSprite(TextureInfo const* info, TextureVertex* vertices, const Vector2& textureSize);
+	void renderBatch(TextureInfo**info, size_t count);
+	void renderSprite(TextureInfo* info, TextureVertex* vertices, const Vector2& textureSize);
 
 private:
 	const unsigned short MAX_BATCH_SIZE = 2048;

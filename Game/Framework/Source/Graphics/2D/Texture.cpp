@@ -9,7 +9,7 @@ Texture::Texture() :
 
 Texture::Texture(const std::string &name)
 {
-	std::string file = "Framework/Resource/Texture/" + name;
+	std::string file = "Application/Resource/Texture/" + name;
 	std::wstring wname(file.begin(), file.end());
 	ComPtr<ID3D11Resource> resource;
 	HRESULT result = 0;

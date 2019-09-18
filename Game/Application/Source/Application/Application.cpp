@@ -7,6 +7,7 @@
 #include<Framework/Source/Device/D3d11.h>
 #include<Framework/Source/Application/Resource/ResourceManager.h>
 #include<Framework/Source/Graphics/Shader/TextureShader.h>
+#include<Framework/Source/Graphics/Shader/SpriteShader.h>
 #include<Framework/Source/Device/DeviceLocator.h>
 #include<Framework/Source/Device/Input/Keyboard.h>
 //#include<Framework/Source/Device/Sound/XactAudio.h>
@@ -51,8 +52,10 @@ bool Application::init()
 	ResourceManager::Create();
 
 	ResourceManager::Instance().loadShader<TextureShader>("Texture.hlsl");
-	//ResourceManager::Instance().loadTexture("blue.png");
-	//ResourceManager::Instance().loadTexture("red.png");
+	ResourceManager::Instance().loadShader<SpriteShader>("SpritebatchShader.hlsl");
+	ResourceManager::Instance().loadTexture("blue.png");
+	ResourceManager::Instance().loadTexture("red.png"); 
+	ResourceManager::Instance().loadTexture("green_pepper.png");
 
 	TaskManager::Create();
 
