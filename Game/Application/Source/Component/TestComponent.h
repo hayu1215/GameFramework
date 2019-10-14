@@ -1,7 +1,9 @@
 #pragma once
 
+#include<memory>
 #include<Framework/Source/Component/UpdateComponent.h>
 #include<Framework/Source/Graphics/2D/Camera.h>
+#include<Framework/Source/Graphics/2D/LineRenderer.h>
 
 class TestComponent :public UpdateComponent
 {
@@ -19,4 +21,5 @@ public:
 
 private:
 	std::shared_ptr<Camera>a;
+	std::unique_ptr<LineRenderer> lineRenderer;
 };

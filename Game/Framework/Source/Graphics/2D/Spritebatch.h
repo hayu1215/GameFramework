@@ -76,6 +76,7 @@ private:
 	void createVertexBuffer();
 	void createIndexBuffer();
 	void createConstantBuffer();
+	void createSamplerState();
 	std::vector<short> createIndexValue();
 	void setInfo(const std::string& shaderName);
 	void flushBatch();
@@ -98,6 +99,6 @@ private:
 	ComPtr<ID3D11Buffer> m_pConstantBuffer;
 	ComPtr<ID3D11Buffer> m_pVertexBuffer;
 	ComPtr<ID3D11Buffer> m_pIndexBuffer;
+	ComPtr<ID3D11SamplerState> m_pSamplerState;
 	size_t m_VertexBufferPos; //この名前嫌　veretxのposなのにスプライト1枚に対して１しか増えない
-
 };

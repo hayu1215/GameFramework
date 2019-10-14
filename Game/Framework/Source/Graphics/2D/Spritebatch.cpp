@@ -10,6 +10,7 @@ Spritebatch::Spritebatch()
 	createVertexBuffer();
 	createIndexBuffer();
 	createConstantBuffer();
+	createSamplerState();
 }
 
 Spritebatch::Spritebatch(std::shared_ptr<Camera>camera)
@@ -18,6 +19,7 @@ Spritebatch::Spritebatch(std::shared_ptr<Camera>camera)
 	createVertexBuffer();
 	createIndexBuffer();
 	createConstantBuffer();
+	createSamplerState();
 }
 
 Spritebatch::~Spritebatch()
@@ -121,6 +123,18 @@ void Spritebatch::createConstantBuffer()
 	D3d11::Instance().getDeviceContext()->UpdateSubresource(m_pConstantBuffer.Get(), 0, nullptr, &cb, 0, 0);
 }
 
+void Spritebatch::createSamplerState()
+{
+	D3D11_SAMPLER_DESC SamDesc;
+	ZeroMemory(&SamDesc, sizeof(D3D11_SAMPLER_DESC));
+	SamDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	SamDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	SamDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	SamDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+
+	D3d11::Instance().getDevice()->CreateSamplerState(&SamDesc, m_pSamplerState.GetAddressOf());
+}
+
 std::vector<short> Spritebatch::createIndexValue()
 {
 	std::vector<short> indices;
@@ -160,8 +174,7 @@ void Spritebatch::setInfo(const std::string& shaderName)
 	deviceContext->VSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
 	//deviceContext->PSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
 
-	//テクスチャーをシェーダーに渡す
-	deviceContext->PSSetSamplers(0, 1, ResourceManager::Instance().findShader(shaderName)->getSamplerState().GetAddressOf());
+	deviceContext->PSSetSamplers(0, 1, m_pSamplerState.GetAddressOf());
 
 	//バーテックスバッファーをセット
 	UINT stride = sizeof(TextureVertex);

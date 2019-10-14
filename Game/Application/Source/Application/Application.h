@@ -5,7 +5,7 @@
 #include<memory>
 
 class Window;
-class SpritebatchOld;
+//class SpritebatchOld;
 class Camera;
 
 class Application
@@ -25,6 +25,6 @@ private:
 	HWND m_hWnd;
 	std::unique_ptr<Window> m_pWindow;
 	utility::FPSTimer m_FPSTimer;
-	std::unique_ptr<SpritebatchOld> m_pSpritebatchOld;
+	//std::unique_ptr<SpritebatchOld> m_pSpritebatchOld;
 	std::shared_ptr<Camera>m_pCamera;
 };

@@ -58,40 +58,40 @@ struct TextureVertex
 
 class SpritebatchOld
 {
-public:
-	SpritebatchOld();
-	SpritebatchOld(std::shared_ptr<Camera>);
-	~SpritebatchOld();
-
-	void begin();
-	void begin(const SortMode &sortMode);
-	void begin(const SortMode &sortMode, bool isUI);
-	void end();
-
-	void draw(std::string textureName, Vector3 position);
-	void draw(std::string textureName, Vector3 position, Vector4 color);
-	void draw(std::string textureName, Vector3 position, Vector4 uv, Vector4 color);
-	void draw(std::string textureName, Vector3 position, Vector2 scale, Vector4 color);
-	void draw(std::string textureName, Vector3 position, float angle, Vector2 orgin, Vector4 color);
-	void draw(std::string textureName, Vector3 position, Vector2 scale, float angle, Vector2 orgin, Vector4 color);
-	void draw(std::string textureName, Vector3 position, Vector2 scale, float angle, Vector2 orgin, Vector4 uv, Vector4 color);
-
-	void setCamera(std::shared_ptr<Camera>);
-
-private:
-	void createVertexBuffer();
-	void deferredEnd();
-	void textureEnd();
-	void backToFrontEnd();
-	void frontToBackEnd();
-	void setInfo(const std::string textureName, const std::string shaderName);
-	void draw(const TextureInfo &info);
-	void clearDrawList();
-
-private:
-	SortMode m_CurrentMode;
-	std::weak_ptr<Camera>m_pCamera;
-	std::vector<TextureInfo>m_DrawTextures;
-	ComPtr<ID3D11Buffer> m_pVertexBuffer;
-	bool m_IsUI;
+//public:
+//	SpritebatchOld();
+//	SpritebatchOld(std::shared_ptr<Camera>);
+//	~SpritebatchOld();
+//
+//	void begin();
+//	void begin(const SortMode &sortMode);
+//	void begin(const SortMode &sortMode, bool isUI);
+//	void end();
+//
+//	void draw(std::string textureName, Vector3 position);
+//	void draw(std::string textureName, Vector3 position, Vector4 color);
+//	void draw(std::string textureName, Vector3 position, Vector4 uv, Vector4 color);
+//	void draw(std::string textureName, Vector3 position, Vector2 scale, Vector4 color);
+//	void draw(std::string textureName, Vector3 position, float angle, Vector2 orgin, Vector4 color);
+//	void draw(std::string textureName, Vector3 position, Vector2 scale, float angle, Vector2 orgin, Vector4 color);
+//	void draw(std::string textureName, Vector3 position, Vector2 scale, float angle, Vector2 orgin, Vector4 uv, Vector4 color);
+//
+//	void setCamera(std::shared_ptr<Camera>);
+//
+//private:
+//	void createVertexBuffer();
+//	void deferredEnd();
+//	void textureEnd();
+//	void backToFrontEnd();
+//	void frontToBackEnd();
+//	void setInfo(const std::string textureName, const std::string shaderName);
+//	void draw(const TextureInfo &info);
+//	void clearDrawList();
+//
+//private:
+//	SortMode m_CurrentMode;
+//	std::weak_ptr<Camera>m_pCamera;
+//	std::vector<TextureInfo>m_DrawTextures;
+//	ComPtr<ID3D11Buffer> m_pVertexBuffer;
+//	bool m_IsUI;
 };

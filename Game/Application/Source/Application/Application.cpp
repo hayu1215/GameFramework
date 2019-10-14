@@ -8,6 +8,7 @@
 #include<Framework/Source/Application/Resource/ResourceManager.h>
 #include<Framework/Source/Graphics/Shader/TextureShader.h>
 #include<Framework/Source/Graphics/Shader/SpriteShader.h>
+#include<Framework/Source/Graphics/Shader/TestShader.h>
 #include<Framework/Source/Device/DeviceLocator.h>
 #include<Framework/Source/Device/Input/Keyboard.h>
 //#include<Framework/Source/Device/Sound/XactAudio.h>
@@ -22,7 +23,7 @@ Application::Application():
 {
 	init();
 	m_pCamera = std::make_shared<Camera>();
-	m_pSpritebatchOld = std::make_unique<SpritebatchOld>(m_pCamera);
+	//m_pSpritebatchOld = std::make_unique<SpritebatchOld>(m_pCamera);
 }
 
 Application::~Application()
@@ -51,8 +52,9 @@ bool Application::init()
 
 	ResourceManager::Create();
 
-	ResourceManager::Instance().loadShader<TextureShader>("Texture.hlsl");
+	//ResourceManager::Instance().loadShader<TextureShader>("Texture.hlsl");
 	ResourceManager::Instance().loadShader<SpriteShader>("SpritebatchShader.hlsl");
+	ResourceManager::Instance().loadShader<TestShader>("LineShader.hlsl");
 	ResourceManager::Instance().loadTexture("blue.png");
 	ResourceManager::Instance().loadTexture("red.png"); 
 	ResourceManager::Instance().loadTexture("green_pepper.png");

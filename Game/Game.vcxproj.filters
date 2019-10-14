@@ -117,6 +117,15 @@
     <ClCompile Include="Framework\Source\Graphics\Shader\SpriteShader.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Framework\Source\Graphics\Shader\AShader.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Source\Graphics\Shader\TestShader.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Source\Graphics\2D\LineRenderer.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\Source\Application\Window\Window.h">
@@ -242,9 +251,20 @@
     <ClInclude Include="Framework\Source\Graphics\Shader\SpriteShader.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Framework\Source\Graphics\Shader\AShader.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Source\Graphics\Shader\TestShader.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Source\Graphics\2D\LineRenderer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Framework\Resource\Shader\Texture.hlsl" />
     <FxCompile Include="Framework\Resource\Shader\SpritebatchShader.hlsl" />
+    <FxCompile Include="Framework\Resource\Shader\TestShader.hlsl" />
+    <FxCompile Include="Framework\Resource\Shader\LineShader.hlsl" />
   </ItemGroup>
 </Project>

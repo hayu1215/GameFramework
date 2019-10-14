@@ -24,6 +24,8 @@
     <ClCompile Include="Application\Source\Application\Scene\TestScene.cpp" />
     <ClCompile Include="Application\Source\Application\Scene\Title.cpp" />
     <ClCompile Include="Application\Source\Component\TestComponent.cpp" />
+    <ClCompile Include="Framework\Source\Graphics\2D\LineRenderer.cpp" />
+    <ClCompile Include="Framework\Source\Graphics\Shader\AShader.cpp" />
     <ClCompile Include="Framework\Source\Application\Resource\ResourceManager.cpp" />
     <ClCompile Include="Framework\Source\Application\Scene\AScene.cpp" />
     <ClCompile Include="Framework\Source\Application\Scene\SceneManager.cpp" />
@@ -44,6 +46,7 @@
     <ClCompile Include="Framework\Source\Application\Resource\Loader\TextureLoader\WICTextureLoader.cpp" />
     <ClCompile Include="Framework\Source\Graphics\Shader\SimpleShader.cpp" />
     <ClCompile Include="Framework\Source\Graphics\Shader\SpriteShader.cpp" />
+    <ClCompile Include="Framework\Source\Graphics\Shader\TestShader.cpp" />
     <ClCompile Include="Framework\Source\Graphics\Shader\TextureShader.cpp" />
     <ClCompile Include="Framework\Source\Utility\Judge.cpp" />
     <ClCompile Include="Framework\Source\Utility\Math\Mathf.cpp" />
@@ -59,6 +62,8 @@
     <ClInclude Include="Application\Source\Application\Scene\TestScene.h" />
     <ClInclude Include="Application\Source\Application\Scene\Title.h" />
     <ClInclude Include="Application\Source\Component\TestComponent.h" />
+    <ClInclude Include="Framework\Source\Graphics\2D\LineRenderer.h" />
+    <ClInclude Include="Framework\Source\Graphics\Shader\AShader.h" />
     <ClInclude Include="Framework\Source\Application\Resource\ResourceManager.h" />
     <ClInclude Include="Framework\Source\Application\Resource\IResource.h" />
     <ClInclude Include="Framework\Source\Application\Scene\AScene.h" />
@@ -85,6 +90,7 @@
     <ClInclude Include="Framework\Source\Graphics\Shader\IShader.h" />
     <ClInclude Include="Framework\Source\Graphics\Shader\SimpleShader.h" />
     <ClInclude Include="Framework\Source\Graphics\Shader\SpriteShader.h" />
+    <ClInclude Include="Framework\Source\Graphics\Shader\TestShader.h" />
     <ClInclude Include="Framework\Source\Graphics\Shader\TextureShader.h" />
     <ClInclude Include="Framework\Source\Utility\Constant.h" />
     <ClInclude Include="Framework\Source\Utility\Judge.h" />
@@ -98,11 +104,27 @@
     <ClInclude Include="Framework\Source\Utility\Timer\FPSTimer.h" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Framework\Resource\Shader\LineShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="Framework\Resource\Shader\SpritebatchShader.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Framework\Resource\Shader\TestShader.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Geometry</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
     </FxCompile>
     <FxCompile Include="Framework\Resource\Shader\Texture.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Effect</ShaderType>
