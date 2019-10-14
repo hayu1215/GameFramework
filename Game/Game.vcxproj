@@ -44,10 +44,8 @@
     <ClCompile Include="Framework\Source\Graphics\2D\SpritebatchOld.cpp" />
     <ClCompile Include="Framework\Source\Graphics\2D\Texture.cpp" />
     <ClCompile Include="Framework\Source\Application\Resource\Loader\TextureLoader\WICTextureLoader.cpp" />
-    <ClCompile Include="Framework\Source\Graphics\Shader\SimpleShader.cpp" />
     <ClCompile Include="Framework\Source\Graphics\Shader\SpriteShader.cpp" />
     <ClCompile Include="Framework\Source\Graphics\Shader\TestShader.cpp" />
-    <ClCompile Include="Framework\Source\Graphics\Shader\TextureShader.cpp" />
     <ClCompile Include="Framework\Source\Utility\Judge.cpp" />
     <ClCompile Include="Framework\Source\Utility\Math\Mathf.cpp" />
     <ClCompile Include="Framework\Source\Utility\Math\Matrix4.cpp" />
@@ -87,11 +85,8 @@
     <ClInclude Include="Framework\Source\Graphics\2D\SpritebatchOld.h" />
     <ClInclude Include="Framework\Source\Graphics\2D\Texture.h" />
     <ClInclude Include="Framework\Source\Application\Resource\Loader\TextureLoader\WICTextureLoader.h" />
-    <ClInclude Include="Framework\Source\Graphics\Shader\IShader.h" />
-    <ClInclude Include="Framework\Source\Graphics\Shader\SimpleShader.h" />
     <ClInclude Include="Framework\Source\Graphics\Shader\SpriteShader.h" />
     <ClInclude Include="Framework\Source\Graphics\Shader\TestShader.h" />
-    <ClInclude Include="Framework\Source\Graphics\Shader\TextureShader.h" />
     <ClInclude Include="Framework\Source\Utility\Constant.h" />
     <ClInclude Include="Framework\Source\Utility\Judge.h" />
     <ClInclude Include="Framework\Source\Utility\Math\Mathf.h" />

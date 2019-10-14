@@ -27,23 +27,14 @@ void LineRenderer::drawLine(const Vector3 & position1, const Vector3 & position2
 	UINT stride = sizeof(LineVertex);
 	UINT offset = 0;
 	deviceContext->IASetVertexBuffers(0, 1, m_pVertexBuffer.GetAddressOf(), &stride, &offset);
+	deviceContext->IASetInputLayout(ResourceManager::Instance().findShader(shaderName)->getInputLayout().Get());
+	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 	deviceContext->GSSetShader(ResourceManager::Instance().findShader(shaderName)->getGeometryShader().Get(), nullptr, 0);
 	deviceContext->VSSetShader(ResourceManager::Instance().findShader(shaderName)->getVertexShader().Get(), nullptr, 0);
 	deviceContext->PSSetShader(ResourceManager::Instance().findShader(shaderName)->getPixelShader().Get(), nullptr, 0);
 	deviceContext->GSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
 	deviceContext->VSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
 	deviceContext->PSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
-	deviceContext->IASetInputLayout(ResourceManager::Instance().findShader(shaderName)->getInputLayout().Get());
-	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-
-	Matrix4 mView = m_pCamera.lock()->getView();
-	Matrix4 mProj = {
-		2.0f / (float)(WINDOW_WIDTH), 0.0f, 0.0f, 0.0f,
-		0.0f, 2.0f / (float)(WINDOW_HEIGHT), 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f
-	};
-	//Matrix4 vp = mView * mProj;
 
 	D3D11_MAP mapType = D3D11_MAP_WRITE_DISCARD;
 	D3D11_MAPPED_SUBRESOURCE mappedBuffer;
@@ -52,15 +43,21 @@ void LineRenderer::drawLine(const Vector3 & position1, const Vector3 & position2
 
 	vertices[0].pos = position1;
 	vertices[0].color = color1;
-
 	vertices[1].pos = position2;
 	vertices[1].color = color2;
 
 	deviceContext->Unmap(m_pVertexBuffer.Get(), 0);
 
+	Matrix4 mView = m_pCamera.lock()->getView();
+	Matrix4 mProj = {
+		2.0f / (float)(WINDOW_WIDTH), 0.0f, 0.0f, 0.0f,
+		0.0f, 2.0f / (float)(WINDOW_HEIGHT), 0.0f, 0.0f,
+		0.0f, 0.0f, 1.0f, 0.0f,
+		0.0f, 0.0f, 0.0f, 1.0f
+	};
+
 	D3D11_MAPPED_SUBRESOURCE pData;
 	LineCBuffer cb;
-
 	HRESULT result = deviceContext->Map(m_pConstantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData);
 	if (!utility::checkError(result, "DeviceContextのMapの失敗"))
 	{
@@ -73,8 +70,7 @@ void LineRenderer::drawLine(const Vector3 & position1, const Vector3 & position2
 		deviceContext->Unmap(m_pConstantBuffer.Get(), 0);
 	}
 
-	D3d11::Instance().getDeviceContext()->Draw(6, 0);
-
+	D3d11::Instance().getDeviceContext()->Draw(2, 0);
 }
 
 void LineRenderer::createVertexBuffer()
@@ -85,22 +81,11 @@ void LineRenderer::createVertexBuffer()
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	bd.MiscFlags = 0;
-
-	HRESULT result = D3d11::Instance().getDevice()->CreateBuffer(&bd, nullptr, m_pVertexBuffer.GetAddressOf());
-	//utility::checkError(result, "バーテックスバッファー作成失敗");
-	if (utility::checkError(result, "バーテックスバッファー作成失敗"));
-	else { utility::debugLog("CLEAR : バーテックスバッファー作成成功"); }
-
+	D3d11::Instance().getDevice()->CreateBuffer(&bd, nullptr, m_pVertexBuffer.GetAddressOf());
 }
 
 void LineRenderer::createConstantBuffer()
 {
-	//D3D11_BUFFER_DESC cb;
-	//cb.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	//cb.ByteWidth = sizeof(LineCBuffer);
-	//cb.CPUAccessFlags = 0;
-	//cb.Usage = D3D11_USAGE_DYNAMIC;
-
 	D3D11_BUFFER_DESC bd;
 	bd.ByteWidth = sizeof(LineCBuffer);
 	bd.Usage = D3D11_USAGE_DYNAMIC;
@@ -108,22 +93,5 @@ void LineRenderer::createConstantBuffer()
 	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	bd.MiscFlags = 0;
 	bd.StructureByteStride = 0;
-
-	//LineCBuffer data;
-	//data.width = { 1.0f, 0.0f, 0.0f, 0.0f };
-	//data.width = { 1.0f, 0.0f, 0.0f, 0.0f,
-	//			   0.0f, 0.0f, 0.0f, 0.0f, 
-	//			   0.0f, 0.0f, 0.0f, 0.0f, 
-	//			   0.0f, 0.0f, 0.0f, 0.0f};
-
-	//D3D11_SUBRESOURCE_DATA initData;
-	//initData.pSysMem = &data;
-	//initData.SysMemPitch = 0;
-	//initData.SysMemSlicePitch = 0;
-
-	HRESULT result = D3d11::Instance().getDevice()->CreateBuffer(&bd, nullptr, m_pConstantBuffer.GetAddressOf());
-	/*HRESULT result = D3d11::Instance().getDevice()->CreateBuffer(&bd, &initData, m_pConstantBuffer.GetAddressOf());*/
-	if(utility::checkError(result, "コンスタントバッファー作成失敗"));
-	else{ utility::debugLog("CLEAR : コンスタントバッファー作成成功"); }
-
+	D3d11::Instance().getDevice()->CreateBuffer(&bd, nullptr, m_pConstantBuffer.GetAddressOf());
 }

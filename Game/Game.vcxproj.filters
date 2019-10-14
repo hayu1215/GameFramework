@@ -57,12 +57,6 @@
     <ClCompile Include="Framework\Source\Device\D3d11.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Framework\Source\Graphics\Shader\SimpleShader.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\Source\Graphics\Shader\TextureShader.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Framework\Source\Utility\Math\Mathf.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -180,15 +174,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Framework\Source\Device\D3d11.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\Source\Graphics\Shader\IShader.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\Source\Graphics\Shader\SimpleShader.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\Source\Graphics\Shader\TextureShader.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Framework\Source\Utility\Math\Mathf.h">
