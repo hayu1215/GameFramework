@@ -4,10 +4,10 @@
 #include<memory>
 #include<wrl/client.h>
 #include"Texture.h"
-#include<Framework/Source/Utility/Math/Vector4.h>
-#include<Framework/Source/Utility/Math/Vector3.h>
-#include<Framework/Source/Utility/Math/Vector2.h>
-#include<Framework/Source/Utility/Math/Matrix4.h>
+#include<Framework/Source/Utility/Math/XMath.h>
+#include<Framework/Source/Utility/Math/XMath.h>
+#include<Framework/Source/Utility/Math/XMath.h>
+#include<Framework/Source/Utility/Math/XMath.h>
 #include<Framework/Source/Graphics/2D/Camera.h>
 
 
@@ -32,11 +32,11 @@ enum struct SortMode
 struct TextureInfo
 {
 	std::string textureName;
-	Vector4 color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	Vector4 uv = Vector4(0, 0, 1.0f, 1.0f);
-	Vector3 position;
-	Vector2 scale = Vector2(1.0f, 1.0f);
-	Vector2 orgin = Vector2(0, 0);
+	XMFLOAT4 color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	XMFLOAT4 uv = XMFLOAT4(0, 0, 1.0f, 1.0f);
+	XMFLOAT3 position;
+	XMFLOAT2 scale = XMFLOAT2(1.0f, 1.0f);
+	XMFLOAT2 orgin = XMFLOAT2(0, 0);
 	float angle = 0;
 
 	//bool operator>(const TextureInfo& info) const {
@@ -50,14 +50,14 @@ struct TextureInfo
 //í∏ì_ÇÃç\ë¢ëÃ
 struct TextureVertex
 {
-	Vector3 pos;
-	Vector2 tex;
-	Vector4 color;
+	XMFLOAT3 pos;
+	XMFLOAT2 tex;
+	XMFLOAT4 color;
 };
 
 struct SimpleConstantBuffer
 {
-	Matrix4 matrix4;
+	XMFLOAT4X4 matrix;
 };
 
 class Spritebatch
@@ -70,7 +70,7 @@ public:
 	void begin();
 	void begin(const SortMode &sortMode);
 	void end(const std::string& shaderName);
-	void draw(std::string textureName, Vector3 position, Vector2 scale, float angle, Vector2 orgin, Vector4 uv, Vector4 color);
+	void draw(std::string textureName, XMFLOAT3 position, XMFLOAT2 scale, float angle, XMFLOAT2 orgin, XMFLOAT4 uv, XMFLOAT4 color);
 
 private:
 	void createVertexBuffer();
@@ -83,7 +83,7 @@ private:
 	void sortSprites();
 	void growSortSprites();
 	void renderBatch(TextureInfo**info, size_t count);
-	void renderSprite(TextureInfo* info, TextureVertex* vertices, const Vector2& textureSize);
+	void renderSprite(TextureInfo* info, TextureVertex* vertices, const XMFLOAT2& textureSize);
 
 private:
 	const unsigned short MAX_BATCH_SIZE = 2048;

@@ -3,7 +3,8 @@
 #include<wrl/client.h>
 #include<d3d11.h>
 
-using namespace Microsoft::WRL;
+//using namespace Microsoft::WRL;
+using Microsoft::WRL::ComPtr;
 
 class AShader
 {

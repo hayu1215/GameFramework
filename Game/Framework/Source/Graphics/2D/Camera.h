@@ -1,23 +1,24 @@
 #pragma once
 
-#include<Framework/Source/Utility/Math/Vector3.h>
-#include<Framework/Source/Utility/Math/Matrix4.h>
+#include<Framework/Source/Utility/Math/XMath.h>
+#include<Framework/Source/Utility/Math/XMath.h>
+#include<DirectXMath.h>
 
 class Camera
 {
 public:
 	Camera();
-	Camera(const Vector3&, const Vector3&);
+	Camera(const XMFLOAT3&, const XMFLOAT3&);
 	~Camera();
 
 public:
-	void setPosition(const Vector3&);
-	void setLookatPt(const Vector3&);
-	Matrix4 getView();
+	void setPosition(const XMFLOAT3&);
+	void setLookatPt(const XMFLOAT3&);
+	XMMATRIX getView();
 
 private:
-	Matrix4 m_View;
-	Vector3 m_Position;
-	Vector3 m_LookatPt;
-	Vector3 m_UpVector = Vector3(0, 1, 0);
+	XMFLOAT4X4 m_View;
+	XMFLOAT3 m_Position;
+	XMFLOAT3 m_LookatPt;
+	XMFLOAT3 m_UpVector = XMFLOAT3(0, 1, 0);
 };

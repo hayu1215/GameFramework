@@ -5,24 +5,25 @@
 #include<wrl/client.h>
 #include"Texture.h"
 #include<Framework/Source/Device/D3d11.h>
-#include<Framework/Source/Utility/Math/Vector4.h>
-#include<Framework/Source/Utility/Math/Vector3.h>
-#include<Framework/Source/Utility/Math/Vector2.h>
-#include<Framework/Source/Utility/Math/Matrix4.h>
+#include<Framework/Source/Utility/Math/XMath.h>
+#include<Framework/Source/Utility/Math/XMath.h>
+#include<Framework/Source/Utility/Math/XMath.h>
+#include<Framework/Source/Utility/Math/XMath.h>
 #include<Framework/Source/Graphics/2D/Camera.h>
 
-using namespace Microsoft::WRL;
+//using namespace Microsoft::WRL;
+using Microsoft::WRL::ComPtr;
 
 struct LineVertex
 {
-	Vector3 pos;
-	Vector4 color;
+	XMFLOAT3 pos;
+	XMFLOAT4 color;
 };
 
 struct LineCBuffer
 {
-	Matrix4 wvp;
-	Vector4 width;
+	XMFLOAT4X4 wvp;
+	XMFLOAT4 width;
 };
 
 class LineRenderer
@@ -32,7 +33,7 @@ public:
 	LineRenderer(std::shared_ptr<Camera>camera);
 	~LineRenderer();
 
-	void drawLine(const Vector3& position1, const Vector3& position2, const Vector4& color1, const Vector4& color2, float width);
+	void drawLine(const XMFLOAT3& position1, const XMFLOAT3& position2, const XMFLOAT4& color1, const XMFLOAT4& color2, float width);
 
 private:
 	void createVertexBuffer();

@@ -4,10 +4,10 @@
 #include<memory>
 #include<wrl/client.h>
 #include"Texture.h"
-#include<Framework/Source/Utility/Math/Vector4.h>
-#include<Framework/Source/Utility/Math/Vector3.h>
-#include<Framework/Source/Utility/Math/Vector2.h>
-#include<Framework/Source/Utility/Math/Matrix4.h>
+#include<Framework/Source/Utility/Math/XMath.h>
+#include<Framework/Source/Utility/Math/XMath.h>
+#include<Framework/Source/Utility/Math/XMath.h>
+#include<Framework/Source/Utility/Math/XMath.h>
 #include<Framework/Source/Graphics/2D/Camera.h>
 
 
@@ -34,11 +34,11 @@ struct TextureInfo
 	std::string shaderName = "Texture.hlsl";
 	std::string textureName;
 	//Texture texture;
-	Vector4 color = Vector4(1.0f, 1.0f, 1.0f, 1.0f);
-	Vector4 uv = Vector4(0, 0, 1.0f, 1.0f);
-	Vector3 position;
-	Vector2 scale = Vector2(1.0f, 1.0f);
-	Vector2 orgin = Vector2(0, 0);
+	XMFLOAT4 color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	XMFLOAT4 uv = XMFLOAT4(0, 0, 1.0f, 1.0f);
+	XMFLOAT3 position;
+	XMFLOAT2 scale = XMFLOAT2(1.0f, 1.0f);
+	XMFLOAT2 orgin = XMFLOAT2(0, 0);
 	float angle = 0;
 
 	bool operator>(const TextureInfo& info) const {
@@ -52,8 +52,8 @@ struct TextureInfo
 //頂点の構造体
 struct TextureVertex
 {
-	Vector3 Pos; //位置
-	Vector2 vTex; //テクスチャー座標
+	XMFLOAT3 Pos; //位置
+	XMFLOAT2 vTex; //テクスチャー座標
 };
 
 class SpritebatchOld
@@ -68,13 +68,13 @@ class SpritebatchOld
 //	void begin(const SortMode &sortMode, bool isUI);
 //	void end();
 //
-//	void draw(std::string textureName, Vector3 position);
-//	void draw(std::string textureName, Vector3 position, Vector4 color);
-//	void draw(std::string textureName, Vector3 position, Vector4 uv, Vector4 color);
-//	void draw(std::string textureName, Vector3 position, Vector2 scale, Vector4 color);
-//	void draw(std::string textureName, Vector3 position, float angle, Vector2 orgin, Vector4 color);
-//	void draw(std::string textureName, Vector3 position, Vector2 scale, float angle, Vector2 orgin, Vector4 color);
-//	void draw(std::string textureName, Vector3 position, Vector2 scale, float angle, Vector2 orgin, Vector4 uv, Vector4 color);
+//	void draw(std::string textureName, XMFLOAT3 position);
+//	void draw(std::string textureName, XMFLOAT3 position, XMFLOAT4 color);
+//	void draw(std::string textureName, XMFLOAT3 position, XMFLOAT4 uv, XMFLOAT4 color);
+//	void draw(std::string textureName, XMFLOAT3 position, XMFLOAT2 scale, XMFLOAT4 color);
+//	void draw(std::string textureName, XMFLOAT3 position, float angle, XMFLOAT2 orgin, XMFLOAT4 color);
+//	void draw(std::string textureName, XMFLOAT3 position, XMFLOAT2 scale, float angle, XMFLOAT2 orgin, XMFLOAT4 color);
+//	void draw(std::string textureName, XMFLOAT3 position, XMFLOAT2 scale, float angle, XMFLOAT2 orgin, XMFLOAT4 uv, XMFLOAT4 color);
 //
 //	void setCamera(std::shared_ptr<Camera>);
 //

@@ -245,6 +245,9 @@
     <ClInclude Include="Framework\Source\Graphics\2D\LineRenderer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Framework\Source\Utility\Math\XMath.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Framework\Resource\Shader\Texture.hlsl" />

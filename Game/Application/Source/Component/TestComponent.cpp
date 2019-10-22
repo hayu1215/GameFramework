@@ -21,16 +21,16 @@ void TestComponent::update()
 {
 	static float angle = 0;
 	//angle += 0.01f;
-	//Spritebatch spritebatch(a);
-	//spritebatch.begin();
-	//spritebatch.draw("blue.png", Vector3(-200, 0, 1.0f), Vector2(1, 1), angle, Vector2(0, 0), Vector4(0, 0, 1, 1), Vector4(0.5f, 0.5f, 1, 1));
-	//spritebatch.draw("red.png", Vector3(0, 0, 0.5f), Vector2(1, 1), 0, Vector2(0, 0), Vector4(0, 0, 1, 1), Vector4(1, 1, 1, 0.5f));
-	//spritebatch.draw("blue.png", Vector3(200, 0, 0.0f), Vector2(1, 1), 0, Vector2(0, 0), Vector4(0, 0, 1, 1), Vector4(1, 1, 1, 1));
-	//spritebatch.draw("green_pepper.png", Vector3(0, 0, 0), Vector2(1, 1), 0, Vector2(0, 0), Vector4(0, 0, 1, 1), Vector4(1, 1, 1, 1));
-	//spritebatch.end("SpritebatchShader.hlsl");
+	Spritebatch spritebatch(a);
+	spritebatch.begin();
+	//spritebatch.draw("blue.png", XMFLOAT3(-200, 0, 1.0f), XMFLOAT2(1, 1), angle, XMFLOAT2(0, 0), XMFLOAT4(0, 0, 1, 1), XMFLOAT4(0.5f, 0.5f, 1, 1));
+	//spritebatch.draw("red.png", XMFLOAT3(0, 0, 0.5f), XMFLOAT2(1, 1), 0, XMFLOAT2(0, 0), XMFLOAT4(0, 0, 1, 1), XMFLOAT4(1, 1, 1, 0.5f));
+	//spritebatch.draw("blue.png", XMFLOAT3(200, 0, 0.0f), XMFLOAT2(1, 1), 0, XMFLOAT2(0, 0), XMFLOAT4(0, 0, 1, 1), XMFLOAT4(1, 1, 1, 1));
+	spritebatch.draw("green_pepper.png", XMFLOAT3(0, 0, 0), XMFLOAT2(1, 1), 0, XMFLOAT2(0, 0), XMFLOAT4(0, 0, 1, 1), XMFLOAT4(1, 1, 1, 1));
+	spritebatch.end("SpritebatchShader.hlsl");
 
 	//LineRenderer lineRenderer(a);
-	lineRenderer->drawLine(Vector3(-200, 100, 0), Vector3(200, -100, 0), Vector4(1, 1, 0, 1), Vector4(0, 0, 1, 1), 40.0f);
+	//lineRenderer->drawLine(XMFLOAT3(-200, 100, 0), XMFLOAT3(200, -100, 0), XMFLOAT4(1, 1, 0, 1), XMFLOAT4(0, 0, 1, 1), 40.0f);
 }
 
 void TestComponent::onActive()

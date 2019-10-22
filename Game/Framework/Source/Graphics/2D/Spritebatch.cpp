@@ -42,7 +42,7 @@ void Spritebatch::end(const std::string& shaderName)
 	flushBatch();
 }
 
-void Spritebatch::draw(std::string textureName, Vector3 position, Vector2 scale, float angle, Vector2 orgin, Vector4 uv, Vector4 color)
+void Spritebatch::draw(std::string textureName, XMFLOAT3 position, XMFLOAT2 scale, float angle, XMFLOAT2 orgin, XMFLOAT4 uv, XMFLOAT4 color)
 {
 	TextureInfo info;
 	info.textureName = textureName;
@@ -110,16 +110,15 @@ void Spritebatch::createConstantBuffer()
 	if (utility::checkError(result, "コンスタントバッファー作成失敗"));
 
 	//やり方あってるかはわからん、コンスタントバッファの初期値の設定
-	Matrix4 view = m_pCamera.lock()->getView();
-	Matrix4 proj = {
+	XMMATRIX view = m_pCamera.lock()->getView();
+	XMMATRIX proj = DirectX::XMMatrixSet(		
 		2.0f / (float)(WINDOW_WIDTH), 0.0f, 0.0f, 0.0f,
 		0.0f, 2.0f / (float)(WINDOW_HEIGHT), 0.0f, 0.0f,
 		0.0f, 0.0f, 1.0f, 0.0f,
 		0.0f, 0.0f, 0.0f, 1.0f
-	};
-
+	);
 	SimpleConstantBuffer cb;
-	cb.matrix4 = (view * proj).transpose();
+	XMStoreFloat4x4(&cb.matrix, DirectX::XMMatrixMultiplyTranspose(view, proj));
 	D3d11::Instance().getDeviceContext()->UpdateSubresource(m_pConstantBuffer.Get(), 0, nullptr, &cb, 0, 0);
 }
 
@@ -283,7 +282,7 @@ void Spritebatch::renderBatch(TextureInfo** info, size_t count)
 
 		unsigned int remainingSpace = MAX_BATCH_SIZE - m_VertexBufferPos;
 
-		Vector2 textureSize = ResourceManager::Instance().findTexture((*info)->textureName)->getSize();
+		XMFLOAT2 textureSize = ResourceManager::Instance().findTexture((*info)->textureName)->getSize();
 
 		if (batchSize > remainingSpace)
 		{
@@ -325,16 +324,16 @@ void Spritebatch::renderBatch(TextureInfo** info, size_t count)
 		//HRESULT result = deviceContext->Map(m_pConstantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData);
 		//if (!utility::checkError(result, "DeviceContextのMapの失敗"))
 		//{
-		//	Matrix4 view = Matrix4::identity;
+		//	XMFLOAT4X4 view = XMFLOAT4X4::identity;
 
-		//	Matrix4 proj = {
+		//	XMFLOAT4X4 proj = {
 		//		2.0f / (float)(WINDOW_WIDTH), 0.0f, 0.0f, 0.0f,
 		//		0.0f, 2.0f / (float)(WINDOW_HEIGHT), 0.0f, 0.0f,
 		//		0.0f, 0.0f, 1.0f, 0.0f,
 		//		0.0f, 0.0f, 0.0f, 1.0f
 		//	};
 
-		//	cb.matrix4 = view * proj;
+		//	cb.XMFLOAT4X4 = view * proj;
 		//	memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
 		//	deviceContext->Unmap(m_pConstantBuffer.Get(), 0);
 		//}
@@ -350,41 +349,47 @@ void Spritebatch::renderBatch(TextureInfo** info, size_t count)
 	}
 }
 
-void Spritebatch::renderSprite(TextureInfo * info, TextureVertex* vertices, const Vector2& textureSize)
+void Spritebatch::renderSprite(TextureInfo * info, TextureVertex* vertices, const XMFLOAT2& textureSize)
 {
 	//2次元の拡大縮小、回転、平行移動をしたい（今は3次元）
-	Matrix4 scale;
-	scale = Matrix4::Scale(info->scale.x*textureSize.x, info->scale.y*textureSize.y, 1.0f);
+	XMMATRIX scale;
+	//scale = XMFLOAT4X4::Scale(info->scale.x*textureSize.x, info->scale.y*textureSize.y, 1.0f);
+	scale = DirectX::XMMatrixScaling(info->scale.x*textureSize.x, info->scale.y*textureSize.y, 1.0f);
 
-	Matrix4 beginTranslation;
-	beginTranslation = Matrix4::Translation(-info->orgin.x, -info->orgin.y, 0);
+	XMMATRIX beginTranslation;
+	//beginTranslation = XMFLOAT4X4::Translation(-info->orgin.x, -info->orgin.y, 0);
+	beginTranslation = DirectX::XMMatrixTranslation(-info->orgin.x, -info->orgin.y, 0);
 
-	Matrix4 rotate;
-	rotate = Matrix4::RotationFromAxisZ(info->angle);
+	XMMATRIX rotate;
+	//rotate = XMFLOAT4X4::RotationFromAxisZ(info->angle);
+	rotate = DirectX::XMMatrixRotationZ(info->angle);
 
-	Matrix4 endTranslation;
-	endTranslation = Matrix4::Translation(info->orgin.x, info->orgin.y, 0);
+	XMMATRIX endTranslation;
+	//endTranslation = XMFLOAT4X4::Translation(info->orgin.x, info->orgin.y, 0);
+	endTranslation = DirectX::XMMatrixTranslation(info->orgin.x, info->orgin.y, 0);
 
-	Matrix4 translation;
-	translation = Matrix4::Translation(info->position.x, info->position.y, 0);
+	XMMATRIX translation;
+	//translation = XMFLOAT4X4::Translation(info->position.x, info->position.y, 0);
+	translation = DirectX::XMMatrixTranslation(info->position.x, info->position.y, 0);
 
-	Matrix4 world = scale * beginTranslation * rotate * endTranslation * translation;
+	XMMATRIX world = scale * beginTranslation * rotate * endTranslation * translation;
 
 	float halfw = 0.5f;
 	float halfh = 0.5f;
 
-	std::pair<Vector3, Vector2>initialData[] =
+	std::pair<XMVECTORF32, XMVECTORF32>initialData[] =
 	{
-		{ Vector3(-halfw,halfh,0),Vector2(0,0) },
-		{ Vector3(halfw,halfh,0), Vector2(1,0) },
-		{ Vector3(-halfw,-halfh,0),Vector2(0,1) },
-		{ Vector3(halfw,-halfh,0),Vector2(1,1) }
+		{ XMVECTORF32{-halfw,halfh,0},XMVECTORF32{0,0} },
+		{ XMVECTORF32{halfw,halfh,0}, XMVECTORF32{1,0} },
+		{ XMVECTORF32{-halfw,-halfh,0},XMVECTORF32{0,1} },
+		{ XMVECTORF32{halfw,-halfh,0},XMVECTORF32{1,1} }
 	};
 
 	for (unsigned int i = 0; i < VERTICES_SPRITE; i++)
 	{
-		vertices[i].pos = Vector3::Transform(initialData[i].first, world);
-		vertices[i].tex = Vector2(initialData[i].second.x * info->uv.z, initialData[i].second.y * info->uv.w) + Vector2(info->uv.x, info->uv.y);
+		//vertices[i].pos = XMFLOAT3::Transform(initialData[i].first, world);
+		XMStoreFloat3(&vertices[i].pos, DirectX::XMVector3Transform(initialData[i].first, world));
+		XMStoreFloat2(&vertices[i].tex, XMVECTORF32{ initialData[i].second[0] * info->uv.z, initialData[i].second[1] * info->uv.w } + XMVECTORF32{ info->uv.x, info->uv.y });
 		vertices[i].color = info->color;
 	}
 }

@@ -35,9 +35,9 @@ Texture::~Texture()
 //	return std::make_pair(m_Width, m_Height);
 //}
 
-Vector2 Texture::getSize()
+XMFLOAT2 Texture::getSize()
 {
-	return Vector2(m_Width, m_Height);
+	return XMFLOAT2(m_Width, m_Height);
 }
 
 ComPtr<ID3D11ShaderResourceView> Texture::getShaderResourceView()

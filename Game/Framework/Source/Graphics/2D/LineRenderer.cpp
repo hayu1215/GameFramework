@@ -20,7 +20,7 @@ LineRenderer::~LineRenderer()
 {
 }
 
-void LineRenderer::drawLine(const Vector3 & position1, const Vector3 & position2, const Vector4& color1, const Vector4& color2, float width)
+void LineRenderer::drawLine(const XMFLOAT3 & position1, const XMFLOAT3 & position2, const XMFLOAT4& color1, const XMFLOAT4& color2, float width)
 {
 	std::string shaderName = "LineShader.hlsl";
 	auto deviceContext = D3d11::Instance().getDeviceContext();
@@ -48,8 +48,8 @@ void LineRenderer::drawLine(const Vector3 & position1, const Vector3 & position2
 
 	deviceContext->Unmap(m_pVertexBuffer.Get(), 0);
 
-	Matrix4 mView = m_pCamera.lock()->getView();
-	Matrix4 mProj = {
+	XMMATRIX mView = m_pCamera.lock()->getView();
+	XMMATRIX mProj = {
 		2.0f / (float)(WINDOW_WIDTH), 0.0f, 0.0f, 0.0f,
 		0.0f, 2.0f / (float)(WINDOW_HEIGHT), 0.0f, 0.0f,
 		0.0f, 0.0f, 1.0f, 0.0f,
@@ -61,9 +61,8 @@ void LineRenderer::drawLine(const Vector3 & position1, const Vector3 & position2
 	HRESULT result = deviceContext->Map(m_pConstantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData);
 	if (!utility::checkError(result, "DeviceContext‚ÌMap‚ÌŽ¸”s"))
 	{
-		Matrix4 m = mView * mProj;
-		m = Matrix4::Transpose(m);
-		cb.wvp = m;
+		XMMATRIX m = XMMatrixMultiplyTranspose(mView, mProj);
+		XMStoreFloat4x4(&cb.wvp,m);
 		cb.width.x = width;
 
 		memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));

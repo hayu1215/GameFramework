@@ -119,8 +119,8 @@ void Application::loop()
 	//angle2 += 0.04;
 
 	//m_pSpritebatchOld->begin(SortMode::BackToFront);
-	//m_pSpritebatchOld->draw("blue.png", Vector3(0, 0, 0), angle, Vector2(0, 0), Vector4(1, 1, 1, 0.5f));
-	//m_pSpritebatchOld->draw("red.png", Vector3(0, 0, 0.5f), Vector2(0.5f, 0.5f), angle2, Vector2(0, 0), Vector4(1, 1, 1, 0.5f));
+	//m_pSpritebatchOld->draw("blue.png", XMFLOAT3(0, 0, 0), angle, XMFLOAT2(0, 0), XMFLOAT4(1, 1, 1, 0.5f));
+	//m_pSpritebatchOld->draw("red.png", XMFLOAT3(0, 0, 0.5f), XMFLOAT2(0.5f, 0.5f), angle2, XMFLOAT2(0, 0), XMFLOAT4(1, 1, 1, 0.5f));
 	//m_pSpritebatchOld->end();
 
 	TaskManager::Instance().removeTask();

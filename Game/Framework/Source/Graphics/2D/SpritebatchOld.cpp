@@ -69,7 +69,7 @@
 //
 //#pragma region draw
 //
-//void SpritebatchOld::draw(std::string textureName, Vector3 position)
+//void SpritebatchOld::draw(std::string textureName, XMFLOAT3 position)
 //{
 //	TextureInfo info;
 //	info.textureName = textureName;
@@ -77,7 +77,7 @@
 //	m_DrawTextures.push_back(info);
 //}
 //
-//void SpritebatchOld::draw(std::string textureName, Vector3 position, Vector4 color)
+//void SpritebatchOld::draw(std::string textureName, XMFLOAT3 position, XMFLOAT4 color)
 //{
 //	TextureInfo info;
 //	info.textureName = textureName;
@@ -86,7 +86,7 @@
 //	m_DrawTextures.push_back(info);
 //}
 //
-//void SpritebatchOld::draw(std::string textureName, Vector3 position, Vector4 uv, Vector4 color)
+//void SpritebatchOld::draw(std::string textureName, XMFLOAT3 position, XMFLOAT4 uv, XMFLOAT4 color)
 //{
 //	TextureInfo info;
 //	info.textureName = textureName;
@@ -96,7 +96,7 @@
 //	m_DrawTextures.push_back(info);
 //}
 //
-//void SpritebatchOld::draw(std::string textureName, Vector3 position, Vector2 scale, Vector4 color)
+//void SpritebatchOld::draw(std::string textureName, XMFLOAT3 position, XMFLOAT2 scale, XMFLOAT4 color)
 //{
 //	TextureInfo info;
 //	info.textureName = textureName;
@@ -106,7 +106,7 @@
 //	m_DrawTextures.push_back(info);
 //}
 //
-//void SpritebatchOld::draw(std::string textureName, Vector3 position, float angle, Vector2 orgin, Vector4 color)
+//void SpritebatchOld::draw(std::string textureName, XMFLOAT3 position, float angle, XMFLOAT2 orgin, XMFLOAT4 color)
 //{
 //	TextureInfo info;
 //	info.textureName = textureName;
@@ -117,7 +117,7 @@
 //	m_DrawTextures.push_back(info);
 //}
 //
-//void SpritebatchOld::draw(std::string textureName, Vector3 position, Vector2 scale, float angle, Vector2 orgin, Vector4 color)
+//void SpritebatchOld::draw(std::string textureName, XMFLOAT3 position, XMFLOAT2 scale, float angle, XMFLOAT2 orgin, XMFLOAT4 color)
 //{
 //	TextureInfo info;
 //	info.textureName = textureName;
@@ -129,7 +129,7 @@
 //	m_DrawTextures.push_back(info);
 //}
 //
-//void SpritebatchOld::draw(std::string textureName, Vector3 position, Vector2 scale, float angle, Vector2 orgin, Vector4 uv, Vector4 color)
+//void SpritebatchOld::draw(std::string textureName, XMFLOAT3 position, XMFLOAT2 scale, float angle, XMFLOAT2 orgin, XMFLOAT4 uv, XMFLOAT4 color)
 //{
 //	TextureInfo info;
 //	info.textureName = textureName;
@@ -161,10 +161,10 @@
 //	float halfh = 0.5f;
 //	TextureVertex vertices[] =
 //	{
-//		Vector3(-halfw,halfh,0),Vector2(0,0),//頂点1,
-//		Vector3(halfw,halfh,0), Vector2(1,0),//頂点2
-//		Vector3(-halfw,-halfh,0),Vector2(0,1), //頂点3
-//		Vector3(halfw,-halfh,0),Vector2(1,1), //頂点4
+//		XMFLOAT3(-halfw,halfh,0),XMFLOAT2(0,0),//頂点1,
+//		XMFLOAT3(halfw,halfh,0), XMFLOAT2(1,0),//頂点2
+//		XMFLOAT3(-halfw,-halfh,0),XMFLOAT2(0,1), //頂点3
+//		XMFLOAT3(halfw,-halfh,0),XMFLOAT2(1,1), //頂点4
 //	};
 //
 //	//バーテックスバッファーの宣言
@@ -249,12 +249,12 @@
 //
 //void SpritebatchOld::draw(const TextureInfo &info)
 //{
-//	Matrix4 mView = m_pCamera.lock()->getView();
-//	if (m_IsUI)mView = Matrix4::identity;
+//	XMFLOAT4X4 mView = m_pCamera.lock()->getView();
+//	if (m_IsUI)mView = XMFLOAT4X4::identity;
 //
 //	//元の頂点のZの値が0未満か1より大きいと、カメラ空間の外にあると判断される
 //    // プロジェクショントランスフォーム（射影変換）
-//	Matrix4 mProj = {
+//	XMFLOAT4X4 mProj = {
 //		2.0f / (float)(WINDOW_WIDTH), 0.0f, 0.0f, 0.0f,
 //		0.0f, 2.0f / (float)(WINDOW_HEIGHT), 0.0f, 0.0f,
 //		0.0f, 0.0f, 1.0f, 0.0f,
@@ -262,28 +262,28 @@
 //	};
 //
 //	//ワールド変換
-//	Matrix4 mWorld;
+//	XMFLOAT4X4 mWorld;
 //
-//	Matrix4 mScale;
-//	mScale = Matrix4::Scale(info.scale.x*ResourceManager::Instance().findTexture(info.textureName)->getSize().x, 
+//	XMFLOAT4X4 mScale;
+//	mScale = XMFLOAT4X4::Scale(info.scale.x*ResourceManager::Instance().findTexture(info.textureName)->getSize().x, 
 //		                    info.scale.y*ResourceManager::Instance().findTexture(info.textureName)->getSize().y, 
 //		                    1.0f);
 //
-//	Matrix4 mBeginTranslation;
-//	mBeginTranslation = Matrix4::Translation(-info.orgin.x, -info.orgin.y, 0);
+//	XMFLOAT4X4 mBeginTranslation;
+//	mBeginTranslation = XMFLOAT4X4::Translation(-info.orgin.x, -info.orgin.y, 0);
 //
-//	Matrix4 mRotate;
-//	mRotate = Matrix4::RotationFromAxisZ(info.angle);
+//	XMFLOAT4X4 mRotate;
+//	mRotate = XMFLOAT4X4::RotationFromAxisZ(info.angle);
 //
-//	Matrix4 mEndTranslation;
-//	mEndTranslation = Matrix4::Translation(info.orgin.x, info.orgin.y, 0);
+//	XMFLOAT4X4 mEndTranslation;
+//	mEndTranslation = XMFLOAT4X4::Translation(info.orgin.x, info.orgin.y, 0);
 //
-//	Matrix4 mTranslation;
-//	mTranslation = Matrix4::Translation(info.position.x, info.position.y, info.position.z);
+//	XMFLOAT4X4 mTranslation;
+//	mTranslation = XMFLOAT4X4::Translation(info.position.x, info.position.y, info.position.z);
 //
 //	mWorld = mScale * mBeginTranslation * mRotate * mEndTranslation * mTranslation;
 //
-//	Matrix4 wvp = mWorld * mView * mProj;
+//	XMFLOAT4X4 wvp = mWorld * mView * mProj;
 //	wvp = wvp.transpose();
 //	ResourceManager::Instance().findShader(info.shaderName)->passConstantBuffer(D3d11::Instance().getDeviceContext(), wvp, info.color.w, info.uv);
 //

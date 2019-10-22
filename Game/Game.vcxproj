@@ -94,6 +94,7 @@
     <ClInclude Include="Framework\Source\Utility\Math\Vector2.h" />
     <ClInclude Include="Framework\Source\Utility\Math\Vector3.h" />
     <ClInclude Include="Framework\Source\Utility\Math\Vector4.h" />
+    <ClInclude Include="Framework\Source\Utility\Math\XMath.h" />
     <ClInclude Include="Framework\Source\Utility\Template\DynamicSingleton.h" />
     <ClInclude Include="Framework\Source\Utility\Timer\ChronoTimer.h" />
     <ClInclude Include="Framework\Source\Utility\Timer\FPSTimer.h" />

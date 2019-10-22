@@ -9,7 +9,8 @@
 #pragma comment(lib,"d3d11.lib")
 #pragma comment(lib, "d3dCompiler.lib")
 
-using namespace Microsoft::WRL;
+//using namespace Microsoft::WRL;
+using Microsoft::WRL::ComPtr;
 
 //とりあえず、動的にインスタンス生成するシングルトンを使う
 class D3d11:public DynamicSingleton<D3d11>
