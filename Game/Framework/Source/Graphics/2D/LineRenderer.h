@@ -3,6 +3,7 @@
 #include<vector>
 #include<memory>
 #include<wrl/client.h>
+#include<vector>
 #include"Texture.h"
 #include<Framework/Source/Device/D3d11.h>
 #include<Framework/Source/Utility/Math/XMath.h>
@@ -34,10 +35,13 @@ public:
 	~LineRenderer();
 
 	void drawLine(const XMFLOAT3& position1, const XMFLOAT3& position2, const XMFLOAT4& color1, const XMFLOAT4& color2, float width);
+	void drawLine(const std::string& name,const std::vector<XMFLOAT3>& vertexes, const std::vector<XMFLOAT4>& clors, float width);
 
 private:
 	void createVertexBuffer();
 	void createConstantBuffer();
+	void createVertexBuffer2();
+	void createConstantBuffer2();
 
 private:
 	ComPtr<ID3D11Buffer> m_pConstantBuffer;

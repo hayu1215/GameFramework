@@ -54,6 +54,7 @@ bool Application::init()
 	//ResourceManager::Instance().loadShader<TextureShader>("Texture.hlsl");
 	ResourceManager::Instance().loadShader<SpriteShader>("SpritebatchShader.hlsl");
 	ResourceManager::Instance().loadShader<TestShader>("LineShader.hlsl");
+	ResourceManager::Instance().loadShader<TestShader>("LineShaderTest.hlsl");
 	ResourceManager::Instance().loadTexture("blue.png");
 	ResourceManager::Instance().loadTexture("red.png"); 
 	ResourceManager::Instance().loadTexture("green_pepper.png");

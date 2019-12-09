@@ -254,5 +254,6 @@
     <FxCompile Include="Framework\Resource\Shader\SpritebatchShader.hlsl" />
     <FxCompile Include="Framework\Resource\Shader\TestShader.hlsl" />
     <FxCompile Include="Framework\Resource\Shader\LineShader.hlsl" />
+    <FxCompile Include="Framework\Resource\Shader\LineShaderTest.hlsl" />
   </ItemGroup>
 </Project>
