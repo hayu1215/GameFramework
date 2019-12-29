@@ -94,9 +94,37 @@ void LineRenderer::drawLine(const std::string& name,const std::vector<XMFLOAT3>&
 	deviceContext->Map(m_pVertexBuffer.Get(), 0, mapType, 0, &mappedBuffer);
 	auto vertices = static_cast<LineVertex*>(mappedBuffer.pData);
 
-	for (int i = 0; i < vertexes.size(); i++) {
-		vertices[i].pos = vertexes[i];
-		vertices[i].color = clors[i];
+	std::vector<XMFLOAT3> v = vertexes;
+
+	auto xmv0 = DirectX::XMLoadFloat3(&v[0]);
+	auto xmv1 = DirectX::XMLoadFloat3(&v[1]);
+	XMFLOAT3 vm0;
+	DirectX::XMStoreFloat3(&vm0, DirectX::XMVectorAdd(xmv0, DirectX::XMVectorSubtract(xmv0, xmv1)));
+
+	auto xmv2 = DirectX::XMLoadFloat3(&v[v.size() - 2]);
+	auto xmv3 = DirectX::XMLoadFloat3(&v[v.size() - 1]);
+	XMFLOAT3 vm1;
+	DirectX::XMStoreFloat3(&vm1, DirectX::XMVectorAdd(xmv3, DirectX::XMVectorSubtract(xmv3, xmv2)));
+	
+	v.insert(v.begin(), vm0);
+	v.emplace_back(vm1);
+
+	std::vector<XMFLOAT4> c = clors;
+	c.insert(c.begin(), XMFLOAT4(0, 0, 0, 0));
+	c.emplace_back(XMFLOAT4(0, 0, 0, 0));
+
+	if (v.size() == c.size()) 
+	{
+		for (int i = 0; i < v.size(); i++) {
+			vertices[i].pos = v[i];
+			vertices[i].color = c[i];
+		}
+	}
+	else {
+		for (int i = 0; i < v.size(); i++) {
+			vertices[i].pos = v[i];
+			vertices[i].color = c[1];
+		}
 	}
 
 	deviceContext->Unmap(m_pVertexBuffer.Get(), 0);
@@ -122,7 +150,7 @@ void LineRenderer::drawLine(const std::string& name,const std::vector<XMFLOAT3>&
 		deviceContext->Unmap(m_pConstantBuffer.Get(), 0);
 	}
 
-	D3d11::Instance().getDeviceContext()->Draw(vertexes.size(), 0);
+	D3d11::Instance().getDeviceContext()->Draw(v.size(), 0);
 }
 
 void LineRenderer::createVertexBuffer()
@@ -152,7 +180,7 @@ void LineRenderer::createVertexBuffer2()
 {
 	D3D11_BUFFER_DESC bd;
 	bd.Usage = D3D11_USAGE_DYNAMIC;
-	bd.ByteWidth = sizeof(LineVertex) * 100;
+	bd.ByteWidth = sizeof(LineVertex) * 8192;
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	bd.MiscFlags = 0;

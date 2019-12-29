@@ -19,6 +19,9 @@ public:
 	void onDeActive()override;
 	void onDestory()override;
 
+	void drawBezier(const XMFLOAT3 & p0, const XMFLOAT3 & p1, const XMFLOAT3 & p2, const XMFLOAT3 & p3, int s);
+	XMFLOAT3 bezier(const XMFLOAT3 & p0, const XMFLOAT3 & p1, const XMFLOAT3 & p2, const XMFLOAT3 & p3, float t);
+
 private:
 	std::shared_ptr<Camera>a;
 	std::unique_ptr<LineRenderer> lineRenderer;

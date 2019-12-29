@@ -38,7 +38,9 @@ void TestComponent::update()
 	std::vector<XMFLOAT3> pos2 = { XMFLOAT3(-200, -1, 0), XMFLOAT3(-100, 99, 0), XMFLOAT3(100, 99, 0), XMFLOAT3(200, -1, 0), XMFLOAT3(100, -99, 0) };
 	std::vector<XMFLOAT4> col2 = { XMFLOAT4(1, 0, 0, 1), XMFLOAT4(0, 1, 0, 1), XMFLOAT4(0, 0, 1, 1), XMFLOAT4(1, 0, 0, 1) , XMFLOAT4(0, 1, 0, 1) };
 	//lineRenderer->drawLine("LineShaderTest.hlsl",pos1, col1, 40.0f);
-	lineRenderer->drawLine("LineShader.hlsl", pos2, col2, 40.0f);
+	//lineRenderer->drawLine("LineShader.hlsl", pos1, col1, 3.0f);
+
+	//drawBezier(XMFLOAT3(-200, 0, 0), XMFLOAT3(-100, 200, 0), XMFLOAT3(100, -200, 0), XMFLOAT3(200, 0, 0), 30);
 }
 
 void TestComponent::onActive()
@@ -51,4 +53,33 @@ void TestComponent::onDeActive()
 
 void TestComponent::onDestory()
 {
+}
+
+void TestComponent::drawBezier(const XMFLOAT3 & p0, const XMFLOAT3 & p1, const XMFLOAT3 & p2, const XMFLOAT3 & p3, int s)
+{
+	double t = 1.0f / s;
+	std::vector<XMFLOAT3>pos;
+
+	for (int i = 0; i < s + 1; i++)
+	{
+		XMFLOAT3 v = bezier(p0, p1, p2, p3, i * t);
+		pos.emplace_back(v);
+	}
+	std::vector<XMFLOAT4> col = { XMFLOAT4(1, 0, 0, 1) };
+	lineRenderer->drawLine("LineShader.hlsl", pos, col, 20.0f);
+}
+
+XMFLOAT3 TestComponent::bezier(const XMFLOAT3 & p0, const XMFLOAT3 & p1, const XMFLOAT3 & p2, const XMFLOAT3 & p3, float t)
+{
+	auto a = DirectX::XMVectorLerp(DirectX::XMLoadFloat3(&p0), DirectX::XMLoadFloat3(&p1), t);
+	auto b = DirectX::XMVectorLerp(DirectX::XMLoadFloat3(&p1), DirectX::XMLoadFloat3(&p2), t);
+	auto c = DirectX::XMVectorLerp(DirectX::XMLoadFloat3(&p2), DirectX::XMLoadFloat3(&p3), t);
+
+	auto d = DirectX::XMVectorLerp(a, b, t);
+	auto e = DirectX::XMVectorLerp(b, c, t);
+
+	XMFLOAT3 res;
+	DirectX::XMStoreFloat3(&res,DirectX::XMVectorLerp(d, e, t));
+
+	return res;
 }
