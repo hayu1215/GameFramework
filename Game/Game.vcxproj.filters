@@ -395,9 +395,6 @@
     <ClInclude Include="Framework\Source\Application\Resource\ResourceManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Framework\Source\Application\Resource\IResource.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Framework\Source\Component\AComponent.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>

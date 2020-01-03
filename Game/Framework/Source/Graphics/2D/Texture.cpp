@@ -14,7 +14,7 @@ Texture::Texture(const std::string &name)
 	ComPtr<ID3D11Resource> resource;
 	HRESULT result = 0;
 
-	result = DirectX::CreateWICTextureFromFile(D3d11::Instance().getDevice(), wname.c_str(), resource.GetAddressOf(), m_ShaderResourceView.GetAddressOf());
+	result = DirectX::CreateWICTextureFromFile(D3d11::Device(), wname.c_str(), resource.GetAddressOf(), m_ShaderResourceView.GetAddressOf());
 	utility::checkError(result, "TextureÇÃì«Ç›çûÇ›é∏îs");
 
 	ComPtr<ID3D11Texture2D> texture2D;

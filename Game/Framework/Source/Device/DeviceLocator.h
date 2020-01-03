@@ -8,6 +8,8 @@
 class DeviceLocator
 {
 public:
+	DeviceLocator() = delete;
+
 	static IKeyboard& Keyboard() 
 	{ 
 		if (!m_pKeyboard)return m_NullDevice;

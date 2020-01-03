@@ -23,15 +23,15 @@ LineRenderer::~LineRenderer()
 void LineRenderer::drawLine(const XMFLOAT3 & position1, const XMFLOAT3 & position2, const XMFLOAT4& color1, const XMFLOAT4& color2, float width)
 {
 	std::string shaderName = "LineShader.hlsl";
-	auto deviceContext = D3d11::Instance().getDeviceContext();
+	auto deviceContext = D3d11::DeviceContext();
 	UINT stride = sizeof(LineVertex);
 	UINT offset = 0;
 	deviceContext->IASetVertexBuffers(0, 1, m_pVertexBuffer.GetAddressOf(), &stride, &offset);
-	deviceContext->IASetInputLayout(ResourceManager::Instance().findShader(shaderName)->getInputLayout().Get());
+	deviceContext->IASetInputLayout(ResourceManager::FindShader(shaderName)->getInputLayout().Get());
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST_ADJ);
-	deviceContext->GSSetShader(ResourceManager::Instance().findShader(shaderName)->getGeometryShader().Get(), nullptr, 0);
-	deviceContext->VSSetShader(ResourceManager::Instance().findShader(shaderName)->getVertexShader().Get(), nullptr, 0);
-	deviceContext->PSSetShader(ResourceManager::Instance().findShader(shaderName)->getPixelShader().Get(), nullptr, 0);
+	deviceContext->GSSetShader(ResourceManager::FindShader(shaderName)->getGeometryShader().Get(), nullptr, 0);
+	deviceContext->VSSetShader(ResourceManager::FindShader(shaderName)->getVertexShader().Get(), nullptr, 0);
+	deviceContext->PSSetShader(ResourceManager::FindShader(shaderName)->getPixelShader().Get(), nullptr, 0);
 	deviceContext->GSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
 	deviceContext->VSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
 	deviceContext->PSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
@@ -69,22 +69,22 @@ void LineRenderer::drawLine(const XMFLOAT3 & position1, const XMFLOAT3 & positio
 		deviceContext->Unmap(m_pConstantBuffer.Get(), 0);
 	}
 
-	D3d11::Instance().getDeviceContext()->Draw(2, 0);
+	D3d11::DeviceContext()->Draw(2, 0);
 }
 
 void LineRenderer::drawLine(const std::string& name,const std::vector<XMFLOAT3>& vertexes, const std::vector<XMFLOAT4>& clors, float width)
 {
 	std::string shaderName = name;
-	auto deviceContext = D3d11::Instance().getDeviceContext();
+	auto deviceContext = D3d11::DeviceContext();
 	UINT stride = sizeof(LineVertex);
 	UINT offset = 0;
 	deviceContext->IASetVertexBuffers(0, 1, m_pVertexBuffer.GetAddressOf(), &stride, &offset);
-	deviceContext->IASetInputLayout(ResourceManager::Instance().findShader(shaderName)->getInputLayout().Get());
+	deviceContext->IASetInputLayout(ResourceManager::FindShader(shaderName)->getInputLayout().Get());
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP_ADJ);
 	//deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
-	deviceContext->GSSetShader(ResourceManager::Instance().findShader(shaderName)->getGeometryShader().Get(), nullptr, 0);
-	deviceContext->VSSetShader(ResourceManager::Instance().findShader(shaderName)->getVertexShader().Get(), nullptr, 0);
-	deviceContext->PSSetShader(ResourceManager::Instance().findShader(shaderName)->getPixelShader().Get(), nullptr, 0);
+	deviceContext->GSSetShader(ResourceManager::FindShader(shaderName)->getGeometryShader().Get(), nullptr, 0);
+	deviceContext->VSSetShader(ResourceManager::FindShader(shaderName)->getVertexShader().Get(), nullptr, 0);
+	deviceContext->PSSetShader(ResourceManager::FindShader(shaderName)->getPixelShader().Get(), nullptr, 0);
 	deviceContext->GSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
 	deviceContext->VSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
 	deviceContext->PSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
@@ -150,7 +150,7 @@ void LineRenderer::drawLine(const std::string& name,const std::vector<XMFLOAT3>&
 		deviceContext->Unmap(m_pConstantBuffer.Get(), 0);
 	}
 
-	D3d11::Instance().getDeviceContext()->Draw(v.size(), 0);
+	D3d11::DeviceContext()->Draw(v.size(), 0);
 }
 
 void LineRenderer::createVertexBuffer()
@@ -161,7 +161,7 @@ void LineRenderer::createVertexBuffer()
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	bd.MiscFlags = 0;
-	D3d11::Instance().getDevice()->CreateBuffer(&bd, nullptr, m_pVertexBuffer.GetAddressOf());
+	D3d11::Device()->CreateBuffer(&bd, nullptr, m_pVertexBuffer.GetAddressOf());
 }
 
 void LineRenderer::createConstantBuffer()
@@ -173,7 +173,7 @@ void LineRenderer::createConstantBuffer()
 	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	bd.MiscFlags = 0;
 	bd.StructureByteStride = 0;
-	D3d11::Instance().getDevice()->CreateBuffer(&bd, nullptr, m_pConstantBuffer.GetAddressOf());
+	D3d11::Device()->CreateBuffer(&bd, nullptr, m_pConstantBuffer.GetAddressOf());
 }
 
 void LineRenderer::createVertexBuffer2()
@@ -184,7 +184,7 @@ void LineRenderer::createVertexBuffer2()
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	bd.MiscFlags = 0;
-	D3d11::Instance().getDevice()->CreateBuffer(&bd, nullptr, m_pVertexBuffer.GetAddressOf());
+	D3d11::Device()->CreateBuffer(&bd, nullptr, m_pVertexBuffer.GetAddressOf());
 }
 
 void LineRenderer::createConstantBuffer2()
@@ -196,5 +196,5 @@ void LineRenderer::createConstantBuffer2()
 	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	bd.MiscFlags = 0;
 	bd.StructureByteStride = 0;
-	D3d11::Instance().getDevice()->CreateBuffer(&bd, nullptr, m_pConstantBuffer.GetAddressOf());
+	D3d11::Device()->CreateBuffer(&bd, nullptr, m_pConstantBuffer.GetAddressOf());
 }

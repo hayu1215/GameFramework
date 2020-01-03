@@ -5,6 +5,8 @@
 class B2Manager
 {
 public:
+	B2Manager() = delete;
+
 	static void Update();
 
 public:

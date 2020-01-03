@@ -35,12 +35,12 @@
 //	m_CurrentMode = sortMode;
 //	m_IsUI = isUI;
 //
-//	D3d11::Instance().getDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+//	D3d11::DeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 //
 //	//バーテックスバッファーをセット
 //	UINT stride = sizeof(TextureVertex);
 //	UINT offset = 0;
-//	D3d11::Instance().getDeviceContext()->IASetVertexBuffers(0, 1, m_pVertexBuffer.GetAddressOf(), &stride, &offset);
+//	D3d11::DeviceContext()->IASetVertexBuffers(0, 1, m_pVertexBuffer.GetAddressOf(), &stride, &offset);
 //}
 //
 //void SpritebatchOld::end()
@@ -181,7 +181,7 @@
 //	D3D11_SUBRESOURCE_DATA initData;
 //	initData.pSysMem = vertices;
 //
-//	HRESULT result = D3d11::Instance().getDevice()->CreateBuffer(&bd, &initData, m_pVertexBuffer.GetAddressOf());
+//	HRESULT result = D3d11::Device()->CreateBuffer(&bd, &initData, m_pVertexBuffer.GetAddressOf());
 //	utility::checkError(result, "バーテックスバッファーの作成失敗");
 //}
 //
@@ -231,20 +231,20 @@
 //void SpritebatchOld::setInfo(const std::string textureName, const std::string shaderName)
 //{
 //	//頂点インプットレイアウトをセット
-//	D3d11::Instance().getDeviceContext()->IASetInputLayout(ResourceManager::Instance().findShader(shaderName)->getInputLayout().Get());
+//	D3d11::DeviceContext()->IASetInputLayout(ResourceManager::FindShader(shaderName)->getInputLayout().Get());
 //
 //	//使用するシェーダーの登録
-//	D3d11::Instance().getDeviceContext()->VSSetShader(ResourceManager::Instance().findShader(shaderName)->getVertexShader().Get(), NULL, 0);
-//	D3d11::Instance().getDeviceContext()->PSSetShader(ResourceManager::Instance().findShader(shaderName)->getPixelShader().Get(), NULL, 0);
+//	D3d11::DeviceContext()->VSSetShader(ResourceManager::FindShader(shaderName)->getVertexShader().Get(), NULL, 0);
+//	D3d11::DeviceContext()->PSSetShader(ResourceManager::FindShader(shaderName)->getPixelShader().Get(), NULL, 0);
 //
-//	D3d11::Instance().getDeviceContext()->VSSetConstantBuffers(0, 1, ResourceManager::Instance().findShader(shaderName)->getConstantBuffer().GetAddressOf());
-//	D3d11::Instance().getDeviceContext()->PSSetConstantBuffers(0, 1, ResourceManager::Instance().findShader(shaderName)->getConstantBuffer().GetAddressOf());
+//	D3d11::DeviceContext()->VSSetConstantBuffers(0, 1, ResourceManager::FindShader(shaderName)->getConstantBuffer().GetAddressOf());
+//	D3d11::DeviceContext()->PSSetConstantBuffers(0, 1, ResourceManager::FindShader(shaderName)->getConstantBuffer().GetAddressOf());
 //
 //	//テクスチャーをシェーダーに渡す
-//	D3d11::Instance().getDeviceContext()->PSSetSamplers(0, 1, ResourceManager::Instance().findShader(shaderName)->getSamplerState().GetAddressOf());
+//	D3d11::DeviceContext()->PSSetSamplers(0, 1, ResourceManager::FindShader(shaderName)->getSamplerState().GetAddressOf());
 //
-//	ID3D11ShaderResourceView* srv = ResourceManager::Instance().findTexture(textureName)->getShaderResourceView().Get();
-//	D3d11::Instance().getDeviceContext()->PSSetShaderResources(0, 1, &srv);
+//	ID3D11ShaderResourceView* srv = ResourceManager::FindTexture(textureName)->getShaderResourceView().Get();
+//	D3d11::DeviceContext()->PSSetShaderResources(0, 1, &srv);
 //}
 //
 //void SpritebatchOld::draw(const TextureInfo &info)
@@ -265,8 +265,8 @@
 //	XMFLOAT4X4 mWorld;
 //
 //	XMFLOAT4X4 mScale;
-//	mScale = XMFLOAT4X4::Scale(info.scale.x*ResourceManager::Instance().findTexture(info.textureName)->getSize().x, 
-//		                    info.scale.y*ResourceManager::Instance().findTexture(info.textureName)->getSize().y, 
+//	mScale = XMFLOAT4X4::Scale(info.scale.x*ResourceManager::FindTexture(info.textureName)->getSize().x, 
+//		                    info.scale.y*ResourceManager::FindTexture(info.textureName)->getSize().y, 
 //		                    1.0f);
 //
 //	XMFLOAT4X4 mBeginTranslation;
@@ -285,7 +285,7 @@
 //
 //	XMFLOAT4X4 wvp = mWorld * mView * mProj;
 //	wvp = wvp.transpose();
-//	ResourceManager::Instance().findShader(info.shaderName)->passConstantBuffer(D3d11::Instance().getDeviceContext(), wvp, info.color.w, info.uv);
+//	ResourceManager::FindShader(info.shaderName)->passConstantBuffer(D3d11::DeviceContext(), wvp, info.color.w, info.uv);
 //
-//	D3d11::Instance().getDeviceContext()->Draw(4, 0);
+//	D3d11::DeviceContext()->Draw(4, 0);
 //}

@@ -3,20 +3,20 @@
 #include<Framework/Source/Component/UpdateComponent.h>
 #include<Framework/Source/Utility/Judge.h>
 
-TaskManager::TaskManager() = default;
-TaskManager::~TaskManager() = default;
+std::list<std::weak_ptr<UpdateComponent>> TaskManager::m_UpdateComponents = {};
+std::list<std::weak_ptr<UpdateComponent>> TaskManager::m_RemoveComponents = {};
 
-void TaskManager::addTask(const std::weak_ptr<UpdateComponent>& task)
+void TaskManager::AddTask(const std::weak_ptr<UpdateComponent>& task)
 {
 	m_UpdateComponents.emplace_back(task);
 }
 
-void TaskManager::addRemoveTask(const std::weak_ptr<UpdateComponent>& task)
+void TaskManager::AddRemoveTask(const std::weak_ptr<UpdateComponent>& task)
 {
 	m_RemoveComponents.emplace_back(task);
 }
 
-void TaskManager::update()
+void TaskManager::Update()
 {
 	for (auto& e : m_UpdateComponents)
 	{
@@ -24,11 +24,11 @@ void TaskManager::update()
 	}
 }
 
-void TaskManager::draw()
+void TaskManager::Draw()
 {
 }
 
-void TaskManager::removeTask()
+void TaskManager::RemoveTask()
 {
 	for (auto& v : m_RemoveComponents)
 	{

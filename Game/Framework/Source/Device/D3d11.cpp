@@ -3,10 +3,18 @@
 #include<Framework/Source/Utility/Constant.h>
 #include<Framework/Source/Utility/Judge.h>
 
-D3d11::D3d11() = default;
-D3d11::~D3d11() = default;
+HWND D3d11::m_hWnd = 0;
+ComPtr<ID3D11Device> D3d11::m_pDevice = nullptr;
+ComPtr<ID3D11DeviceContext> D3d11::m_pDeviceContext = nullptr;
+ComPtr<IDXGISwapChain> D3d11::m_pSwapChain = nullptr;
+ComPtr<ID3D11RenderTargetView> D3d11::m_pRenderTargetView = nullptr;
+ComPtr<ID3D11DepthStencilView> D3d11::m_pDepthStencilView = nullptr;
+ComPtr<ID3D11Texture2D> D3d11::m_pDepthStencil = nullptr;
+ComPtr<ID3D11DepthStencilState> D3d11::m_pDepthStencilState = nullptr;
+ComPtr<ID3D11BlendState> D3d11::m_pBlendState = nullptr;
+ComPtr<ID3D11RasterizerState> D3d11::m_pRasterizerState = nullptr;
 
-bool D3d11::init(const HWND &pcd)
+bool D3d11::Init(const HWND &pcd)
 {
 	m_hWnd = pcd;
 	HRESULT result = 0;
@@ -246,7 +254,7 @@ bool D3d11::init(const HWND &pcd)
 	return true;
 }
 
-void D3d11::clear()
+void D3d11::Clear()
 {
 	//画面クリア（実際は単色で画面を塗りつぶす処理）
 	float ClearColor[4] = { 1,1,1,1 };// クリア色作成　RGBAの順
@@ -254,22 +262,22 @@ void D3d11::clear()
 	m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);//深度バッファクリア
 }
 
-void D3d11::present()
+void D3d11::Present()
 {
 	m_pSwapChain->Present(0, 0);//画面更新（バックバッファをフロントバッファに）
 }
 
-ID3D11Device* D3d11::getDevice()
+ID3D11Device* D3d11::Device()
 {
 	return m_pDevice.Get();
 }
 
-ID3D11DeviceContext* D3d11::getDeviceContext()
+ID3D11DeviceContext* D3d11::DeviceContext()
 {
 	return m_pDeviceContext.Get();
 }
 
-ID3D11DepthStencilView* D3d11::getDepthStencilView()
+ID3D11DepthStencilView* D3d11::DepthStencilView()
 {
 	return m_pDepthStencilView.Get();
 }

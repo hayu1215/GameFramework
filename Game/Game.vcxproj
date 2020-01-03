@@ -184,7 +184,6 @@
     <ClInclude Include="Framework\Source\Graphics\2D\LineRenderer.h" />
     <ClInclude Include="Framework\Source\Graphics\Shader\AShader.h" />
     <ClInclude Include="Framework\Source\Application\Resource\ResourceManager.h" />
-    <ClInclude Include="Framework\Source\Application\Resource\IResource.h" />
     <ClInclude Include="Framework\Source\Application\Scene\AScene.h" />
     <ClInclude Include="Framework\Source\Application\Scene\SceneManager.h" />
     <ClInclude Include="Framework\Source\Application\Task\TaskManager.h" />

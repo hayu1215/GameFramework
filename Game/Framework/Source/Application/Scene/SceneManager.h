@@ -11,6 +11,8 @@ class Entity;
 class SceneManager
 {
 public:
+	SceneManager() = delete;
+
 	static void Change(const std::string&);
 	static void Add(std::unique_ptr<AScene>);
 	static void AddRemoveEntity(const std::weak_ptr<Entity>&);

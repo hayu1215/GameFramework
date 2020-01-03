@@ -5,7 +5,7 @@
 
 TestShader::TestShader(const std::string& name)
 {
-	auto device = D3d11::Instance().getDevice();
+	auto device = D3d11::Device();
 
 	std::string file = "Framework/Resource/Shader/" + name;
 	std::wstring wname(file.begin(), file.end());

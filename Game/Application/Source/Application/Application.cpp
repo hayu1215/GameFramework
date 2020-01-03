@@ -33,22 +33,18 @@ bool Application::init(HINSTANCE hInstance)
 	if (!window.initWindow(hInstance, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, APP_NAME))utility::debugLog("ウィンドウ初期化失敗");
 	m_hWnd = window.m_hWnd;
 
-	D3d11::Create();
-	TaskManager::Create();
-	ResourceManager::Create();
-
-	if (!D3d11::Instance().init(m_hWnd)) 
+	if (!D3d11::Init(m_hWnd)) 
 	{ 
 		utility::debugLog("D3d11の初期化失敗");
 		return false; 
 	}
 
-	ResourceManager::Instance().loadShader<SpriteShader>("SpritebatchShader.hlsl");
-	ResourceManager::Instance().loadShader<TestShader>("LineShader.hlsl");
-	ResourceManager::Instance().loadShader<TestShader>("LineShaderTest.hlsl");
-	ResourceManager::Instance().loadTexture("blue.png");
-	ResourceManager::Instance().loadTexture("red.png"); 
-	ResourceManager::Instance().loadTexture("green_pepper.png");
+	ResourceManager::LoadShader<SpriteShader>("SpritebatchShader.hlsl");
+	ResourceManager::LoadShader<TestShader>("LineShader.hlsl");
+	ResourceManager::LoadShader<TestShader>("LineShaderTest.hlsl");
+	ResourceManager::LoadTexture("blue.png");
+	ResourceManager::LoadTexture("red.png"); 
+	ResourceManager::LoadTexture("green_pepper.png");
 
 	SceneManager::Add(std::make_unique<Title>("title"));
 	SceneManager::Add(std::make_unique<TestScene>("test"));
@@ -89,23 +85,20 @@ void Application::run(HINSTANCE hInstance)
 
 void Application::loop()
 {
-	D3d11::Instance().clear();
+	D3d11::Clear();
 
 	DeviceLocator::Keyboard().update();
 
-	TaskManager::Instance().update();
-	TaskManager::Instance().draw();
-	TaskManager::Instance().removeTask();
+	TaskManager::Update();
+	TaskManager::Draw();
+	TaskManager::RemoveTask();
 	B2Manager::Update();
 
 	SceneManager::RemoveEntity();
 
-	D3d11::Instance().present();
+	D3d11::Present();
 }
 
 void Application::finalize()
 {
-	ResourceManager::Destroy();
-	TaskManager::Destroy();
-	D3d11::Destroy();
 }

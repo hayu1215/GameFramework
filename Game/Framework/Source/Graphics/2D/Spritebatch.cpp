@@ -67,7 +67,7 @@ void Spritebatch::createVertexBuffer()
 	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	bd.MiscFlags = 0;
 
-	HRESULT result = D3d11::Instance().getDevice()->CreateBuffer(&bd, nullptr, m_pVertexBuffer.GetAddressOf());
+	HRESULT result = D3d11::Device()->CreateBuffer(&bd, nullptr, m_pVertexBuffer.GetAddressOf());
 	utility::checkError(result, "バーテックスバッファーの作成失敗");
 }
 
@@ -87,11 +87,11 @@ void Spritebatch::createIndexBuffer()
 	indexDataDesc.pSysMem = indexValues.data();
 	//indexDataDesc.SysMemPitch = 0;
 	//indexDataDesc.SysMemSlicePitch = 0;
-	HRESULT result = D3d11::Instance().getDevice()->CreateBuffer(&bd, &indexDataDesc, m_pIndexBuffer.GetAddressOf());
+	HRESULT result = D3d11::Device()->CreateBuffer(&bd, &indexDataDesc, m_pIndexBuffer.GetAddressOf());
 	utility::checkError(result, "インデックスバッファーの作成失敗");
 
-	//D3d11::Instance().getDevice()->CreateBuffer(&bd, nullptr, m_pIndexBuffer.GetAddressOf());
-	//D3d11::Instance().getDeviceContext()->UpdateSubresource(m_pIndexBuffer.Get(), 0, nullptr, indexValues.data(), 0, 0);
+	//D3d11::Device()->CreateBuffer(&bd, nullptr, m_pIndexBuffer.GetAddressOf());
+	//D3d11::DeviceContext()->UpdateSubresource(m_pIndexBuffer.Get(), 0, nullptr, indexValues.data(), 0, 0);
 }
 
 void Spritebatch::createConstantBuffer()
@@ -106,7 +106,7 @@ void Spritebatch::createConstantBuffer()
 	bd.Usage = D3D11_USAGE_DEFAULT;
 	//bd.Usage = D3D11_USAGE_DYNAMIC;
 
-	HRESULT result = D3d11::Instance().getDevice()->CreateBuffer(&bd, nullptr, m_pConstantBuffer.GetAddressOf());
+	HRESULT result = D3d11::Device()->CreateBuffer(&bd, nullptr, m_pConstantBuffer.GetAddressOf());
 	if (utility::checkError(result, "コンスタントバッファー作成失敗"));
 
 	//やり方あってるかはわからん、コンスタントバッファの初期値の設定
@@ -119,7 +119,7 @@ void Spritebatch::createConstantBuffer()
 	);
 	SimpleConstantBuffer cb;
 	XMStoreFloat4x4(&cb.matrix, DirectX::XMMatrixMultiplyTranspose(view, proj));
-	D3d11::Instance().getDeviceContext()->UpdateSubresource(m_pConstantBuffer.Get(), 0, nullptr, &cb, 0, 0);
+	D3d11::DeviceContext()->UpdateSubresource(m_pConstantBuffer.Get(), 0, nullptr, &cb, 0, 0);
 }
 
 void Spritebatch::createSamplerState()
@@ -131,7 +131,7 @@ void Spritebatch::createSamplerState()
 	SamDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 	SamDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 
-	D3d11::Instance().getDevice()->CreateSamplerState(&SamDesc, m_pSamplerState.GetAddressOf());
+	D3d11::Device()->CreateSamplerState(&SamDesc, m_pSamplerState.GetAddressOf());
 }
 
 std::vector<short> Spritebatch::createIndexValue()
@@ -158,16 +158,16 @@ std::vector<short> Spritebatch::createIndexValue()
 
 void Spritebatch::setInfo(const std::string& shaderName)
 {
-	auto deviceContext = D3d11::Instance().getDeviceContext();
+	auto deviceContext = D3d11::DeviceContext();
 
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	//頂点インプットレイアウトをセット
-	deviceContext->IASetInputLayout(ResourceManager::Instance().findShader(shaderName)->getInputLayout().Get());
+	deviceContext->IASetInputLayout(ResourceManager::FindShader(shaderName)->getInputLayout().Get());
 
 	//使用するシェーダーの登録
-	deviceContext->VSSetShader(ResourceManager::Instance().findShader(shaderName)->getVertexShader().Get(), nullptr, 0);
-	deviceContext->PSSetShader(ResourceManager::Instance().findShader(shaderName)->getPixelShader().Get(), nullptr, 0);
+	deviceContext->VSSetShader(ResourceManager::FindShader(shaderName)->getVertexShader().Get(), nullptr, 0);
+	deviceContext->PSSetShader(ResourceManager::FindShader(shaderName)->getPixelShader().Get(), nullptr, 0);
 
 	//コンスタントバッファに関しては違う処理が必要かも
 	deviceContext->VSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
@@ -271,8 +271,8 @@ void Spritebatch::growSortSprites()
 
 void Spritebatch::renderBatch(TextureInfo** info, size_t count)
 {
-	ID3D11ShaderResourceView* texture = ResourceManager::Instance().findTexture((*info)->textureName)->getShaderResourceView().Get();
-	auto deviceContext = D3d11::Instance().getDeviceContext();
+	ID3D11ShaderResourceView* texture = ResourceManager::FindTexture((*info)->textureName)->getShaderResourceView().Get();
+	auto deviceContext = D3d11::DeviceContext();
 	deviceContext->PSSetShaderResources(0, 1, &texture);
 
 	while (count > 0)
@@ -282,7 +282,7 @@ void Spritebatch::renderBatch(TextureInfo** info, size_t count)
 
 		unsigned int remainingSpace = MAX_BATCH_SIZE - m_VertexBufferPos;
 
-		XMFLOAT2 textureSize = ResourceManager::Instance().findTexture((*info)->textureName)->getSize();
+		XMFLOAT2 textureSize = ResourceManager::FindTexture((*info)->textureName)->getSize();
 
 		if (batchSize > remainingSpace)
 		{
