@@ -15,9 +15,7 @@ public:
 
 	static void Create() 
 	{
-		if (!instance) {
-			instance = new T();
-		}
+		if (!instance) instance = new T();
 	}
 
 	static void Destroy() 

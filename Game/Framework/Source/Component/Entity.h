@@ -4,6 +4,7 @@
 #include<list>
 #include<memory>
 #include<string>
+#include<Framework/Source/Utility/Math/XMath.h>
 
 class AComponent;
 
@@ -11,7 +12,7 @@ class Entity : public std::enable_shared_from_this<Entity>
 {
 public:
 	Entity();
-	Entity(const std::string &tag, const std::string &name);
+	Entity(const XMFLOAT3& position, const std::string& tag, const std::string& name);
 	virtual ~Entity();
 
 	template<class T>
@@ -29,10 +30,12 @@ public:
 	bool isActive();
 	const std::string& getTg();
 	const std::string& getName();
+	const XMFLOAT3& getPosition();
 
 private:
 	std::list<std::shared_ptr<AComponent>>m_Components;
 	std::list<std::weak_ptr<AComponent>>m_RemoveComponents;
+	XMFLOAT3 m_Position;
 	const std::string m_Tag;
 	const std::string m_Name;
 	bool m_IsActive;

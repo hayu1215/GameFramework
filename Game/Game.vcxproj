@@ -79,6 +79,9 @@
     <ClCompile Include="Framework\Include\Box2D\Particle\b2ParticleSystem.cpp" />
     <ClCompile Include="Framework\Include\Box2D\Particle\b2VoronoiDiagram.cpp" />
     <ClCompile Include="Framework\Include\Box2D\Rope\b2Rope.cpp" />
+    <ClCompile Include="Framework\Source\Component\Physics\B2Manager.cpp" />
+    <ClCompile Include="Framework\Source\Component\Physics\B2BoxComponent.cpp" />
+    <ClCompile Include="Framework\Source\Component\Physics\B2PolygonComponent.cpp" />
     <ClCompile Include="Framework\Source\Graphics\2D\LineRenderer.cpp" />
     <ClCompile Include="Framework\Source\Graphics\Shader\AShader.cpp" />
     <ClCompile Include="Framework\Source\Application\Resource\ResourceManager.cpp" />
@@ -175,6 +178,9 @@
     <ClInclude Include="Framework\Include\Box2D\Particle\b2StackQueue.h" />
     <ClInclude Include="Framework\Include\Box2D\Particle\b2VoronoiDiagram.h" />
     <ClInclude Include="Framework\Include\Box2D\Rope\b2Rope.h" />
+    <ClInclude Include="Framework\Source\Component\Physics\B2Manager.h" />
+    <ClInclude Include="Framework\Source\Component\Physics\B2BoxComponent.h" />
+    <ClInclude Include="Framework\Source\Component\Physics\B2PolygonComponent.h" />
     <ClInclude Include="Framework\Source\Graphics\2D\LineRenderer.h" />
     <ClInclude Include="Framework\Source\Graphics\Shader\AShader.h" />
     <ClInclude Include="Framework\Source\Application\Resource\ResourceManager.h" />

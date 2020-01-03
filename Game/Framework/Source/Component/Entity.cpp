@@ -8,8 +8,8 @@ Entity::Entity()
 {
 }
 
-Entity::Entity(const std::string & tag, const std::string & name)
-	:m_Tag(tag), m_Name(name)
+Entity::Entity(const XMFLOAT3& position, const std::string& tag, const std::string& name)
+	:m_Position(position), m_Tag(tag), m_Name(name)
 {
 }
 
@@ -78,4 +78,9 @@ const std::string& Entity::getTg()
 const std::string& Entity::getName()
 {
 	return m_Name;
+}
+
+const XMFLOAT3& Entity::getPosition()
+{
+	return m_Position;
 }

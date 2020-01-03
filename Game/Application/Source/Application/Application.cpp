@@ -1,4 +1,7 @@
 #include"Application.h"
+#include"Scene/TestScene.h"
+#include"Scene/Title.h"
+#include<memory>
 #include<Framework/Source/Application/Window/Window.h>
 #include<Framework/Source/Graphics/2D/SpritebatchOld.h>
 #include<Framework/Source/Graphics/2D/Camera.h>
@@ -10,48 +13,36 @@
 #include<Framework/Source/Graphics/Shader/TestShader.h>
 #include<Framework/Source/Device/DeviceLocator.h>
 #include<Framework/Source/Device/Input/Keyboard.h>
-//#include<Framework/Source/Device/Sound/XactAudio.h>
 #include<Framework/Source/Graphics/2D/Texture.h>
 #include<Framework/Source/Application/Task/TaskManager.h>
-#include"Scene/TestScene.h"
-#include"Scene/Title.h"
+#include<Framework/Source/Application/Scene/SceneManager.h>
+#include<Framework/Source/Component/Physics/B2Manager.h>
 
 
-Application::Application():
-	m_FPSTimer(100,60)
+Application::Application()
 {
-	init();
-	m_pCamera = std::make_shared<Camera>();
-	//m_pSpritebatchOld = std::make_unique<SpritebatchOld>(m_pCamera);
 }
 
 Application::~Application()
 {
 }
 
-bool Application::init()
+bool Application::init(HINSTANCE hInstance)
 {
-	//Window
-	m_pWindow = std::make_unique<Window>();
-	if (utility::checkNull(m_pWindow.get(), "Windowのインスタンス取得失敗"))return false;
-	if (!m_pWindow->initWindow(m_hInstance, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, APP_NAME))utility::debugLog("ウィンドウ初期化失敗");
-	m_hWnd = m_pWindow->m_hWnd;
+	Window window;
+	if (!window.initWindow(hInstance, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, APP_NAME))utility::debugLog("ウィンドウ初期化失敗");
+	m_hWnd = window.m_hWnd;
 
-	//Direct3D11
 	D3d11::Create();
+	TaskManager::Create();
+	ResourceManager::Create();
+
 	if (!D3d11::Instance().init(m_hWnd)) 
 	{ 
 		utility::debugLog("D3d11の初期化失敗");
 		return false; 
 	}
 
-	//Input
-	DeviceLocator::ProvideKeyboard(std::make_unique<Keyboard>(m_hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND));
-	//DeviceLocator::ProvideAudio(std::make_unique<XactAudio>());
-
-	ResourceManager::Create();
-
-	//ResourceManager::Instance().loadShader<TextureShader>("Texture.hlsl");
 	ResourceManager::Instance().loadShader<SpriteShader>("SpritebatchShader.hlsl");
 	ResourceManager::Instance().loadShader<TestShader>("LineShader.hlsl");
 	ResourceManager::Instance().loadShader<TestShader>("LineShaderTest.hlsl");
@@ -59,18 +50,20 @@ bool Application::init()
 	ResourceManager::Instance().loadTexture("red.png"); 
 	ResourceManager::Instance().loadTexture("green_pepper.png");
 
-	TaskManager::Create();
-
 	SceneManager::Add(std::make_unique<Title>("title"));
 	SceneManager::Add(std::make_unique<TestScene>("test"));
 	SceneManager::Change("title");
+
+	DeviceLocator::ProvideKeyboard(std::make_unique<Keyboard>(m_hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND));
+	//DeviceLocator::ProvideAudio(std::make_unique<XactAudio>());
 
 	return true;
 }
 
 void Application::run(HINSTANCE hInstance)
 {
-	m_hInstance = hInstance;
+	init(hInstance);
+	utility::FPSTimer timer;
 	ShowWindow(m_hWnd, SW_SHOW);
 	UpdateWindow(m_hWnd);
 
@@ -86,9 +79,9 @@ void Application::run(HINSTANCE hInstance)
 		}
 		else
 		{
-			m_FPSTimer.update();
+			timer.update();
 			loop();
-			m_FPSTimer.wait();
+			timer.wait();
 		}
 	}
 	finalize();
@@ -102,35 +95,17 @@ void Application::loop()
 
 	TaskManager::Instance().update();
 	TaskManager::Instance().draw();
-
-	if (DeviceLocator::Keyboard().keyUp(KeyCode::A)) {
-		SceneManager::Change("title");
-	}
-
-	if (DeviceLocator::Keyboard().keyUp(KeyCode::S)) {
-		SceneManager::Change("test");
-	}
-
-	/*m_SceneManager.update();*/
-
-	//static float angle = 0;
-	//angle += 0.02;
-
-	//static float angle2 = 0;
-	//angle2 += 0.04;
-
-	//m_pSpritebatchOld->begin(SortMode::BackToFront);
-	//m_pSpritebatchOld->draw("blue.png", XMFLOAT3(0, 0, 0), angle, XMFLOAT2(0, 0), XMFLOAT4(1, 1, 1, 0.5f));
-	//m_pSpritebatchOld->draw("red.png", XMFLOAT3(0, 0, 0.5f), XMFLOAT2(0.5f, 0.5f), angle2, XMFLOAT2(0, 0), XMFLOAT4(1, 1, 1, 0.5f));
-	//m_pSpritebatchOld->end();
-
 	TaskManager::Instance().removeTask();
+	B2Manager::Update();
+
 	SceneManager::RemoveEntity();
+
 	D3d11::Instance().present();
 }
 
 void Application::finalize()
 {
-	D3d11::Destroy();
 	ResourceManager::Destroy();
+	TaskManager::Destroy();
+	D3d11::Destroy();
 }

@@ -1,4 +1,5 @@
 #include"D3d11.h"
+#include<dxgi1_2.h>
 #include<Framework/Source/Utility/Constant.h>
 #include<Framework/Source/Utility/Judge.h>
 
@@ -10,65 +11,167 @@ bool D3d11::init(const HWND &pcd)
 	m_hWnd = pcd;
 	HRESULT result = 0;
 
-	//スワップチェーンの宣言
-	DXGI_SWAP_CHAIN_DESC sd;
-	ZeroMemory(&sd, sizeof(sd));
+	bool msaa = true;//アンチエイリアスのテストMSAA
+	if (!msaa)
+	{
+		//スワップチェーンの宣言
+		DXGI_SWAP_CHAIN_DESC sd;
+		ZeroMemory(&sd, sizeof(sd));
 
-	//スワップチェーンの定義
-	sd.BufferCount = 1;
-	sd.BufferDesc.Width = WINDOW_WIDTH;
-	sd.BufferDesc.Height = WINDOW_HEIGHT;
-	sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-	sd.BufferDesc.RefreshRate.Numerator = 60;
-	sd.BufferDesc.RefreshRate.Denominator = 1;
-	sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-	sd.OutputWindow = m_hWnd;
-	sd.SampleDesc.Count = 1;
-	sd.SampleDesc.Quality = 0;
-	sd.Windowed = TRUE;
+		//スワップチェーンの定義
+		sd.BufferCount = 1;
+		sd.BufferDesc.Width = WINDOW_WIDTH;
+		sd.BufferDesc.Height = WINDOW_HEIGHT;
+		sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		sd.BufferDesc.RefreshRate.Numerator = 60;
+		sd.BufferDesc.RefreshRate.Denominator = 1;
+		sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+		sd.OutputWindow = m_hWnd;
+		sd.SampleDesc.Count = 1;
+		sd.SampleDesc.Quality = 0;
+		sd.Windowed = TRUE;
 
-	D3D_FEATURE_LEVEL pFeatureLevels = D3D_FEATURE_LEVEL_11_0;
-	D3D_FEATURE_LEVEL* pFeatureLevel = NULL;
+		D3D_FEATURE_LEVEL pFeatureLevels = D3D_FEATURE_LEVEL_11_0;
+		D3D_FEATURE_LEVEL* pFeatureLevel = NULL;
 
-	//デバイスとスワップチェーンの作成
-	result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE,
-		NULL, 0, &pFeatureLevels, 1, D3D11_SDK_VERSION, &sd, m_pSwapChain.GetAddressOf(),
-		m_pDevice.GetAddressOf(), pFeatureLevel, m_pDeviceContext.GetAddressOf());
-	if (utility::checkError(result, "デバイスとスワップチェーンの作成失敗"))return false;
+		//デバイスとスワップチェーンの作成
+		result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE,
+			NULL, 0, &pFeatureLevels, 1, D3D11_SDK_VERSION, &sd, m_pSwapChain.GetAddressOf(),
+			m_pDevice.GetAddressOf(), pFeatureLevel, m_pDeviceContext.GetAddressOf());
+		if (utility::checkError(result, "デバイスとスワップチェーンの作成失敗"))return false;
 
 
-	//レンダーターゲットビューの作成
-	//バックバッファーのポインタ
-	ComPtr<ID3D11Texture2D>pBackBuffer;
+		//レンダーターゲットビューの作成
+		//バックバッファーのポインタ
+		ComPtr<ID3D11Texture2D>pBackBuffer;
 
-	//スワップチェーンからバックバッファーのポインタを取得
-	m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)pBackBuffer.GetAddressOf());
+		//スワップチェーンからバックバッファーのポインタを取得
+		m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)pBackBuffer.GetAddressOf());
 
-	//バックバッファーを渡し、それに対するレンダーターゲットビューを作成
-	result = m_pDevice->CreateRenderTargetView(pBackBuffer.Get(), NULL, m_pRenderTargetView.GetAddressOf());
-	if (utility::checkError(result, "レンダーターゲットビューの作成失敗"))return false;
+		//バックバッファーを渡し、それに対するレンダーターゲットビューを作成
+		result = m_pDevice->CreateRenderTargetView(pBackBuffer.Get(), NULL, m_pRenderTargetView.GetAddressOf());
+		if (utility::checkError(result, "レンダーターゲットビューの作成失敗"))return false;
 
-	//深度ステンシルビューの宣言
-	D3D11_TEXTURE2D_DESC descDepth;
+		//深度ステンシルビューの宣言
+		D3D11_TEXTURE2D_DESC descDepth;
 
-	//深度ステンシルビューの定義
-	descDepth.Width = WINDOW_WIDTH;
-	descDepth.Height = WINDOW_HEIGHT;
-	descDepth.MipLevels = 1;
-	descDepth.ArraySize = 1;
-	descDepth.Format = DXGI_FORMAT_D32_FLOAT;
-	descDepth.SampleDesc.Count = 1;
-	descDepth.SampleDesc.Quality = 0;
-	descDepth.Usage = D3D11_USAGE_DEFAULT;
-	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-	descDepth.CPUAccessFlags = 0;
-	descDepth.MiscFlags = 0;
+		//深度ステンシルビューの定義
+		descDepth.Width = WINDOW_WIDTH;
+		descDepth.Height = WINDOW_HEIGHT;
+		descDepth.MipLevels = 1;
+		descDepth.ArraySize = 1;
+		descDepth.Format = DXGI_FORMAT_D32_FLOAT;
+		descDepth.SampleDesc.Count = 1;
+		descDepth.SampleDesc.Quality = 0;
+		descDepth.Usage = D3D11_USAGE_DEFAULT;
+		descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+		descDepth.CPUAccessFlags = 0;
+		descDepth.MiscFlags = 0;
 
-	m_pDevice->CreateTexture2D(&descDepth, NULL, m_pDepthStencil.GetAddressOf());
+		m_pDevice->CreateTexture2D(&descDepth, NULL, m_pDepthStencil.GetAddressOf());
 
-	//深度ステンシルビューの作成
-	result = m_pDevice->CreateDepthStencilView(m_pDepthStencil.Get(), NULL, m_pDepthStencilView.GetAddressOf());
-	if (utility::checkError(result, "深度ステンシルビューの作成失敗"))return false;
+		//深度ステンシルビューの作成
+		result = m_pDevice->CreateDepthStencilView(m_pDepthStencil.Get(), NULL, m_pDepthStencilView.GetAddressOf());
+		if (utility::checkError(result, "深度ステンシルビューの作成失敗"))return false;
+	}
+	else 
+	{
+		D3D_FEATURE_LEVEL pFeatureLevels = D3D_FEATURE_LEVEL_11_0;
+		D3D11CreateDevice(
+			nullptr, // Specify nullptr to use the default adapter.
+			D3D_DRIVER_TYPE_HARDWARE,
+			nullptr,
+			0,
+			&pFeatureLevels,
+			1,
+			D3D11_SDK_VERSION, // UWP apps must set this to D3D11_SDK_VERSION.
+			m_pDevice.GetAddressOf(), // Returns the Direct3D device created.
+			nullptr,
+			m_pDeviceContext.GetAddressOf() // Returns the device immediate context.
+		);
+
+		DXGI_SAMPLE_DESC sampleDesc = {};
+		for (int i = 1; i <= D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT; i <<= 1)
+		{
+			UINT Quality;
+			if (SUCCEEDED(m_pDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_D24_UNORM_S8_UINT, i, &Quality)))
+			{
+				if (0 < Quality)
+				{
+					sampleDesc.Count = i;
+					sampleDesc.Quality = Quality - 1;
+				}
+			}
+		}
+
+		ComPtr<IDXGIDevice1> dxgiDevice;
+		m_pDevice.As(&dxgiDevice);
+
+		ComPtr<IDXGIAdapter> dxgiAdapter;
+		dxgiDevice->GetAdapter(&dxgiAdapter);
+
+		ComPtr<IDXGIFactory> dxgiFactory;
+		dxgiAdapter->GetParent(
+			__uuidof(IDXGIFactory2),
+			&dxgiFactory
+		);
+
+		DXGI_SWAP_CHAIN_DESC sd;
+		ZeroMemory(&sd, sizeof(sd));
+		sd.BufferCount = 1;
+		sd.BufferDesc.Width = WINDOW_WIDTH;
+		sd.BufferDesc.Height = WINDOW_HEIGHT;
+		sd.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		sd.BufferDesc.RefreshRate.Numerator = 60;
+		sd.BufferDesc.RefreshRate.Denominator = 1;
+		sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+		sd.OutputWindow = m_hWnd;
+		sd.SampleDesc = sampleDesc;
+		sd.Windowed = TRUE;
+		dxgiFactory->CreateSwapChain(
+			m_pDevice.Get(),
+			&sd,
+			m_pSwapChain.GetAddressOf()
+		);
+
+		//レンダーターゲットビューの作成
+		//バックバッファーのポインタ
+		ComPtr<ID3D11Texture2D>pBackBuffer;
+
+		//スワップチェーンからバックバッファーのポインタを取得
+		m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)pBackBuffer.GetAddressOf());
+
+		//バックバッファーを渡し、それに対するレンダーターゲットビューを作成
+		result = m_pDevice->CreateRenderTargetView(pBackBuffer.Get(), NULL, m_pRenderTargetView.GetAddressOf());
+		if (utility::checkError(result, "レンダーターゲットビューの作成失敗"))return false;
+
+		//深度ステンシルビューの宣言
+		D3D11_TEXTURE2D_DESC descDepth;
+
+		//深度ステンシルビューの定義
+		descDepth.Width = WINDOW_WIDTH;
+		descDepth.Height = WINDOW_HEIGHT;
+		descDepth.MipLevels = 1;
+		descDepth.ArraySize = 1;
+		descDepth.Format = DXGI_FORMAT_D32_FLOAT;
+		descDepth.SampleDesc = sampleDesc;
+		descDepth.Usage = D3D11_USAGE_DEFAULT;
+		descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+		descDepth.CPUAccessFlags = 0;
+		descDepth.MiscFlags = 0;
+
+		D3D11_DEPTH_STENCIL_VIEW_DESC dsvDesc = {};
+		dsvDesc.Format = descDepth.Format;
+		dsvDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2DMS;
+		dsvDesc.Flags = 0;
+		dsvDesc.Texture2D.MipSlice = 0;
+
+		m_pDevice->CreateTexture2D(&descDepth, NULL, m_pDepthStencil.GetAddressOf());
+
+		//深度ステンシルビューの作成
+		result = m_pDevice->CreateDepthStencilView(m_pDepthStencil.Get(), &dsvDesc, m_pDepthStencilView.GetAddressOf());
+		if (utility::checkError(result, "深度ステンシルビューの作成失敗"))return false;
+	}
 
 	//レンダーターゲットビューと深度ステンシルビューをパイプラインにバインド
     m_pDeviceContext->OMSetRenderTargets(1, m_pRenderTargetView.GetAddressOf(), m_pDepthStencilView.Get());
