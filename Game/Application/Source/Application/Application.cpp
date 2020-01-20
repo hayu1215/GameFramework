@@ -7,7 +7,7 @@
 #include<Framework/Source/Graphics/2D/Camera.h>
 #include<Framework/Source/Utility/Judge.h>
 #include<Framework/Source/Utility/Constant.h>
-#include<Framework/Source/Device/D3d11.h>
+#include<Framework/Source/Graphics/D3d11.h>
 #include<Framework/Source/Application/Resource/ResourceManager.h>
 #include<Framework/Source/Graphics/Shader/SpriteShader.h>
 #include<Framework/Source/Graphics/Shader/TestShader.h>
@@ -17,6 +17,7 @@
 #include<Framework/Source/Application/Task/TaskManager.h>
 #include<Framework/Source/Application/Scene/SceneManager.h>
 #include<Framework/Source/Component/Physics/B2Manager.h>
+#include<Framework/Source/Utility/Timer/FpsTimer.h>
 
 
 Application::Application()
@@ -59,7 +60,7 @@ bool Application::init(HINSTANCE hInstance)
 void Application::run(HINSTANCE hInstance)
 {
 	init(hInstance);
-	utility::FPSTimer timer;
+	utility::FpsTimer fpsTimer;
 	ShowWindow(m_hWnd, SW_SHOW);
 	UpdateWindow(m_hWnd);
 
@@ -75,9 +76,9 @@ void Application::run(HINSTANCE hInstance)
 		}
 		else
 		{
-			timer.update();
+			fpsTimer.update();
 			loop();
-			timer.wait();
+			fpsTimer.wait();
 		}
 	}
 	finalize();
@@ -86,17 +87,14 @@ void Application::run(HINSTANCE hInstance)
 void Application::loop()
 {
 	D3d11::Clear();
-
-	DeviceLocator::Keyboard().update();
-
 	TaskManager::Update();
 	TaskManager::Draw();
-	TaskManager::RemoveTask();
-	B2Manager::Update();
-
-	SceneManager::RemoveEntity();
-
 	D3d11::Present();
+
+	DeviceLocator::Keyboard().update();
+	B2Manager::Update();
+	TaskManager::RemoveTask();
+	SceneManager::RemoveEntity();
 }
 
 void Application::finalize()

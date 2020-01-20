@@ -5,16 +5,16 @@
 
 namespace utility
 {
-	class FPSTimer
+	class FpsTimer
 	{
 	public:
-		FPSTimer();
-		FPSTimer(int sampleNum, int targetFps);
-		~FPSTimer();
+		FpsTimer();
+		FpsTimer(int sampleNum, int targetFps);
+		~FpsTimer();
 
 		void update();
 		void wait();
-		float getFPS();
+		float getFps();
 
 	private:
 		ChronoTimer timer;

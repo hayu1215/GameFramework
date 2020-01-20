@@ -11,13 +11,12 @@ class B2PolygonComponent :public UpdateComponent
 {
 public:
 	B2PolygonComponent();
-	B2PolygonComponent(bool isStatic, const std::vector<b2Vec2>& vertexes);
+	B2PolygonComponent(bool isActive, bool isStatic, const std::vector<b2Vec2>& vertexes);
 	~B2PolygonComponent();
 
 public:
-	void init()override;
+	void onCreate()override;
 	void update()override;
-
 	void onActive()override;
 	void onDeActive()override;
 	void onDestory()override;

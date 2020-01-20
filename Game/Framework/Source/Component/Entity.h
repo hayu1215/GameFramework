@@ -28,7 +28,7 @@ public:
 	void destroy();
 
 	bool isActive();
-	const std::string& getTg();
+	const std::string& getTag();
 	const std::string& getName();
 	const XMFLOAT3& getPosition();
 

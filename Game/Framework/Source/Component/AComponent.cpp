@@ -2,7 +2,13 @@
 #include<Framework/Source/Component/Entity.h>
 #include<Framework/Source/Application/Task/TaskManager.h>
 
-AComponent::AComponent()
+AComponent::AComponent():
+	m_IsActive(false)
+{
+}
+
+AComponent::AComponent(bool isActive)
+	:m_IsActive(isActive)
 {
 }
 
@@ -10,15 +16,10 @@ AComponent::~AComponent()
 {
 }
 
-void AComponent::prepareDestroy()
-{
-	deActive();
-}
-
 void AComponent::destroy()
 {
 	onDestory();
-	prepareDestroy();
+	deActive();
 	m_pEntity.lock()->addRemoveComponent(shared_from_this());
 }
 

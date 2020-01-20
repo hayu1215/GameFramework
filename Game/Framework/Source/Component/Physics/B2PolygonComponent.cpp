@@ -8,8 +8,8 @@ B2PolygonComponent::B2PolygonComponent()
 {
 }
 
-B2PolygonComponent::B2PolygonComponent(bool isStatic, const std::vector<b2Vec2>& vertexes)
-	: m_IsStatic(isStatic), m_Vertexes(vertexes)
+B2PolygonComponent::B2PolygonComponent(bool isActive, bool isStatic, const std::vector<b2Vec2>& vertexes)
+	:UpdateComponent(isActive), m_IsStatic(isStatic), m_Vertexes(vertexes)
 {
 }
 
@@ -17,10 +17,9 @@ B2PolygonComponent::~B2PolygonComponent()
 {
 }
 
-void B2PolygonComponent::init()
+void B2PolygonComponent::onCreate()
 {
-	a = std::make_shared<Camera>();
-	lineRenderer = std::make_unique<LineRenderer>(a);
+	lineRenderer = std::make_unique<LineRenderer>();
 
 	//object
 	b2BodyDef bodyDef;
@@ -28,10 +27,9 @@ void B2PolygonComponent::init()
 	if (m_IsStatic)bodyDef.type = b2_staticBody;
 	else bodyDef.type = b2_dynamicBody;
 
-	utility::debugLog(m_pEntity.lock()->getName());
 	XMFLOAT3 pos = m_pEntity.lock()->getPosition();
 	bodyDef.position.Set(pos.x, pos.y);
-	m_pBody = B2Manager::m_World.CreateBody(&bodyDef);
+	m_pBody = B2Manager::World().CreateBody(&bodyDef);
 
 	b2PolygonShape shape;
 	shape.Set(&m_Vertexes[0], m_Vertexes.size());

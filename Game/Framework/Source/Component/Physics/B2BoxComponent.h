@@ -10,13 +10,12 @@ class B2BoxComponent :public UpdateComponent
 {
 public:
 	B2BoxComponent();
-	B2BoxComponent(bool isStatic, const XMFLOAT2& size);
+	B2BoxComponent(bool isActive, bool isStatic, const XMFLOAT2& size);
 	~B2BoxComponent();
 
 public:
-	void init()override;
+	void onCreate()override;
 	void update()override;
-
 	void onActive()override;
 	void onDeActive()override;
 	void onDestory()override;

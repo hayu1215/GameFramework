@@ -1,7 +1,7 @@
 #include "TestShader.h"
 #include<d3dcompiler.h>
 //#include<Framework/Source/Utility/Judge.h>
-#include<Framework/Source/Device/D3d11.h>
+#include<Framework/Source/Graphics/D3d11.h>
 
 TestShader::TestShader(const std::string& name)
 {

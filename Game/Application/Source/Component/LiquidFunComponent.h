@@ -6,8 +6,6 @@
 #include<Framework/Source/Graphics/2D/LineRenderer.h>
 #include<Framework/Include/Box2D/Box2D.h>
 #include<Framework/Source/Utility/Judge.h>
-#include<Framework/Source/Graphics/2D/Camera.h>
-#include<Framework/Source/Graphics/2D/LineRenderer.h>
 
 class LiquidFunComponent :public UpdateComponent
 {
@@ -16,9 +14,8 @@ public:
 	~LiquidFunComponent();
 
 public:
-	void init()override;
+	void onCreate()override;
 	void update()override;
-
 	void onActive()override;
 	void onDeActive()override;
 	void onDestory()override;

@@ -5,12 +5,11 @@
 #include<wrl/client.h>
 #include<vector>
 #include"Texture.h"
-#include<Framework/Source/Device/D3d11.h>
+#include<Framework/Source/Graphics/D3d11.h>
 #include<Framework/Source/Utility/Math/XMath.h>
 #include<Framework/Source/Utility/Math/XMath.h>
 #include<Framework/Source/Utility/Math/XMath.h>
 #include<Framework/Source/Utility/Math/XMath.h>
-#include<Framework/Source/Graphics/2D/Camera.h>
 
 //using namespace Microsoft::WRL;
 using Microsoft::WRL::ComPtr;
@@ -31,7 +30,6 @@ class LineRenderer
 {
 public:
 	LineRenderer();
-	LineRenderer(std::shared_ptr<Camera>camera);
 	~LineRenderer();
 
 	void drawLine(const XMFLOAT3& position1, const XMFLOAT3& position2, const XMFLOAT4& color1, const XMFLOAT4& color2, float width);
@@ -45,5 +43,4 @@ private:
 private:
 	ComPtr<ID3D11Buffer> m_pConstantBuffer;
 	ComPtr<ID3D11Buffer> m_pVertexBuffer;
-	std::weak_ptr<Camera> m_pCamera;
 };

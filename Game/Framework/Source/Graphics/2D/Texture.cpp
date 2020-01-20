@@ -1,7 +1,7 @@
 #include"Texture.h"
 #include<Framework/Source/Utility/Constant.h>
 #include<Framework/Source/Utility/Judge.h>
-#include<Framework/Source/Application/Resource/Loader/TextureLoader/WICTextureLoader.h>
+#include<Framework/Include/Loader/TextureLoader/WICTextureLoader.h>
 
 Texture::Texture() :
 	m_ShaderResourceView(nullptr), m_Width(0), m_Height(0)

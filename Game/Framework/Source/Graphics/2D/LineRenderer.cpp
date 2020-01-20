@@ -2,15 +2,9 @@
 #include<Framework/Source/Utility/Judge.h>
 #include<Framework/Source/Application/Resource/ResourceManager.h>
 #include<Framework/Source/Utility/Constant.h>
+#include<Framework/Source/Component/CameraComponent.h>
 
 LineRenderer::LineRenderer()
-{
-	createVertexBuffer2();
-	createConstantBuffer2();
-}
-
-LineRenderer::LineRenderer(std::shared_ptr<Camera>camera)
-	:m_pCamera(camera)
 {
 	createVertexBuffer2();
 	createConstantBuffer2();
@@ -48,7 +42,7 @@ void LineRenderer::drawLine(const XMFLOAT3 & position1, const XMFLOAT3 & positio
 
 	deviceContext->Unmap(m_pVertexBuffer.Get(), 0);
 
-	XMMATRIX mView = m_pCamera.lock()->getView();
+	XMMATRIX mView = CameraComponent::GetMainCamera().lock()->getView();
 	XMMATRIX mProj = {
 		2.0f / (float)(WINDOW_WIDTH), 0.0f, 0.0f, 0.0f,
 		0.0f, 2.0f / (float)(WINDOW_HEIGHT), 0.0f, 0.0f,
@@ -129,7 +123,7 @@ void LineRenderer::drawLine(const std::string& name,const std::vector<XMFLOAT3>&
 
 	deviceContext->Unmap(m_pVertexBuffer.Get(), 0);
 
-	XMMATRIX mView = m_pCamera.lock()->getView();
+	XMMATRIX mView = CameraComponent::GetMainCamera().lock()->getView();
 	XMMATRIX mProj = {
 		2.0f / (float)(WINDOW_WIDTH), 0.0f, 0.0f, 0.0f,
 		0.0f, 2.0f / (float)(WINDOW_HEIGHT), 0.0f, 0.0f,

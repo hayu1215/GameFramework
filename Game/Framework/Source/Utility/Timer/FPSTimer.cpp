@@ -1,23 +1,23 @@
-#include "FPSTimer.h"
+#include "FpsTimer.h"
 
 namespace utility
 {
-	FPSTimer::FPSTimer() :
+	FpsTimer::FpsTimer() :
 		m_sampleNum(100), m_TargetFps(60), m_Count(0), m_Fps(0)
 	{
 	}
 
 
-	FPSTimer::FPSTimer(int sampleNum, int targetFps) :
+	FpsTimer::FpsTimer(int sampleNum, int targetFps) :
 		m_sampleNum(sampleNum), m_TargetFps(targetFps), m_Count(0), m_Fps(0)
 	{
 	}
 
-	FPSTimer::~FPSTimer()
+	FpsTimer::~FpsTimer()
 	{
 	}
 
-	void FPSTimer::update()
+	void FpsTimer::update()
 	{
 		//最初だけ呼ばれるタイマーのスタート
 		if (m_Count == 0) timer.restart();
@@ -32,14 +32,14 @@ namespace utility
 		m_Count += 1;
 	}
 
-	void FPSTimer::wait()
+	void FpsTimer::wait()
 	{
 		double minFrameTime = 1.0f / m_TargetFps * 1000.0f;
 		std::chrono::milliseconds sleepTime((long long)(minFrameTime * m_Count - timer.elapsed()));
 		if (sleepTime.count() > 0) std::this_thread::sleep_for(sleepTime);
 	}
 
-	float FPSTimer::getFPS()
+	float FpsTimer::getFps()
 	{
 		return m_Fps;
 	}

@@ -6,17 +6,37 @@ UpdateComponent::UpdateComponent()
 {
 }
 
+UpdateComponent::UpdateComponent(bool isActive)
+	:AComponent(isActive)
+{
+}
+
 UpdateComponent::~UpdateComponent()
 {
 }
 
-void UpdateComponent::setTask(const std::shared_ptr<AComponent>& task)
+void UpdateComponent::init()
 {
-	TaskManager::AddTask(std::dynamic_pointer_cast<UpdateComponent>(task));
+	if (m_IsActive)
+	{
+		onActive();
+		TaskManager::AddTask(std::dynamic_pointer_cast<UpdateComponent>(shared_from_this()));
+	}
+	else onDeActive();
 }
 
-void UpdateComponent::prepareDestroy()
+void UpdateComponent::active()
 {
-	deActive();
+	if (m_IsActive)return;
+	onActive();
+	TaskManager::AddTask(std::dynamic_pointer_cast<UpdateComponent>(shared_from_this()));
+	m_IsActive = true;
+}
+
+void UpdateComponent::deActive()
+{
+	if (!m_IsActive)return;
+	onDeActive();
 	TaskManager::AddRemoveTask(std::dynamic_pointer_cast<UpdateComponent>(shared_from_this()));
+	m_IsActive = false;
 }

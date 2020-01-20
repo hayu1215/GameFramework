@@ -6,3 +6,8 @@ void B2Manager::Update()
 {
 	m_World.Step(timeStep, velocityIterations, positionIterations);
 }
+
+b2World& B2Manager::World()
+{
+	return m_World;
+}

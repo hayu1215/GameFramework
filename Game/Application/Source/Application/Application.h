@@ -1,6 +1,6 @@
 #pragma once
+
 #include<Windows.h>
-#include<Framework/Source/Utility/Timer/FPSTimer.h>
 
 class Application
 {
@@ -18,6 +18,4 @@ private:
 
 private:
 	HWND m_hWnd;
-	
-	//utility::FPSTimer timer;
 };

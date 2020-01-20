@@ -8,8 +8,8 @@ B2BoxComponent::B2BoxComponent()
 {
 }
 
-B2BoxComponent::B2BoxComponent(bool isStatic, const XMFLOAT2 & size)
-	:m_IsStatic(isStatic),m_Size(size)
+B2BoxComponent::B2BoxComponent(bool isActive, bool isStatic, const XMFLOAT2 & size)
+	:UpdateComponent(isActive), m_IsStatic(isStatic),m_Size(size)
 {
 }
 
@@ -17,10 +17,9 @@ B2BoxComponent::~B2BoxComponent()
 {
 }
 
-void B2BoxComponent::init()
+void B2BoxComponent::onCreate()
 {
-	a = std::make_shared<Camera>();
-	lineRenderer = std::make_unique<LineRenderer>(a);
+	lineRenderer = std::make_unique<LineRenderer>();
 
 	//object
 	b2BodyDef bodyDef;
@@ -28,10 +27,9 @@ void B2BoxComponent::init()
 	if (m_IsStatic)bodyDef.type = b2_staticBody;
 	else bodyDef.type = b2_dynamicBody;
 
-	utility::debugLog(m_pEntity.lock()->getName());
 	XMFLOAT3 pos = m_pEntity.lock()->getPosition();
 	bodyDef.position.Set(pos.x, pos.y);
-	m_pBody = B2Manager::m_World.CreateBody(&bodyDef);
+	m_pBody = B2Manager::World().CreateBody(&bodyDef);
 
 	b2PolygonShape shape;
 	shape.SetAsBox(m_Size.x, m_Size.y);

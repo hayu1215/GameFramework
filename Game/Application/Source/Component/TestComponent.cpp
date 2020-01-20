@@ -4,15 +4,14 @@
 
 TestComponent::TestComponent()
 {
-	a = std::make_shared<Camera>();
-	lineRenderer = std::make_unique<LineRenderer>(a);
+	lineRenderer = std::make_unique<LineRenderer>();
 }
 
 TestComponent::~TestComponent()
 {
 }
 
-void TestComponent::init()
+void TestComponent::onCreate()
 {
 	//m_pEntity.lock()->destroy();
 }

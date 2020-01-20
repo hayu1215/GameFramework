@@ -12,9 +12,8 @@ public:
 	~TestComponent();
 
 public:
-	void init()override;
+	void onCreate()override;
 	void update()override;
-
 	void onActive()override;
 	void onDeActive()override;
 	void onDestory()override;

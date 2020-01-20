@@ -79,6 +79,7 @@
     <ClCompile Include="Framework\Include\Box2D\Particle\b2ParticleSystem.cpp" />
     <ClCompile Include="Framework\Include\Box2D\Particle\b2VoronoiDiagram.cpp" />
     <ClCompile Include="Framework\Include\Box2D\Rope\b2Rope.cpp" />
+    <ClCompile Include="Framework\Source\Component\CameraComponent.cpp" />
     <ClCompile Include="Framework\Source\Component\Physics\B2Manager.cpp" />
     <ClCompile Include="Framework\Source\Component\Physics\B2BoxComponent.cpp" />
     <ClCompile Include="Framework\Source\Component\Physics\B2PolygonComponent.cpp" />
@@ -92,7 +93,7 @@
     <ClCompile Include="Framework\Source\Component\AComponent.cpp" />
     <ClCompile Include="Framework\Source\Component\Entity.cpp" />
     <ClCompile Include="Framework\Source\Component\UpdateComponent.cpp" />
-    <ClCompile Include="Framework\Source\Device\D3d11.cpp" />
+    <ClCompile Include="Framework\Source\Graphics\D3d11.cpp" />
     <ClCompile Include="Framework\Source\Device\DeviceLocator.cpp" />
     <ClCompile Include="Framework\Source\Device\Input\Keyboard.cpp" />
     <ClCompile Include="Framework\Source\Device\Sound\XactAudio.cpp" />
@@ -101,7 +102,7 @@
     <ClCompile Include="Framework\Source\Graphics\2D\Spritebatch.cpp" />
     <ClCompile Include="Framework\Source\Graphics\2D\SpritebatchOld.cpp" />
     <ClCompile Include="Framework\Source\Graphics\2D\Texture.cpp" />
-    <ClCompile Include="Framework\Source\Application\Resource\Loader\TextureLoader\WICTextureLoader.cpp" />
+    <ClCompile Include="Framework\Include\Loader\TextureLoader\WICTextureLoader.cpp" />
     <ClCompile Include="Framework\Source\Graphics\Shader\SpriteShader.cpp" />
     <ClCompile Include="Framework\Source\Graphics\Shader\TestShader.cpp" />
     <ClCompile Include="Framework\Source\Utility\Judge.cpp" />
@@ -111,7 +112,7 @@
     <ClCompile Include="Framework\Source\Utility\Math\Vector3.cpp" />
     <ClCompile Include="Framework\Source\Utility\Math\Vector4.cpp" />
     <ClCompile Include="Framework\Source\Utility\Timer\ChronoTimer.cpp" />
-    <ClCompile Include="Framework\Source\Utility\Timer\FPSTimer.cpp" />
+    <ClCompile Include="Framework\Source\Utility\Timer\FpsTimer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Source\Application\Application.h" />
@@ -178,6 +179,7 @@
     <ClInclude Include="Framework\Include\Box2D\Particle\b2StackQueue.h" />
     <ClInclude Include="Framework\Include\Box2D\Particle\b2VoronoiDiagram.h" />
     <ClInclude Include="Framework\Include\Box2D\Rope\b2Rope.h" />
+    <ClInclude Include="Framework\Source\Component\CameraComponent.h" />
     <ClInclude Include="Framework\Source\Component\Physics\B2Manager.h" />
     <ClInclude Include="Framework\Source\Component\Physics\B2BoxComponent.h" />
     <ClInclude Include="Framework\Source\Component\Physics\B2PolygonComponent.h" />
@@ -191,7 +193,7 @@
     <ClInclude Include="Framework\Source\Component\AComponent.h" />
     <ClInclude Include="Framework\Source\Component\Entity.h" />
     <ClInclude Include="Framework\Source\Component\UpdateComponent.h" />
-    <ClInclude Include="Framework\Source\Device\D3d11.h" />
+    <ClInclude Include="Framework\Source\Graphics\D3d11.h" />
     <ClInclude Include="Framework\Source\Device\DeviceLocator.h" />
     <ClInclude Include="Framework\Source\Device\Input\IKeyboard.h" />
     <ClInclude Include="Framework\Source\Device\Input\Keyboard.h" />
@@ -204,7 +206,7 @@
     <ClInclude Include="Framework\Source\Graphics\2D\Spritebatch.h" />
     <ClInclude Include="Framework\Source\Graphics\2D\SpritebatchOld.h" />
     <ClInclude Include="Framework\Source\Graphics\2D\Texture.h" />
-    <ClInclude Include="Framework\Source\Application\Resource\Loader\TextureLoader\WICTextureLoader.h" />
+    <ClInclude Include="Framework\Include\Loader\TextureLoader\WICTextureLoader.h" />
     <ClInclude Include="Framework\Source\Graphics\Shader\SpriteShader.h" />
     <ClInclude Include="Framework\Source\Graphics\Shader\TestShader.h" />
     <ClInclude Include="Framework\Source\Utility\Constant.h" />
@@ -217,7 +219,7 @@
     <ClInclude Include="Framework\Source\Utility\Math\XMath.h" />
     <ClInclude Include="Framework\Source\Utility\Template\DynamicSingleton.h" />
     <ClInclude Include="Framework\Source\Utility\Timer\ChronoTimer.h" />
-    <ClInclude Include="Framework\Source\Utility\Timer\FPSTimer.h" />
+    <ClInclude Include="Framework\Source\Utility\Timer\FpsTimer.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Framework\Resource\Shader\LineShader.hlsl">

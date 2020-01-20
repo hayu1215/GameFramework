@@ -8,10 +8,10 @@ public:
 	B2Manager() = delete;
 
 	static void Update();
+	static b2World& World();
 
-public:
-	static b2World m_World;
 private:
+	static b2World m_World;
 	static constexpr float32 timeStep = 1.0f / 60.0f;
 	static constexpr int32 velocityIterations = 6;
 	static constexpr int32 positionIterations = 2;

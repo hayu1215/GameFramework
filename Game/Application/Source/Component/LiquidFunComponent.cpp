@@ -6,15 +6,14 @@
 LiquidFunComponent::LiquidFunComponent()
 	:m_World(b2Vec2(0.0f,-10.0f))
 {
-	a = std::make_shared<Camera>();
-	lineRenderer = std::make_unique<LineRenderer>(a);
+	lineRenderer = std::make_unique<LineRenderer>();
 }
 
 LiquidFunComponent::~LiquidFunComponent()
 {
 }
 
-void LiquidFunComponent::init()
+void LiquidFunComponent::onCreate()
 {
 	//ground
 	b2BodyDef groundBodyDef;
