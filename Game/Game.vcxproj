@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -84,6 +84,7 @@
     <ClCompile Include="Framework\Source\Component\Physics\B2BoxComponent.cpp" />
     <ClCompile Include="Framework\Source\Component\Physics\B2PolygonComponent.cpp" />
     <ClCompile Include="Framework\Source\Graphics\2D\LineRenderer.cpp" />
+    <ClCompile Include="Framework\Source\Graphics\2D\PolygonRenderer.cpp" />
     <ClCompile Include="Framework\Source\Graphics\Shader\AShader.cpp" />
     <ClCompile Include="Framework\Source\Application\Resource\ResourceManager.cpp" />
     <ClCompile Include="Framework\Source\Application\Scene\AScene.cpp" />
@@ -184,6 +185,7 @@
     <ClInclude Include="Framework\Source\Component\Physics\B2BoxComponent.h" />
     <ClInclude Include="Framework\Source\Component\Physics\B2PolygonComponent.h" />
     <ClInclude Include="Framework\Source\Graphics\2D\LineRenderer.h" />
+    <ClInclude Include="Framework\Source\Graphics\2D\PolygonRenderer.h" />
     <ClInclude Include="Framework\Source\Graphics\Shader\AShader.h" />
     <ClInclude Include="Framework\Source\Application\Resource\ResourceManager.h" />
     <ClInclude Include="Framework\Source\Application\Scene\AScene.h" />
