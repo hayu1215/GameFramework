@@ -10,18 +10,18 @@ protected:
 public:
 	static T& Instance() 
 	{
-		return *instance;
+		return *Instance;
 	}
 
 	static void Create() 
 	{
-		if (!instance) instance = new T();
+		if (!Instance) Instance = new T();
 	}
 
 	static void Destroy() 
 	{
-		delete instance;
-		instance = nullptr;
+		delete Instance;
+		Instance = nullptr;
 	}
 
 	DynamicSingleton(const DynamicSingleton&) = delete;
@@ -30,8 +30,8 @@ public:
 	DynamicSingleton& operator=(DynamicSingleton&&) = delete;
 
 private:
-	static T* instance;
+	static T* Instance;
 };
 
 template<class T>
-T* DynamicSingleton<T>::instance = nullptr;
+T* DynamicSingleton<T>::Instance = nullptr;

@@ -11,7 +11,6 @@ namespace utility
 	public:
 		ChronoTimer();
 
-	public:
 		void restart();
 		double elapsed();
 

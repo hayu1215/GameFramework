@@ -4,7 +4,7 @@
 #include<Framework/Source/Utility/Math/XMath.h>
 
 LiquidFunComponent::LiquidFunComponent()
-	:m_World(b2Vec2(0.0f,-10.0f))
+	:m_world(b2Vec2(0.0f,-10.0f))
 {
 	lineRenderer = std::make_unique<LineRenderer>();
 }
@@ -18,12 +18,12 @@ void LiquidFunComponent::onCreate()
 	//ground
 	b2BodyDef groundBodyDef;
 	groundBodyDef.position.Set(0.0f, -10.0f);
-	m_GroundBody = m_World.CreateBody(&groundBodyDef);
+	m_groundBody = m_world.CreateBody(&groundBodyDef);
 
 	b2PolygonShape groundBox;
 	groundBox.SetAsBox(50.0f, 10.0f);
 
-	m_GroundBody->CreateFixture(&groundBox, 0.0f);
+	m_groundBody->CreateFixture(&groundBox, 0.0f);
 
 	//object
 	b2BodyDef bodyDef;
@@ -31,7 +31,7 @@ void LiquidFunComponent::onCreate()
 	bodyDef.position.Set(0.0f, 100.0f);
 	bodyDef.angle = 90;
 	bodyDef.angularVelocity = 5;
-	m_Body = m_World.CreateBody(&bodyDef);
+	m_body = m_world.CreateBody(&bodyDef);
 
 	b2PolygonShape dynamicBox;
 	dynamicBox.SetAsBox(10.0f, 10.0f);
@@ -41,7 +41,7 @@ void LiquidFunComponent::onCreate()
 	fixtureDef.density = 1.0f;
 	fixtureDef.friction = 0.3f;
 
-	m_Body->CreateFixture(&fixtureDef);
+	m_body->CreateFixture(&fixtureDef);
 }
 
 void LiquidFunComponent::update()
@@ -49,9 +49,9 @@ void LiquidFunComponent::update()
 	float32 timeStep = 1.0f / 60.0f;
 	int32 velocityIterations = 6;
 	int32 positionIterations = 2;
-	m_World.Step(timeStep, velocityIterations, positionIterations);
+	m_world.Step(timeStep, velocityIterations, positionIterations);
 
-	b2Fixture* f = m_Body->GetFixtureList();
+	b2Fixture* f = m_body->GetFixtureList();
 	b2PolygonShape* s = (b2PolygonShape*)f->GetShape();
 
 	int size = s->GetVertexCount();
@@ -63,9 +63,9 @@ void LiquidFunComponent::update()
 		XMMATRIX scale;
 		scale = DirectX::XMMatrixScaling(1.0f, 1.0f, 1.0f);
 		XMMATRIX rotate;
-		rotate = DirectX::XMMatrixRotationZ(m_Body->GetAngle());
+		rotate = DirectX::XMMatrixRotationZ(m_body->GetAngle());
 		XMMATRIX translation;
-		translation = DirectX::XMMatrixTranslation(m_Body->GetPosition().x, m_Body->GetPosition().y, 0);
+		translation = DirectX::XMMatrixTranslation(m_body->GetPosition().x, m_body->GetPosition().y, 0);
 		XMMATRIX world = scale *  rotate * translation;
 		XMStoreFloat3(&pos1[i], DirectX::XMVector3Transform(xv, world));
 	}

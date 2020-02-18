@@ -1,15 +1,15 @@
 #include "Camera.h"
 
 Camera::Camera() :
-	m_Position(0, 0, 0), m_LookatPt(0, 0, 1)
+	m_position(0, 0, 0), m_lookatPt(0, 0, 1)
 {
-	XMStoreFloat4x4(&m_View, DirectX::XMMatrixIdentity());
+	XMStoreFloat4x4(&m_view, DirectX::XMMatrixIdentity());
 }
 
 Camera::Camera(const XMFLOAT3 &position, const XMFLOAT3 &lookat):
-     m_Position(position), m_LookatPt(lookat)
+     m_position(position), m_lookatPt(lookat)
 {
-	XMStoreFloat4x4(&m_View, DirectX::XMMatrixIdentity());
+	XMStoreFloat4x4(&m_view, DirectX::XMMatrixIdentity());
 }
 
 Camera::~Camera()
@@ -18,18 +18,18 @@ Camera::~Camera()
 
 void Camera::setPosition(const XMFLOAT3 &position)
 {
-	m_Position = position;
+	m_position = position;
 }
 
 void Camera::setLookatPt(const XMFLOAT3 &lookatPt)
 {
-	m_LookatPt = lookatPt;
+	m_lookatPt = lookatPt;
 }
 
 XMMATRIX Camera::getView()
 {
-	m_LookatPt = m_Position;
-	m_LookatPt.z += 1.0f;
-	XMStoreFloat4x4(&m_View, DirectX::XMMatrixLookAtLH(XMLoadFloat3(&m_Position), XMLoadFloat3(&m_LookatPt), XMLoadFloat3(&m_UpVector)));
-	return XMLoadFloat4x4(&m_View);
+	m_lookatPt = m_position;
+	m_lookatPt.z += 1.0f;
+	XMStoreFloat4x4(&m_view, DirectX::XMMatrixLookAtLH(XMLoadFloat3(&m_position), XMLoadFloat3(&m_lookatPt), XMLoadFloat3(&m_upVector)));
+	return XMLoadFloat4x4(&m_view);
 }

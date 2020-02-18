@@ -32,7 +32,7 @@ Vector3 Vector3::normalized()const
 
 float Vector3::length() const
 {
-	return mathf::sqrt(lengthSquared());
+	return mathf::Sqrt(lengthSquared());
 }
 
 float Vector3::lengthSquared() const
@@ -42,12 +42,12 @@ float Vector3::lengthSquared() const
 
 Vector3 Vector3::Abs(const Vector3& v)
 {
-	return{ mathf::abs(v.x),mathf::abs(v.y),mathf::abs(v.z) };
+	return{ mathf::Abs(v.x),mathf::Abs(v.y),mathf::Abs(v.z) };
 }
 
 Vector3 Vector3::Clamp(const Vector3 & v, const Vector3 & min, const Vector3 & max)
 {
-	return { mathf::clamp(v.x, min.x, max.x), mathf::clamp(v.y, min.y, max.y), mathf::clamp(v.z, min.z, max.z) };
+	return { mathf::Clamp(v.x, min.x, max.x), mathf::Clamp(v.y, min.y, max.y), mathf::Clamp(v.z, min.z, max.z) };
 }
 
 Vector3 Vector3::Cross(const Vector3 & v1, const Vector3 & v2)

@@ -13,5 +13,5 @@ public:
 	bool keyUp(KeyCode)override { return false; }
 
 	unsigned short load(std::string waveBankName, std::string soundBankName, const char* cueName)override { return 0; }
-	void Play(unsigned short index)override {}
+	void play(unsigned short index)override {}
 };

@@ -4,15 +4,15 @@
 #include<Framework/Source/Utility/Judge.h>
 
 HWND D3d11::m_hWnd = 0;
-ComPtr<ID3D11Device> D3d11::m_pDevice = nullptr;
-ComPtr<ID3D11DeviceContext> D3d11::m_pDeviceContext = nullptr;
-ComPtr<IDXGISwapChain> D3d11::m_pSwapChain = nullptr;
-ComPtr<ID3D11RenderTargetView> D3d11::m_pRenderTargetView = nullptr;
-ComPtr<ID3D11DepthStencilView> D3d11::m_pDepthStencilView = nullptr;
-ComPtr<ID3D11Texture2D> D3d11::m_pDepthStencil = nullptr;
-ComPtr<ID3D11DepthStencilState> D3d11::m_pDepthStencilState = nullptr;
-ComPtr<ID3D11BlendState> D3d11::m_pBlendState = nullptr;
-ComPtr<ID3D11RasterizerState> D3d11::m_pRasterizerState = nullptr;
+ComPtr<ID3D11Device> D3d11::m_Device = nullptr;
+ComPtr<ID3D11DeviceContext> D3d11::m_DeviceContext = nullptr;
+ComPtr<IDXGISwapChain> D3d11::m_SwapChain = nullptr;
+ComPtr<ID3D11RenderTargetView> D3d11::m_RenderTargetView = nullptr;
+ComPtr<ID3D11DepthStencilView> D3d11::m_DepthStencilView = nullptr;
+ComPtr<ID3D11Texture2D> D3d11::m_DepthStencil = nullptr;
+ComPtr<ID3D11DepthStencilState> D3d11::m_DepthStencilState = nullptr;
+ComPtr<ID3D11BlendState> D3d11::m_BlendState = nullptr;
+ComPtr<ID3D11RasterizerState> D3d11::m_RasterizerState = nullptr;
 
 bool D3d11::Init(const HWND &pcd)
 {
@@ -44,9 +44,9 @@ bool D3d11::Init(const HWND &pcd)
 
 		//デバイスとスワップチェーンの作成
 		result = D3D11CreateDeviceAndSwapChain(NULL, D3D_DRIVER_TYPE_HARDWARE,
-			NULL, 0, &pFeatureLevels, 1, D3D11_SDK_VERSION, &sd, m_pSwapChain.GetAddressOf(),
-			m_pDevice.GetAddressOf(), pFeatureLevel, m_pDeviceContext.GetAddressOf());
-		if (utility::checkError(result, "デバイスとスワップチェーンの作成失敗"))return false;
+			NULL, 0, &pFeatureLevels, 1, D3D11_SDK_VERSION, &sd, m_SwapChain.GetAddressOf(),
+			m_Device.GetAddressOf(), pFeatureLevel, m_DeviceContext.GetAddressOf());
+		if (utility::CheckError(result, "デバイスとスワップチェーンの作成失敗"))return false;
 
 
 		//レンダーターゲットビューの作成
@@ -54,11 +54,11 @@ bool D3d11::Init(const HWND &pcd)
 		ComPtr<ID3D11Texture2D>pBackBuffer;
 
 		//スワップチェーンからバックバッファーのポインタを取得
-		m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)pBackBuffer.GetAddressOf());
+		m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)pBackBuffer.GetAddressOf());
 
 		//バックバッファーを渡し、それに対するレンダーターゲットビューを作成
-		result = m_pDevice->CreateRenderTargetView(pBackBuffer.Get(), NULL, m_pRenderTargetView.GetAddressOf());
-		if (utility::checkError(result, "レンダーターゲットビューの作成失敗"))return false;
+		result = m_Device->CreateRenderTargetView(pBackBuffer.Get(), NULL, m_RenderTargetView.GetAddressOf());
+		if (utility::CheckError(result, "レンダーターゲットビューの作成失敗"))return false;
 
 		//深度ステンシルビューの宣言
 		D3D11_TEXTURE2D_DESC descDepth;
@@ -76,11 +76,11 @@ bool D3d11::Init(const HWND &pcd)
 		descDepth.CPUAccessFlags = 0;
 		descDepth.MiscFlags = 0;
 
-		m_pDevice->CreateTexture2D(&descDepth, NULL, m_pDepthStencil.GetAddressOf());
+		m_Device->CreateTexture2D(&descDepth, NULL, m_DepthStencil.GetAddressOf());
 
 		//深度ステンシルビューの作成
-		result = m_pDevice->CreateDepthStencilView(m_pDepthStencil.Get(), NULL, m_pDepthStencilView.GetAddressOf());
-		if (utility::checkError(result, "深度ステンシルビューの作成失敗"))return false;
+		result = m_Device->CreateDepthStencilView(m_DepthStencil.Get(), NULL, m_DepthStencilView.GetAddressOf());
+		if (utility::CheckError(result, "深度ステンシルビューの作成失敗"))return false;
 	}
 	else 
 	{
@@ -93,16 +93,16 @@ bool D3d11::Init(const HWND &pcd)
 			&pFeatureLevels,
 			1,
 			D3D11_SDK_VERSION, // UWP apps must set this to D3D11_SDK_VERSION.
-			m_pDevice.GetAddressOf(), // Returns the Direct3D device created.
+			m_Device.GetAddressOf(), // Returns the Direct3D device created.
 			nullptr,
-			m_pDeviceContext.GetAddressOf() // Returns the device immediate context.
+			m_DeviceContext.GetAddressOf() // Returns the device immediate context.
 		);
 
 		DXGI_SAMPLE_DESC sampleDesc = {};
 		for (int i = 1; i <= D3D11_MAX_MULTISAMPLE_SAMPLE_COUNT; i <<= 1)
 		{
 			UINT Quality;
-			if (SUCCEEDED(m_pDevice->CheckMultisampleQualityLevels(DXGI_FORMAT_D24_UNORM_S8_UINT, i, &Quality)))
+			if (SUCCEEDED(m_Device->CheckMultisampleQualityLevels(DXGI_FORMAT_D24_UNORM_S8_UINT, i, &Quality)))
 			{
 				if (0 < Quality)
 				{
@@ -113,7 +113,7 @@ bool D3d11::Init(const HWND &pcd)
 		}
 
 		ComPtr<IDXGIDevice1> dxgiDevice;
-		m_pDevice.As(&dxgiDevice);
+		m_Device.As(&dxgiDevice);
 
 		ComPtr<IDXGIAdapter> dxgiAdapter;
 		dxgiDevice->GetAdapter(&dxgiAdapter);
@@ -137,9 +137,9 @@ bool D3d11::Init(const HWND &pcd)
 		sd.SampleDesc = sampleDesc;
 		sd.Windowed = TRUE;
 		dxgiFactory->CreateSwapChain(
-			m_pDevice.Get(),
+			m_Device.Get(),
 			&sd,
-			m_pSwapChain.GetAddressOf()
+			m_SwapChain.GetAddressOf()
 		);
 
 		//レンダーターゲットビューの作成
@@ -147,11 +147,11 @@ bool D3d11::Init(const HWND &pcd)
 		ComPtr<ID3D11Texture2D>pBackBuffer;
 
 		//スワップチェーンからバックバッファーのポインタを取得
-		m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)pBackBuffer.GetAddressOf());
+		m_SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)pBackBuffer.GetAddressOf());
 
 		//バックバッファーを渡し、それに対するレンダーターゲットビューを作成
-		result = m_pDevice->CreateRenderTargetView(pBackBuffer.Get(), NULL, m_pRenderTargetView.GetAddressOf());
-		if (utility::checkError(result, "レンダーターゲットビューの作成失敗"))return false;
+		result = m_Device->CreateRenderTargetView(pBackBuffer.Get(), NULL, m_RenderTargetView.GetAddressOf());
+		if (utility::CheckError(result, "レンダーターゲットビューの作成失敗"))return false;
 
 		//深度ステンシルビューの宣言
 		D3D11_TEXTURE2D_DESC descDepth;
@@ -174,17 +174,17 @@ bool D3d11::Init(const HWND &pcd)
 		dsvDesc.Flags = 0;
 		dsvDesc.Texture2D.MipSlice = 0;
 
-		m_pDevice->CreateTexture2D(&descDepth, NULL, m_pDepthStencil.GetAddressOf());
+		m_Device->CreateTexture2D(&descDepth, NULL, m_DepthStencil.GetAddressOf());
 
 		//深度ステンシルビューの作成
-		result = m_pDevice->CreateDepthStencilView(m_pDepthStencil.Get(), &dsvDesc, m_pDepthStencilView.GetAddressOf());
-		if (utility::checkError(result, "深度ステンシルビューの作成失敗"))return false;
+		result = m_Device->CreateDepthStencilView(m_DepthStencil.Get(), &dsvDesc, m_DepthStencilView.GetAddressOf());
+		if (utility::CheckError(result, "深度ステンシルビューの作成失敗"))return false;
 	}
 
 	//レンダーターゲットビューと深度ステンシルビューをパイプラインにバインド
-    m_pDeviceContext->OMSetRenderTargets(1, m_pRenderTargetView.GetAddressOf(), m_pDepthStencilView.Get());
+    m_DeviceContext->OMSetRenderTargets(1, m_RenderTargetView.GetAddressOf(), m_DepthStencilView.Get());
 	//Zバッファの無効化(やりたくない)
-	//m_pDeviceContext->OMSetRenderTargets(1, m_pRenderTargetView.GetAddressOf(), NULL);
+	//m_DeviceContext->OMSetRenderTargets(1, m_RenderTargetView.GetAddressOf(), NULL);
 
 	//深度ステンシルステートを作成
 	D3D11_DEPTH_STENCIL_DESC dc;
@@ -195,11 +195,11 @@ bool D3d11::Init(const HWND &pcd)
 	dc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
 	dc.StencilEnable = false;
 
-	result = m_pDevice->CreateDepthStencilState(&dc, m_pDepthStencilState.GetAddressOf());
-	if (utility::checkError(result, "深度ステンシルステートの作成失敗"))return false;
+	result = m_Device->CreateDepthStencilState(&dc, m_DepthStencilState.GetAddressOf());
+	if (utility::CheckError(result, "深度ステンシルステートの作成失敗"))return false;
 
 	//深度ステンシルステートを適用
-	m_pDeviceContext->OMSetDepthStencilState(m_pDepthStencilState.Get(), 0);
+	m_DeviceContext->OMSetDepthStencilState(m_DepthStencilState.Get(), 0);
 
 	//ビューポートの宣言
 	D3D11_VIEWPORT vp;
@@ -211,7 +211,7 @@ bool D3d11::Init(const HWND &pcd)
 	vp.MaxDepth = 1.0f;
 	vp.TopLeftX = 0;
 	vp.TopLeftY = 0;
-	m_pDeviceContext->RSSetViewports(1, &vp);
+	m_DeviceContext->RSSetViewports(1, &vp);
 
 	//ラスタライズの宣言
 	D3D11_RASTERIZER_DESC rdc;
@@ -224,11 +224,11 @@ bool D3d11::Init(const HWND &pcd)
 	//rdc.FrontCounterClockwise = TRUE;
 
 	//ラスタライズの作成
-	result = m_pDevice->CreateRasterizerState(&rdc, m_pRasterizerState.GetAddressOf());
-	if (utility::checkError(result, "ラスタライズの作成失敗"))return false;
+	result = m_Device->CreateRasterizerState(&rdc, m_RasterizerState.GetAddressOf());
+	if (utility::CheckError(result, "ラスタライズの作成失敗"))return false;
 
 	//ラスタライズステートのセット
-	m_pDeviceContext->RSSetState(m_pRasterizerState.Get());
+	m_DeviceContext->RSSetState(m_RasterizerState.Get());
 
 	//アルファブレンド用ブレンドステート作成
 	D3D11_BLEND_DESC bd;
@@ -245,11 +245,11 @@ bool D3d11::Init(const HWND &pcd)
 	bd.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
 	bd.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
-	result = m_pDevice->CreateBlendState(&bd, m_pBlendState.GetAddressOf());
-	if (utility::checkError(result, "アルファブレンド用ブレンドステートの作成失敗"))return false;
+	result = m_Device->CreateBlendState(&bd, m_BlendState.GetAddressOf());
+	if (utility::CheckError(result, "アルファブレンド用ブレンドステートの作成失敗"))return false;
 
 	UINT mask = 0xffffffff;
-	m_pDeviceContext->OMSetBlendState(m_pBlendState.Get(), NULL, mask);
+	m_DeviceContext->OMSetBlendState(m_BlendState.Get(), NULL, mask);
 
 	return true;
 }
@@ -258,26 +258,26 @@ void D3d11::Clear()
 {
 	//画面クリア（実際は単色で画面を塗りつぶす処理）
 	float ClearColor[4] = { 1,1,1,1 };// クリア色作成　RGBAの順
-	m_pDeviceContext->ClearRenderTargetView(m_pRenderTargetView.Get(), ClearColor);//画面クリア
-	m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);//深度バッファクリア
+	m_DeviceContext->ClearRenderTargetView(m_RenderTargetView.Get(), ClearColor);//画面クリア
+	m_DeviceContext->ClearDepthStencilView(m_DepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);//深度バッファクリア
 }
 
 void D3d11::Present()
 {
-	m_pSwapChain->Present(0, 0);//画面更新（バックバッファをフロントバッファに）
+	m_SwapChain->Present(0, 0);//画面更新（バックバッファをフロントバッファに）
 }
 
 ID3D11Device* D3d11::Device()
 {
-	return m_pDevice.Get();
+	return m_Device.Get();
 }
 
 ID3D11DeviceContext* D3d11::DeviceContext()
 {
-	return m_pDeviceContext.Get();
+	return m_DeviceContext.Get();
 }
 
 ID3D11DepthStencilView* D3d11::DepthStencilView()
 {
-	return m_pDepthStencilView.Get();
+	return m_DepthStencilView.Get();
 }

@@ -8,7 +8,6 @@ public:
 	Application();
 	~Application();
 
-public:
 	void run(HINSTANCE hInstance);
 
 private:
@@ -16,6 +15,5 @@ private:
 	void loop();
 	void finalize();
 
-private:
 	HWND m_hWnd;
 };

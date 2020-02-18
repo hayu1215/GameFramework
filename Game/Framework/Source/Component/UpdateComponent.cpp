@@ -17,7 +17,7 @@ UpdateComponent::~UpdateComponent()
 
 void UpdateComponent::init()
 {
-	if (m_IsActive)
+	if (m_isActive)
 	{
 		onActive();
 		TaskManager::AddTask(std::dynamic_pointer_cast<UpdateComponent>(shared_from_this()));
@@ -27,16 +27,16 @@ void UpdateComponent::init()
 
 void UpdateComponent::active()
 {
-	if (m_IsActive)return;
+	if (m_isActive)return;
 	onActive();
 	TaskManager::AddTask(std::dynamic_pointer_cast<UpdateComponent>(shared_from_this()));
-	m_IsActive = true;
+	m_isActive = true;
 }
 
 void UpdateComponent::deActive()
 {
-	if (!m_IsActive)return;
+	if (!m_isActive)return;
 	onDeActive();
 	TaskManager::AddRemoveTask(std::dynamic_pointer_cast<UpdateComponent>(shared_from_this()));
-	m_IsActive = false;
+	m_isActive = false;
 }

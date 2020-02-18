@@ -27,7 +27,7 @@ Vector4 Vector4::normalized()const
 
 float Vector4::length() const
 {
-	return mathf::sqrt(lengthSquared());
+	return mathf::Sqrt(lengthSquared());
 }
 
 float Vector4::lengthSquared() const
@@ -37,12 +37,12 @@ float Vector4::lengthSquared() const
 
 Vector4 Vector4::Abs(const Vector4& v)
 {
-	return{ mathf::abs(v.x),mathf::abs(v.y),mathf::abs(v.z), mathf::abs(v.w) };
+	return{ mathf::Abs(v.x),mathf::Abs(v.y),mathf::Abs(v.z), mathf::Abs(v.w) };
 }
 
 Vector4 Vector4::Clamp(const Vector4 & v, const Vector4 & min, const Vector4 & max)
 {
-	return { mathf::clamp(v.x, min.x, max.x), mathf::clamp(v.y, min.y, max.y), mathf::clamp(v.z, min.z, max.z), mathf::clamp(v.w, min.w, max.w) };
+	return { mathf::Clamp(v.x, min.x, max.x), mathf::Clamp(v.y, min.y, max.y), mathf::Clamp(v.z, min.z, max.z), mathf::Clamp(v.w, min.w, max.w) };
 }
 
 float Vector4::Distance(const Vector4 & v1, const Vector4 & v2)

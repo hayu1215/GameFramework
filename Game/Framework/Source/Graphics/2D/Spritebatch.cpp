@@ -14,7 +14,7 @@ Spritebatch::Spritebatch()
 }
 
 Spritebatch::Spritebatch(std::shared_ptr<Camera>camera)
-	:m_pCamera(camera)
+	:m_camera(camera)
 {
 	createVertexBuffer();
 	createIndexBuffer();
@@ -28,12 +28,12 @@ Spritebatch::~Spritebatch()
 
 void Spritebatch::begin()
 {
-	m_SortMode = SortMode::BackToFront;
+	m_sortMode = SortMode::BackToFront;
 }
 
 void Spritebatch::begin(const SortMode & sortMode)
 {
-	m_SortMode = sortMode;
+	m_sortMode = sortMode;
 }
 
 void Spritebatch::end(const std::string& shaderName)
@@ -52,7 +52,7 @@ void Spritebatch::draw(std::string textureName, XMFLOAT3 position, XMFLOAT2 scal
 	info.orgin = orgin;
 	info.uv = uv;
 	info.color = color;
-	m_DrawTextures.push_back(info);
+	m_drawTextures.push_back(info);
 }
 
 void Spritebatch::createVertexBuffer()
@@ -67,8 +67,8 @@ void Spritebatch::createVertexBuffer()
 	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	bd.MiscFlags = 0;
 
-	HRESULT result = D3d11::Device()->CreateBuffer(&bd, nullptr, m_pVertexBuffer.GetAddressOf());
-	utility::checkError(result, "バーテックスバッファーの作成失敗");
+	HRESULT result = D3d11::Device()->CreateBuffer(&bd, nullptr, m_vertexBuffer.GetAddressOf());
+	utility::CheckError(result, "バーテックスバッファーの作成失敗");
 }
 
 void Spritebatch::createIndexBuffer()
@@ -87,11 +87,11 @@ void Spritebatch::createIndexBuffer()
 	indexDataDesc.pSysMem = indexValues.data();
 	//indexDataDesc.SysMemPitch = 0;
 	//indexDataDesc.SysMemSlicePitch = 0;
-	HRESULT result = D3d11::Device()->CreateBuffer(&bd, &indexDataDesc, m_pIndexBuffer.GetAddressOf());
-	utility::checkError(result, "インデックスバッファーの作成失敗");
+	HRESULT result = D3d11::Device()->CreateBuffer(&bd, &indexDataDesc, m_indexBuffer.GetAddressOf());
+	utility::CheckError(result, "インデックスバッファーの作成失敗");
 
-	//D3d11::Device()->CreateBuffer(&bd, nullptr, m_pIndexBuffer.GetAddressOf());
-	//D3d11::DeviceContext()->UpdateSubresource(m_pIndexBuffer.Get(), 0, nullptr, indexValues.data(), 0, 0);
+	//D3d11::Device()->CreateBuffer(&bd, nullptr, m_indexBuffer.GetAddressOf());
+	//D3d11::DeviceContext()->UpdateSubresource(m_indexBuffer.Get(), 0, nullptr, indexValues.data(), 0, 0);
 }
 
 void Spritebatch::createConstantBuffer()
@@ -106,11 +106,11 @@ void Spritebatch::createConstantBuffer()
 	bd.Usage = D3D11_USAGE_DEFAULT;
 	//bd.Usage = D3D11_USAGE_DYNAMIC;
 
-	HRESULT result = D3d11::Device()->CreateBuffer(&bd, nullptr, m_pConstantBuffer.GetAddressOf());
-	if (utility::checkError(result, "コンスタントバッファー作成失敗"));
+	HRESULT result = D3d11::Device()->CreateBuffer(&bd, nullptr, m_constantBuffer.GetAddressOf());
+	if (utility::CheckError(result, "コンスタントバッファー作成失敗"));
 
 	//やり方あってるかはわからん、コンスタントバッファの初期値の設定
-	XMMATRIX view = m_pCamera.lock()->getView();
+	XMMATRIX view = m_camera.lock()->getView();
 	XMMATRIX proj = DirectX::XMMatrixSet(		
 		2.0f / (float)(WINDOW_WIDTH), 0.0f, 0.0f, 0.0f,
 		0.0f, 2.0f / (float)(WINDOW_HEIGHT), 0.0f, 0.0f,
@@ -119,7 +119,7 @@ void Spritebatch::createConstantBuffer()
 	);
 	SimpleConstantBuffer cb;
 	XMStoreFloat4x4(&cb.matrix, DirectX::XMMatrixMultiplyTranspose(view, proj));
-	D3d11::DeviceContext()->UpdateSubresource(m_pConstantBuffer.Get(), 0, nullptr, &cb, 0, 0);
+	D3d11::DeviceContext()->UpdateSubresource(m_constantBuffer.Get(), 0, nullptr, &cb, 0, 0);
 }
 
 void Spritebatch::createSamplerState()
@@ -131,7 +131,7 @@ void Spritebatch::createSamplerState()
 	SamDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 	SamDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 
-	D3d11::Device()->CreateSamplerState(&SamDesc, m_pSamplerState.GetAddressOf());
+	D3d11::Device()->CreateSamplerState(&SamDesc, m_samplerState.GetAddressOf());
 }
 
 std::vector<short> Spritebatch::createIndexValue()
@@ -170,23 +170,23 @@ void Spritebatch::setInfo(const std::string& shaderName)
 	deviceContext->PSSetShader(ResourceManager::FindShader(shaderName)->getPixelShader().Get(), nullptr, 0);
 
 	//コンスタントバッファに関しては違う処理が必要かも
-	deviceContext->VSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
-	//deviceContext->PSSetConstantBuffers(0, 1, m_pConstantBuffer.GetAddressOf());
+	deviceContext->VSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
+	//deviceContext->PSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
 
-	deviceContext->PSSetSamplers(0, 1, m_pSamplerState.GetAddressOf());
+	deviceContext->PSSetSamplers(0, 1, m_samplerState.GetAddressOf());
 
 	//バーテックスバッファーをセット
 	UINT stride = sizeof(TextureVertex);
 	UINT offset = 0;
-	deviceContext->IASetVertexBuffers(0, 1, m_pVertexBuffer.GetAddressOf(), &stride, &offset);
+	deviceContext->IASetVertexBuffers(0, 1, m_vertexBuffer.GetAddressOf(), &stride, &offset);
 
 	//インデックスバッファをセット
-	deviceContext->IASetIndexBuffer(m_pIndexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
+	deviceContext->IASetIndexBuffer(m_indexBuffer.Get(), DXGI_FORMAT_R16_UINT, 0);
 
 	//理由まだ調べてない
 	if (deviceContext->GetType() == D3D11_DEVICE_CONTEXT_DEFERRED)
 	{
-		m_VertexBufferPos = 0;
+		m_vertexBufferPos = 0;
 	}
 
 	//カスタムシェーダよぶならここ
@@ -194,22 +194,22 @@ void Spritebatch::setInfo(const std::string& shaderName)
 
 void Spritebatch::flushBatch()
 {
-	if (m_DrawTextures.empty())return;
+	if (m_drawTextures.empty())return;
 	sortSprites();
 	std::string batchTextureName = "";
 	unsigned int batchStart = 0;
-	auto a = m_DrawTextures.size();
+	auto a = m_drawTextures.size();
 
 	//一週目素通り　もう少しきれいなループにしたい、
-	for (unsigned int i = 0; i < m_DrawTextures.size(); i++)
+	for (unsigned int i = 0; i < m_drawTextures.size(); i++)
 	{
-		std::string textureName = m_SortTextures[i]->textureName;
+		std::string textureName = m_sortTextures[i]->textureName;
 
 		if (textureName != batchTextureName)
 		{
 			if (i > batchStart)
 			{
-				renderBatch(&m_SortTextures[batchStart], i - batchStart);
+				renderBatch(&m_sortTextures[batchStart], i - batchStart);
 			}
 
 			batchTextureName = textureName;
@@ -217,20 +217,20 @@ void Spritebatch::flushBatch()
 		}
 	}
 
-	renderBatch(&m_SortTextures[batchStart], m_DrawTextures.size() - batchStart);
+	renderBatch(&m_sortTextures[batchStart], m_drawTextures.size() - batchStart);
 
-	m_DrawTextures.clear();
-	m_SortTextures.clear();
+	m_drawTextures.clear();
+	m_sortTextures.clear();
 }
 
 void Spritebatch::sortSprites()
 {
 	growSortSprites();
 
-	switch (m_SortMode)
+	switch (m_sortMode)
 	{
 	case SortMode::Texture:
-		std::sort(m_SortTextures.begin(), m_SortTextures.end(),
+		std::sort(m_sortTextures.begin(), m_sortTextures.end(),
 			[](TextureInfo const* x, TextureInfo const* y) -> bool
 			{
 				return x->textureName < y->textureName;
@@ -238,7 +238,7 @@ void Spritebatch::sortSprites()
 		break;
 
 	case SortMode::BackToFront:
-		std::sort(m_SortTextures.begin(), m_SortTextures.end(),
+		std::sort(m_sortTextures.begin(), m_sortTextures.end(),
 			[](TextureInfo const* x, TextureInfo const* y) -> bool
 		{
 			return x->position.z > y->position.z;
@@ -246,7 +246,7 @@ void Spritebatch::sortSprites()
 		break;
 
 	case SortMode::FrontToBack:
-		std::sort(m_SortTextures.begin(), m_SortTextures.end(),
+		std::sort(m_sortTextures.begin(), m_sortTextures.end(),
 			[](TextureInfo const* x, TextureInfo const* y) -> bool
 		{
 			return x->position.z < y->position.z;
@@ -260,12 +260,12 @@ void Spritebatch::sortSprites()
 
 void Spritebatch::growSortSprites()
 {
-	unsigned int size = m_DrawTextures.size();
-	m_SortTextures.resize(size);
+	unsigned int size = m_drawTextures.size();
+	m_sortTextures.resize(size);
 
 	for (unsigned int i = 0; i < size; i++)
 	{
-		m_SortTextures[i] = &m_DrawTextures[i];
+		m_sortTextures[i] = &m_drawTextures[i];
 	}
 }
 
@@ -280,7 +280,7 @@ void Spritebatch::renderBatch(TextureInfo** info, size_t count)
 		//vertexBufferPosition調べる
 		unsigned int batchSize = count;
 
-		unsigned int remainingSpace = MAX_BATCH_SIZE - m_VertexBufferPos;
+		unsigned int remainingSpace = MAX_BATCH_SIZE - m_vertexBufferPos;
 
 		XMFLOAT2 textureSize = ResourceManager::FindTexture((*info)->textureName)->getSize();
 
@@ -289,7 +289,7 @@ void Spritebatch::renderBatch(TextureInfo** info, size_t count)
 			if (remainingSpace < MIN_BATCH_SIZE)
 			{
 				//余裕がない場合、または過度に小さいバッチを送信しようとしている場合は、頂点バッファの先頭に戻ります。
-				m_VertexBufferPos = 0;
+				m_vertexBufferPos = 0;
 
 				batchSize = std::min<unsigned int>(count, MAX_BATCH_SIZE);
 			}
@@ -300,14 +300,14 @@ void Spritebatch::renderBatch(TextureInfo** info, size_t count)
 		}
 
 
-		D3D11_MAP mapType = (m_VertexBufferPos == 0) ? D3D11_MAP_WRITE_DISCARD : D3D11_MAP_WRITE_NO_OVERWRITE;
+		D3D11_MAP mapType = (m_vertexBufferPos == 0) ? D3D11_MAP_WRITE_DISCARD : D3D11_MAP_WRITE_NO_OVERWRITE;
 		//D3D11_MAP mapType = D3D11_MAP_WRITE_DISCARD;
 
 		D3D11_MAPPED_SUBRESOURCE mappedBuffer;
 
-		deviceContext->Map(m_pVertexBuffer.Get(), 0, mapType, 0, &mappedBuffer);
+		deviceContext->Map(m_vertexBuffer.Get(), 0, mapType, 0, &mappedBuffer);
 
-		auto vertices = static_cast<TextureVertex*>(mappedBuffer.pData) + m_VertexBufferPos * VERTICES_SPRITE;
+		auto vertices = static_cast<TextureVertex*>(mappedBuffer.pData) + m_vertexBufferPos * VERTICES_SPRITE;
 
 		for (unsigned int i = 0; i < batchSize; i++)
 		{
@@ -315,14 +315,14 @@ void Spritebatch::renderBatch(TextureInfo** info, size_t count)
 			vertices += VERTICES_SPRITE;
 		}
 
-		deviceContext->Unmap(m_pVertexBuffer.Get(), 0);
+		deviceContext->Unmap(m_vertexBuffer.Get(), 0);
 
 		//コンスタントバッファ
 		//D3D11_MAPPED_SUBRESOURCE pData;
 		//SimpleConstantBuffer cb;
 
-		//HRESULT result = deviceContext->Map(m_pConstantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData);
-		//if (!utility::checkError(result, "DeviceContextのMapの失敗"))
+		//HRESULT result = deviceContext->Map(m_constantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData);
+		//if (!utility::CheckError(result, "DeviceContextのMapの失敗"))
 		//{
 		//	XMFLOAT4X4 view = XMFLOAT4X4::identity;
 
@@ -335,15 +335,15 @@ void Spritebatch::renderBatch(TextureInfo** info, size_t count)
 
 		//	cb.XMFLOAT4X4 = view * proj;
 		//	memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
-		//	deviceContext->Unmap(m_pConstantBuffer.Get(), 0);
+		//	deviceContext->Unmap(m_constantBuffer.Get(), 0);
 		//}
 
-		auto startIndex = static_cast<UINT>(m_VertexBufferPos * INDICES_SPRITE);
+		auto startIndex = static_cast<UINT>(m_vertexBufferPos * INDICES_SPRITE);
 		auto indexCount = static_cast<UINT>(batchSize * INDICES_SPRITE);
 
 		deviceContext->DrawIndexed(indexCount, startIndex, 0);
 
-		m_VertexBufferPos += batchSize;
+		m_vertexBufferPos += batchSize;
 		info += batchSize;
 		count -= batchSize;
 	}

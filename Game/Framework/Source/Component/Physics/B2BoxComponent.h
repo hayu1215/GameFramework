@@ -13,7 +13,6 @@ public:
 	B2BoxComponent(bool isActive, bool isStatic, const XMFLOAT2& size);
 	~B2BoxComponent();
 
-public:
 	void onCreate()override;
 	void update()override;
 	void onActive()override;
@@ -23,7 +22,7 @@ public:
 private:
 	std::shared_ptr<Camera>a;
 	std::unique_ptr<LineRenderer> lineRenderer;
-	b2Body* m_pBody;
-	const bool m_IsStatic;
-	const XMFLOAT2 m_Size;
+	b2Body* m_body;
+	const bool m_isStatic;
+	const XMFLOAT2 m_size;
 };

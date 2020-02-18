@@ -85,20 +85,19 @@ private:
 	void renderBatch(TextureInfo**info, size_t count);
 	void renderSprite(TextureInfo* info, TextureVertex* vertices, const XMFLOAT2& textureSize);
 
-private:
 	const unsigned short MAX_BATCH_SIZE = 2048;
 	const unsigned short MIN_BATCH_SIZE = 128;
 	const unsigned short QUEUE_SIZE = 64;
 	const unsigned short VERTICES_SPRITE = 4;
 	const unsigned short INDICES_SPRITE = 6;
 
-	SortMode m_SortMode;
-	std::weak_ptr<Camera> m_pCamera;
-	std::vector<TextureInfo> m_DrawTextures;
-	std::vector<TextureInfo*> m_SortTextures;
-	ComPtr<ID3D11Buffer> m_pConstantBuffer;
-	ComPtr<ID3D11Buffer> m_pVertexBuffer;
-	ComPtr<ID3D11Buffer> m_pIndexBuffer;
-	ComPtr<ID3D11SamplerState> m_pSamplerState;
-	size_t m_VertexBufferPos; //この名前嫌　veretxのposなのにスプライト1枚に対して１しか増えない
+	SortMode m_sortMode;
+	std::weak_ptr<Camera> m_camera;
+	std::vector<TextureInfo> m_drawTextures;
+	std::vector<TextureInfo*> m_sortTextures;
+	ComPtr<ID3D11Buffer> m_constantBuffer;
+	ComPtr<ID3D11Buffer> m_vertexBuffer;
+	ComPtr<ID3D11Buffer> m_indexBuffer;
+	ComPtr<ID3D11SamplerState> m_samplerState;
+	size_t m_vertexBufferPos; //この名前嫌　veretxのposなのにスプライト1枚に対して１しか増えない
 };

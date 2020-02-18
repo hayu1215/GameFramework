@@ -4,12 +4,12 @@
 #include"B2Manager.h"
 
 B2BoxComponent::B2BoxComponent()
-	:m_IsStatic(false), m_Size(10, 10)
+	:m_isStatic(false), m_size(10, 10)
 {
 }
 
 B2BoxComponent::B2BoxComponent(bool isActive, bool isStatic, const XMFLOAT2 & size)
-	:UpdateComponent(isActive), m_IsStatic(isStatic),m_Size(size)
+	:UpdateComponent(isActive), m_isStatic(isStatic),m_size(size)
 {
 }
 
@@ -24,27 +24,27 @@ void B2BoxComponent::onCreate()
 	//object
 	b2BodyDef bodyDef;
 
-	if (m_IsStatic)bodyDef.type = b2_staticBody;
+	if (m_isStatic)bodyDef.type = b2_staticBody;
 	else bodyDef.type = b2_dynamicBody;
 
-	XMFLOAT3 pos = m_pEntity.lock()->getPosition();
+	XMFLOAT3 pos = m_entity.lock()->getPosition();
 	bodyDef.position.Set(pos.x, pos.y);
-	m_pBody = B2Manager::World().CreateBody(&bodyDef);
+	m_body = B2Manager::World().CreateBody(&bodyDef);
 
 	b2PolygonShape shape;
-	shape.SetAsBox(m_Size.x, m_Size.y);
+	shape.SetAsBox(m_size.x, m_size.y);
 
 	b2FixtureDef fixtureDef;
 	fixtureDef.shape = &shape;
 	fixtureDef.density = 1.0f;
 	fixtureDef.friction = 0.3f;
 
-	m_pBody->CreateFixture(&fixtureDef);
+	m_body->CreateFixture(&fixtureDef);
 }
 
 void B2BoxComponent::update()
 {
-	b2Fixture* f = m_pBody->GetFixtureList();
+	b2Fixture* f = m_body->GetFixtureList();
 	b2PolygonShape* s = (b2PolygonShape*)f->GetShape();
 
 	int size = s->GetVertexCount();
@@ -56,9 +56,9 @@ void B2BoxComponent::update()
 		XMMATRIX scale;
 		scale = DirectX::XMMatrixScaling(1.0f, 1.0f, 1.0f);
 		XMMATRIX rotate;
-		rotate = DirectX::XMMatrixRotationZ(m_pBody->GetAngle());
+		rotate = DirectX::XMMatrixRotationZ(m_body->GetAngle());
 		XMMATRIX translation;
-		translation = DirectX::XMMatrixTranslation(m_pBody->GetPosition().x, m_pBody->GetPosition().y, 0);
+		translation = DirectX::XMMatrixTranslation(m_body->GetPosition().x, m_body->GetPosition().y, 0);
 		XMMATRIX world = scale * rotate * translation;
 		XMStoreFloat3(&pos1[i], DirectX::XMVector3Transform(xv, world));
 	}

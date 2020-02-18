@@ -28,11 +28,11 @@ private:
 template<class T>
 bool ResourceManager::LoadShader(const std::string &name)
 {
-	if (utility::judgeBase<AShader, T>())
+	if (utility::JudgeBase<AShader, T>())
 	{
 		m_Shaders[name] = std::make_unique<T>(name);
 		return true;
 	}
-	utility::debugLog(name + "“Ç‚İ‚İ¸”s");
+	utility::DebugLog(name + "“Ç‚İ‚İ¸”s");
 	return false;
 }

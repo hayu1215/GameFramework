@@ -13,7 +13,6 @@ public:
 	LiquidFunComponent();
 	~LiquidFunComponent();
 
-public:
 	void onCreate()override;
 	void update()override;
 	void onActive()override;
@@ -21,9 +20,9 @@ public:
 	void onDestory()override;
 
 private:
-	b2World m_World;
-	b2Body* m_GroundBody;
-	b2Body* m_Body;
+	b2World m_world;
+	b2Body* m_groundBody;
+	b2Body* m_body;
 	std::shared_ptr<Camera>a;
 	std::unique_ptr<LineRenderer> lineRenderer;
 };

@@ -31,12 +31,12 @@ Application::~Application()
 bool Application::init(HINSTANCE hInstance)
 {
 	Window window;
-	if (!window.initWindow(hInstance, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, APP_NAME))utility::debugLog("ウィンドウ初期化失敗");
+	if (!window.initWindow(hInstance, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, APP_NAME))utility::DebugLog("ウィンドウ初期化失敗");
 	m_hWnd = window.m_hWnd;
 
 	if (!D3d11::Init(m_hWnd)) 
 	{ 
-		utility::debugLog("D3d11の初期化失敗");
+		utility::DebugLog("D3d11の初期化失敗");
 		return false; 
 	}
 

@@ -34,13 +34,13 @@ public:
 
 	void drawLine(const XMFLOAT3& position1, const XMFLOAT3& position2, const XMFLOAT4& color1, const XMFLOAT4& color2, float width);
 	void drawLine(const std::string& name,const std::vector<XMFLOAT3>& vertexes, const std::vector<XMFLOAT4>& clors, float width);
+
 private:
 	void createVertexBuffer();
 	void createConstantBuffer();
 	void createVertexBuffer2();
 	void createConstantBuffer2();
 
-private:
-	ComPtr<ID3D11Buffer> m_pConstantBuffer;
-	ComPtr<ID3D11Buffer> m_pVertexBuffer;
+	ComPtr<ID3D11Buffer> m_constantBuffer;
+	ComPtr<ID3D11Buffer> m_vertexBuffer;
 };

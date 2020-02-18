@@ -3,12 +3,12 @@
 std::weak_ptr<CameraComponent> CameraComponent::m_MainCamera;
 
 CameraComponent::CameraComponent() :
-	m_Camera(XMFLOAT3(0, 0, 0), XMFLOAT3(0, 0, 1))
+	m_camera(XMFLOAT3(0, 0, 0), XMFLOAT3(0, 0, 1))
 {
 }
 
 CameraComponent::CameraComponent(bool isActive) :
-	UpdateComponent(isActive),m_Camera(XMFLOAT3(0, 0, 0), XMFLOAT3(0, 0, 1))
+	UpdateComponent(isActive),m_camera(XMFLOAT3(0, 0, 0), XMFLOAT3(0, 0, 1))
 {
 }
 
@@ -23,7 +23,7 @@ void CameraComponent::onCreate()
 
 void CameraComponent::update()
 {
-	m_Camera.setPosition(m_pEntity.lock()->getPosition());
+	m_camera.setPosition(m_entity.lock()->getPosition());
 }
 
 void CameraComponent::onActive()
@@ -52,5 +52,5 @@ std::vector<std::weak_ptr<CameraComponent>> CameraComponent::GetCameras()
 
 XMMATRIX CameraComponent::getView()
 {
-	return m_Camera.getView();
+	return m_camera.getView();
 }

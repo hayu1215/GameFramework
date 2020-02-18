@@ -2,37 +2,37 @@
 #include<cmath>
 #include<random>
 
-float mathf::abs(float f)
+float mathf::Abs(float f)
 {
 	return std::abs(f);
 }
 
-float mathf::acos(float f)
+float mathf::Acos(float f)
 {
 	return std::acos(f);
 }
 
-float mathf::asin(float f)
+float mathf::Asin(float f)
 {
 	return std::asin(f);
 }
 
-float mathf::atan(float f)
+float mathf::Atan(float f)
 {
 	return std::atan(f);
 }
 
-float mathf::atan2(float y, float x)
+float mathf::Atan2(float y, float x)
 {
 	return std::atan2(y, x);
 }
 
-float mathf::ceil(float f)
+float mathf::Ceil(float f)
 {
 	return std::ceilf(f);
 }
 
-float mathf::ceil(float f, unsigned int n)
+float mathf::Ceil(float f, unsigned int n)
 {
 	if (n <= 0)return std::ceilf(f);
 
@@ -40,50 +40,50 @@ float mathf::ceil(float f, unsigned int n)
 	return std::ceil(f * temp) / temp;
 }
 
-float mathf::clamp(float value, float min, float max)
+float mathf::Clamp(float value, float min, float max)
 {
 	return std::min(std::max(value, min), max);
 }
 
-int mathf::clamp(int value, int min, int max)
+int mathf::Clamp(int value, int min, int max)
 {
 	return std::min(std::max(value, min), max);
 }
 
-float mathf::clamp01(float f)
+float mathf::Clamp01(float f)
 {
-	return clamp(f, 0.0f, 1.0f);
+	return Clamp(f, 0.0f, 1.0f);
 }
 
-int mathf::clamp01(int i)
+int mathf::Clamp01(int i)
 {
-	return clamp(i, 0, 1);
+	return Clamp(i, 0, 1);
 }
 
-float mathf::cos(float radian)
+float mathf::Cos(float radian)
 {
 	return std::cos(radian);
 }
 
-float mathf::degreeNormalize(float degree)
+float mathf::DegreeNormalize(float degree)
 {
-	return round(radianNormalize(degree * DEG2RAD) * RAD2DEG, 2);
+	return Round(RadianNormalize(degree * DEG2RAD) * RAD2DEG, 2);
 }
 
-float mathf::deltaAngle(float current, float target)
+float mathf::DeltaAngle(float current, float target)
 {
-	float current_N = degreeNormalize(current);
-	float target_N = degreeNormalize(target);
+	float current_N = DegreeNormalize(current);
+	float target_N = DegreeNormalize(target);
 
 	return target_N - current_N;
 }
 
-float mathf::floor(float f)
+float mathf::Floor(float f)
 {
 	return std::floor(f);
 }
 
-float mathf::floor(float f, int n)
+float mathf::Floor(float f, int n)
 {
 	if (n <= 0)return std::floor(f);
 
@@ -91,37 +91,37 @@ float mathf::floor(float f, int n)
 	return std::floor(f * temp) / temp;
 }
 
-float mathf::log(float x, float base)
+float mathf::Log(float x, float base)
 {
 	return std::log(x) / std::log(base);
 }
 
-float mathf::log10(float x)
+float mathf::Log10(float x)
 {
 	return std::log10(x);
 }
 
-float mathf::max(float a, float b)
+float mathf::Maxf(float a, float b)
 {
 	return std::max(a, b);
 }
 
-float mathf::min(float a, float b)
+float mathf::Minf(float a, float b)
 {
 	return std::min(a, b);
 }
 
-float mathf::pow(float x, float y)
+float mathf::Pow(float x, float y)
 {
 	return std::pow(x, y);
 }
 
-float mathf::radianNormalize(float radian)
+float mathf::RadianNormalize(float radian)
 {
 	return std::atan2(sin(radian), cos(radian));
 }
 
-float mathf::random(float min, float max)
+float mathf::Random(float min, float max)
 {
 	if (max <= min)return 0;
 
@@ -131,7 +131,7 @@ float mathf::random(float min, float max)
 	return rand(mt);
 }
 
-int mathf::random(int min, int max)
+int mathf::Random(int min, int max)
 {
 	if (max <= min)return 0;
 
@@ -141,12 +141,12 @@ int mathf::random(int min, int max)
 	return rand(mt);
 }
 
-float mathf::round(float f)
+float mathf::Round(float f)
 {
 	return std::round(f);
 }
 
-float mathf::round(float f, int n)
+float mathf::Round(float f, int n)
 {
 	if (n <= 0)return std::round(f);
 
@@ -154,34 +154,34 @@ float mathf::round(float f, int n)
 	return std::round(f * temp) / temp;
 }
 
-int mathf::sign(float f)
+int mathf::Sign(float f)
 {
 	return (f > 0) - (f < 0);
 }
 
-float mathf::sin(float radian)
+float mathf::Sin(float radian)
 {
 	return std::sin(radian);
 }
 
-float mathf::sqrt(float f)
+float mathf::Sqrt(float f)
 {
 	if (f < 0)return 0;
 
 	return std::sqrt(f);
 }
 
-float mathf::tan(float radian)
+float mathf::Tan(float radian)
 {
 	return std::tan(radian);
 }
 
-float mathf::toDegree(float radian)
+float mathf::ToDegree(float radian)
 {
 	return radian * RAD2DEG;
 }
 
-float mathf::toRadian(float degree)
+float mathf::ToRadian(float degree)
 {
 	return degree * DEG2RAD;
 }

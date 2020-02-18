@@ -12,7 +12,7 @@ public:
 
 private:
 	static b2World m_World;
-	static constexpr float32 timeStep = 1.0f / 60.0f;
-	static constexpr int32 velocityIterations = 6;
-	static constexpr int32 positionIterations = 2;
+	static constexpr float32 m_TimeStep = 1.0f / 60.0f;
+	static constexpr int32 m_VelocityIterations = 6;
+	static constexpr int32 m_PositionIterations = 2;
 };

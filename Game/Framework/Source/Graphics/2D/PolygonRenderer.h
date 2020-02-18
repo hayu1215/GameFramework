@@ -71,14 +71,13 @@ private:
 	void setWorldMatrix(PolygonInfo* info, SimpleVertex* vertices);
 	void setIndex(int* indexes, int count);
 
-private:
 	const unsigned short MAX_SIZE = 2048 * 4;
 	const unsigned short QUEUE_SIZE = 64;
 
-	std::vector<PolygonInfo> m_DrawPolygons;
-	std::vector<PolygonInfo*> m_SortPolygons;
-	ComPtr<ID3D11Buffer> m_pConstantBuffer;
-	ComPtr<ID3D11Buffer> m_pVertexBuffer;
-	ComPtr<ID3D11Buffer> m_pIndexBuffer;
-	size_t m_VertexBufferPos = 0;
+	std::vector<PolygonInfo> m_drawPolygons;
+	std::vector<PolygonInfo*> m_sortPolygons;
+	ComPtr<ID3D11Buffer> m_constantBuffer;
+	ComPtr<ID3D11Buffer> m_vertexBuffer;
+	ComPtr<ID3D11Buffer> m_indexBuffer;
+	size_t m_vertexBufferPos = 0;
 };

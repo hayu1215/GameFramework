@@ -14,7 +14,6 @@ public:
 	B2PolygonComponent(bool isActive, bool isStatic, const std::vector<b2Vec2>& vertexes);
 	~B2PolygonComponent();
 
-public:
 	void onCreate()override;
 	void update()override;
 	void onActive()override;
@@ -24,8 +23,8 @@ public:
 private:
 	std::shared_ptr<Camera>a;
 	std::unique_ptr<LineRenderer> lineRenderer;
-	b2Body* m_pBody;
+	b2Body* m_body;
 
-	const bool m_IsStatic;
-	std::vector<b2Vec2>m_Vertexes;
+	const bool m_isStatic;
+	std::vector<b2Vec2>m_vertexes;
 };

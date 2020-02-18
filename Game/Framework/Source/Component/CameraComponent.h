@@ -12,7 +12,6 @@ public:
 	CameraComponent(bool isActive);
 	~CameraComponent();
 
-public:
 	void onCreate()override;
 	void update()override;
 	void onActive()override;
@@ -25,5 +24,5 @@ public:
 
 private:
 	static std::weak_ptr<CameraComponent> m_MainCamera;
-	Camera m_Camera;
+	Camera m_camera;
 };

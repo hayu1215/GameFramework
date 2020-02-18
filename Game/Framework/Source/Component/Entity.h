@@ -33,19 +33,19 @@ public:
 	const XMFLOAT3& getPosition();
 
 private:
-	std::list<std::shared_ptr<AComponent>>m_Components;
-	std::list<std::weak_ptr<AComponent>>m_RemoveComponents;
-	XMFLOAT3 m_Position;
-	const std::string m_Tag;
-	const std::string m_Name;
-	bool m_IsActive;
+	std::list<std::shared_ptr<AComponent>>m_components;
+	std::list<std::weak_ptr<AComponent>>m_removeComponents;
+	XMFLOAT3 m_position;
+	const std::string m_tag;
+	const std::string m_name;
+	bool m_isActive;
 };
 
 template<class T>
 std::weak_ptr<T> Entity::getComponent()
 {
 	std::shared_ptr<T>component;
-	for (auto& v : m_Components)
+	for (auto& v : m_components)
 	{
 		component = std::dynamic_pointer_cast<T>(v);
 		if (component != nullptr)return component;
@@ -62,7 +62,7 @@ template<class T>
 std::vector<std::weak_ptr<T>> Entity::getComponents()
 {
 	std::vector<std::weak_ptr<T>>components;
-	for (auto& v : m_Components)
+	for (auto& v : m_components)
 	{
 		std::shared_ptr<T>component = std::dynamic_pointer_cast<T>(v);
 		if (component != nullptr)components.emplace_back(component);

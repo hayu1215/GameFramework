@@ -11,7 +11,6 @@ public:
 	UpdateComponent(bool isActive);
 	~UpdateComponent();
 
-public:
 	virtual void update() = 0;
 	void init()override;
 	void active()override;

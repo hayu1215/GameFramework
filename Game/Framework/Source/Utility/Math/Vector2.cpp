@@ -27,7 +27,7 @@ Vector2 Vector2::normalized()const
 
 float Vector2::length() const
 {
-	return mathf::sqrt(lengthSquared());
+	return mathf::Sqrt(lengthSquared());
 }
 
 float Vector2::lengthSquared() const
@@ -37,12 +37,12 @@ float Vector2::lengthSquared() const
 
 Vector2 Vector2::Abs(const Vector2& v)
 {
-	return{ mathf::abs(v.x),mathf::abs(v.y) };
+	return{ mathf::Abs(v.x),mathf::Abs(v.y) };
 }
 
 Vector2 Vector2::Clamp(const Vector2 & v, const Vector2 & min, const Vector2 & max)
 {
-	return { mathf::clamp(v.x, min.x, max.x), mathf::clamp(v.y, min.y, max.y) };
+	return { mathf::Clamp(v.x, min.x, max.x), mathf::Clamp(v.y, min.y, max.y) };
 }
 
 float Vector2::Cross(const Vector2 & v1, const Vector2 & v2)

@@ -20,7 +20,7 @@ public:
 	const std::string name();
 
 private:
-	const std::string m_Name;
-	std::list<std::shared_ptr<Entity>>m_Entities;
-	std::list<std::weak_ptr<Entity>>m_RemoveEntities;
+	const std::string m_name;
+	std::list<std::shared_ptr<Entity>>m_entities;
+	std::list<std::weak_ptr<Entity>>m_removeEntities;
 };

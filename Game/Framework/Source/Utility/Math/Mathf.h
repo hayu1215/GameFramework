@@ -7,98 +7,98 @@ namespace mathf
 	constexpr float RAD2DEG = 180.0f / PI;
 
 	//絶対値を返します
-	float abs(float f);
+	float Abs(float f);
 
 	//Cosからラジアンで角度を返します
-	float acos(float f);
+	float Acos(float f);
 
 	//Sinからラジアンで角度を返します
-	float asin(float f);
+	float Asin(float f);
 
 	//Tanからラジアンで角度を返します
-	float atan(float f);
+	float Atan(float f);
 
 	//座標からラジアンで角度を返します
-	float atan2(float y, float x);
+	float Atan2(float y, float x);
 
 	//切り上げした値を返します
-	float ceil(float f);
+	float Ceil(float f);
 
 	//小数点第n位を切り上げした値を返します
-	float ceil(float f, unsigned int n);
+	float Ceil(float f, unsigned int n);
 
 	//最小値と最大値の範囲内に収めた値を返します
-	float clamp(float value, float min, float max);
+	float Clamp(float value, float min, float max);
 
 	//最小値と最大値の範囲内に収めた値を整数で返します
-	int clamp(int value, int min, int max);
+	int Clamp(int value, int min, int max);
 
 	//0.0f～1.0fの範囲内に収めた値を返します
-	float clamp01(float f);
+	float Clamp01(float f);
 
 	//0.0f～1.0fの範囲内に収めた値を整数で返します
-	int clamp01(int i);
+	int Clamp01(int i);
 
 	//Cosを返します
-	float cos(float radian);
+	float Cos(float radian);
 
 	//度を-180°～180°に収めた値を返します
-	float degreeNormalize(float degree);
+	float DegreeNormalize(float degree);
 
 	//ターゲットまでの角度を度で返します
-	float deltaAngle(float current, float target);
+	float DeltaAngle(float current, float target);
 
 	//切り捨てした値を返します
-	float floor(float f);
+	float Floor(float f);
 
 	//小数点第n位を切り捨てした値を返します
-	float floor(float f, int n);
+	float Floor(float f, int n);
 
 	//指定された数を底とする数値の対数を返します
-	float log(float x, float base);
+	float Log(float x, float base);
 
 	//10を底とする数値の対数を返します
-	float log10(float x);
+	float Log10(float x);
 
 	//与えられた引数から大きい方の数を返します
-	float max(float a, float b);
+	float Maxf(float a, float b);
 
 	//与えられた引数から小さいほうの数を返します
-	float min(float a, float b);
+	float Minf(float a, float b);
 
 	//xのy乗の値を計算します
-	float pow(float x, float y);
+	float Pow(float x, float y);
 
 	//ラジアンを-π～πに収めた値を返します
-	float radianNormalize(float radian);
+	float RadianNormalize(float radian);
 
 	//最小値から最大値までの範囲内の乱数を返します
-	float random(float min, float max);
+	float Random(float min, float max);
 
 	//最小値から最大値までの範囲内の乱数を整数で返します
-	int random(int min, int max);
+	int Random(int min, int max);
 
 	//四捨五入した値を返します
-	float round(float f);
+	float Round(float f);
 
 	//小数第n位を四捨五入した値を返します
-	float round(float f, int num);
+	float Round(float f, int num);
 
 	//数値の正負を調べて返します（正:1, 負:-1, 0:0）
-	int sign(float f);
+	int Sign(float f);
 
 	//Sinを返します
-	float sin(float radian);
+	float Sin(float radian);
 
 	//正の平方根を返します
-	float sqrt(float f);
+	float Sqrt(float f);
 
 	//Tanを返します
-	float tan(float radian);
+	float Tan(float radian);
 
 	//ラジアンから度に変換します
-	float toDegree(float radian);
+	float ToDegree(float radian);
 
 	//度からラジアンに変換します
-	float toRadian(float degree);
+	float ToRadian(float degree);
 }

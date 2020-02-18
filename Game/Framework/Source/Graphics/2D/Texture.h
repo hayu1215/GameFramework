@@ -20,7 +20,7 @@ public:
 	ComPtr<ID3D11ShaderResourceView> getShaderResourceView();
 
 private:
-	ComPtr<ID3D11ShaderResourceView> m_ShaderResourceView;
-	float m_Width;
-	float m_Height;
+	ComPtr<ID3D11ShaderResourceView> m_shaderResourceView;
+	float m_width;
+	float m_height;
 };

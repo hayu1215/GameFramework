@@ -5,28 +5,32 @@
 
 #ifndef NDEBUG
 #define assert_msg(msg,expr)\
-    internal::assertMsg(expr,__FILE__,__LINE__,msg)
+    internal::AssertMsg(expr,__FILE__,__LINE__,msg)
 #else
 #define assert_msg(msg,expr)
 #endif // !NDEBUG
 
 namespace internal 
 {
-	void assertMsg(bool expr, const char* file, int line, const char* msg);
+
+void AssertMsg(bool expr, const char* file, int line, const char* msg);
+
 }
 
 namespace utility 
 {
+
 #ifdef _DEBUG
-	void debugLog(const std::string&);
+void DebugLog(const std::string&);
 #endif
 
-	bool checkError(int, const std::string&);
-	bool checkNull(const void*, const std::string&);
+bool CheckError(int, const std::string&);
+bool CheckNull(const void*, const std::string&);
 
-	template<class Base, class T>
-	bool judgeBase()
-	{
-		return std::is_base_of<Base, T>::value;
-	};
+template<class Base, class T>
+bool JudgeBase()
+{
+	return std::is_base_of<Base, T>::value;
+};
+
 }

@@ -177,30 +177,30 @@ Matrix4 Matrix4::Scale(float scale)
 Matrix4 Matrix4::RotationFromAxisX(float angle)
 {
 	Matrix4 result = identity;
-	result.m[1][1] = mathf::cos(angle);
-	result.m[1][2] = mathf::sin(angle);
-	result.m[2][1] = -mathf::sin(angle);
-	result.m[2][2] = mathf::cos(angle);
+	result.m[1][1] = mathf::Cos(angle);
+	result.m[1][2] = mathf::Sin(angle);
+	result.m[2][1] = -mathf::Sin(angle);
+	result.m[2][2] = mathf::Cos(angle);
 	return result;
 }
 
 Matrix4 Matrix4::RotationFromAxisY(float angle)
 {
 	Matrix4 result = identity;
-	result.m[0][0] = mathf::cos(angle);
-	result.m[0][2] = -mathf::sin(angle);
-	result.m[2][0] = mathf::sin(angle);
-	result.m[2][2] = mathf::cos(angle);
+	result.m[0][0] = mathf::Cos(angle);
+	result.m[0][2] = -mathf::Sin(angle);
+	result.m[2][0] = mathf::Sin(angle);
+	result.m[2][2] = mathf::Cos(angle);
 	return result;
 }
 
 Matrix4 Matrix4::RotationFromAxisZ(float angle)
 {
 	Matrix4 result = identity;
-	result.m[0][0] = mathf::cos(angle);
-	result.m[0][1] = mathf::sin(angle);
-	result.m[1][0] = -mathf::sin(angle);
-	result.m[1][1] = mathf::cos(angle);
+	result.m[0][0] = mathf::Cos(angle);
+	result.m[0][1] = mathf::Sin(angle);
+	result.m[1][0] = -mathf::Sin(angle);
+	result.m[1][1] = mathf::Cos(angle);
 	return result;
 }
 
@@ -261,7 +261,7 @@ Matrix4 Matrix4::Perspective(float width, float height, float nearPlaneDistance,
 
 Matrix4 Matrix4::PerspectiveFieldOfView(float fov, float aspectRatio, float nearPlaneDistance, float farPlaneDistance)
 {
-	float scaleY = 1.0f / mathf::tan(fov / 2.0f);
+	float scaleY = 1.0f / mathf::Tan(fov / 2.0f);
 	float scaleX = scaleY / aspectRatio;
 	float scaleZ = 1.0f / (farPlaneDistance - nearPlaneDistance) * farPlaneDistance;
 	float transZ = -nearPlaneDistance / (farPlaneDistance - nearPlaneDistance) * farPlaneDistance;

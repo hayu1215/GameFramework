@@ -5,12 +5,12 @@
 #include<Framework/Source/Application/Scene/SceneManager.h>
 
 Entity::Entity()
-	:m_Position(XMFLOAT3(0, 0, 0)), m_Tag(""), m_Name(""), m_IsActive(false)
+	:m_position(XMFLOAT3(0, 0, 0)), m_tag(""), m_name(""), m_isActive(false)
 {
 }
 
 Entity::Entity(const XMFLOAT3& position, const std::string& tag, const std::string& name)
-	:m_Position(position), m_Tag(tag), m_Name(name), m_IsActive(false)
+	:m_position(position), m_tag(tag), m_name(name), m_isActive(false)
 {
 }
 
@@ -20,7 +20,7 @@ Entity::~Entity()
 
 Entity* Entity::addComponent(const std::shared_ptr<AComponent>& component)
 {
-	m_Components.emplace_back(component);
+	m_components.emplace_back(component);
 	component->setEntity(shared_from_this());
 	component->init();
 	component->onCreate();
@@ -29,21 +29,21 @@ Entity* Entity::addComponent(const std::shared_ptr<AComponent>& component)
 
 void Entity::addRemoveComponent(const std::weak_ptr<AComponent>& component)
 {
-	m_RemoveComponents.emplace_back(component);
+	m_removeComponents.emplace_back(component);
 }
 
 void Entity::removeComponent()
 {
-	for (auto& v : m_RemoveComponents)
+	for (auto& v : m_removeComponents)
 	{
-		m_Components.remove_if([&](const std::weak_ptr<AComponent>& x) {return x.lock().get() == v.lock().get(); });
+		m_components.remove_if([&](const std::weak_ptr<AComponent>& x) {return x.lock().get() == v.lock().get(); });
 	}
-	m_RemoveComponents.clear();
+	m_removeComponents.clear();
 }
 
 void Entity::active()
 {
-	for (auto& v : m_Components)
+	for (auto& v : m_components)
 	{
 		v->active();
 	}
@@ -51,7 +51,7 @@ void Entity::active()
 
 void Entity::deActive()
 {
-	for (auto& v : m_Components)
+	for (auto& v : m_components)
 	{
 		v->deActive();
 	}
@@ -59,7 +59,7 @@ void Entity::deActive()
 
 void Entity::destroy()
 {
-	for (auto& v : m_Components)
+	for (auto& v : m_components)
 	{
 		v->onDestory();
 		v->deActive();
@@ -69,20 +69,20 @@ void Entity::destroy()
 
 bool Entity::isActive()
 {
-	return m_IsActive;
+	return m_isActive;
 }
 
 const std::string& Entity::getTag()
 {
-	return m_Tag;
+	return m_tag;
 }
 
 const std::string& Entity::getName()
 {
-	return m_Name;
+	return m_name;
 }
 
 const XMFLOAT3& Entity::getPosition()
 {
-	return m_Position;
+	return m_position;
 }

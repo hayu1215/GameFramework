@@ -11,42 +11,46 @@
 
 namespace internal 
 {
-	void assertMsg(bool expr, const char* file, int line, const char* msg)
-	{
-		if (expr)return;
-		std::stringstream ss;
-		ss << "ERROR : Assert Faild\n" << msg << "\n" << file << "(" + line << ")\n";
-		std::string str = ss.str();
-		OutputDebugString(str.c_str());
-		abort();
-	}
+
+void AssertMsg(bool expr, const char* file, int line, const char* msg)
+{
+	if (expr)return;
+	std::stringstream ss;
+	ss << "ERROR : Assert Faild\n" << msg << "\n" << file << "(" + line << ")\n";
+	std::string str = ss.str();
+	OutputDebugString(str.c_str());
+	abort();
+}
+
 }
 
 namespace utility
 {
-	void debugLog(const std::string &msg)
-	{
-		std::string msgStr = msg + "\n";
-		OutputDebugString(msgStr.c_str());
-	}
 
-	bool checkError(int target, const std::string &msg)
-	{
-		if (target < 0)
-		{
-			debugLog("ERROR : " + msg);
-			return true;
-		}
-		return false;
-	}
+void DebugLog(const std::string &msg)
+{
+	std::string msgStr = msg + "\n";
+	OutputDebugString(msgStr.c_str());
+}
 
-	bool checkNull(const void *targetPtr, const std::string &msg)
+bool CheckError(int target, const std::string &msg)
+{
+	if (target < 0)
 	{
-		if (targetPtr == nullptr)
-		{
-			debugLog("NULL : " + msg);
-			return true;
-		}
-		return false;
+		DebugLog("ERROR : " + msg);
+		return true;
 	}
+	return false;
+}
+
+bool CheckNull(const void *targetPtr, const std::string &msg)
+{
+	if (targetPtr == nullptr)
+	{
+		DebugLog("NULL : " + msg);
+		return true;
+	}
+	return false;
+}
+
 }

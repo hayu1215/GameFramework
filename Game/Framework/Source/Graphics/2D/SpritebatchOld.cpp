@@ -182,7 +182,7 @@
 //	initData.pSysMem = vertices;
 //
 //	HRESULT result = D3d11::Device()->CreateBuffer(&bd, &initData, m_pVertexBuffer.GetAddressOf());
-//	utility::checkError(result, "バーテックスバッファーの作成失敗");
+//	utility::CheckError(result, "バーテックスバッファーの作成失敗");
 //}
 //
 //void SpritebatchOld::deferredEnd()

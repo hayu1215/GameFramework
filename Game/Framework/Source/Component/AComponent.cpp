@@ -3,12 +3,12 @@
 #include<Framework/Source/Application/Task/TaskManager.h>
 
 AComponent::AComponent():
-	m_IsActive(false)
+	m_isActive(false)
 {
 }
 
 AComponent::AComponent(bool isActive)
-	:m_IsActive(isActive)
+	:m_isActive(isActive)
 {
 }
 
@@ -20,29 +20,29 @@ void AComponent::destroy()
 {
 	onDestory();
 	deActive();
-	m_pEntity.lock()->addRemoveComponent(shared_from_this());
+	m_entity.lock()->addRemoveComponent(shared_from_this());
 }
 
 void AComponent::active()
 {
-	if (m_IsActive)return;
+	if (m_isActive)return;
 	onActive();
-	m_IsActive = true;
+	m_isActive = true;
 }
 
 void AComponent::deActive()
 {
-	if (!m_IsActive)return;
+	if (!m_isActive)return;
 	onDeActive();
-	m_IsActive = false;
+	m_isActive = false;
 }
 
 void AComponent::setEntity(const std::weak_ptr<Entity>& entity)
 {
-	m_pEntity = entity;
+	m_entity = entity;
 }
 
 bool AComponent::isActive()
 {
-	return m_IsActive;
+	return m_isActive;
 }

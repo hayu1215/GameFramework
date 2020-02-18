@@ -12,13 +12,13 @@ TestShader::TestShader(const std::string& name)
 	ComPtr<ID3DBlob> pCompiledShader;
 
 	D3DCompileFromFile(wname.c_str(), nullptr, nullptr, "PS", "ps_5_0", 0, 0, pCompiledShader.GetAddressOf(), nullptr);
-	device->CreatePixelShader(pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), nullptr, m_pPixelShader.GetAddressOf());
+	device->CreatePixelShader(pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), nullptr, m_pixelShader.GetAddressOf());
 
 	D3DCompileFromFile(wname.c_str(), nullptr, nullptr, "GS", "gs_5_0", 0, 0, pCompiledShader.GetAddressOf(), nullptr);
-	device->CreateGeometryShader(pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), nullptr, m_pGeometryShader.GetAddressOf());
+	device->CreateGeometryShader(pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), nullptr, m_geometryShader.GetAddressOf());
 
 	D3DCompileFromFile(wname.c_str(), nullptr, nullptr, "VS", "vs_5_0", 0, 0, pCompiledShader.GetAddressOf(), nullptr);
-	device->CreateVertexShader(pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), nullptr, m_pVertexShader.GetAddressOf());
+	device->CreateVertexShader(pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), nullptr, m_vertexShader.GetAddressOf());
 
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
@@ -26,5 +26,5 @@ TestShader::TestShader(const std::string& name)
 		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
 	UINT numElements = sizeof(layout) / sizeof(layout[0]);
-	device->CreateInputLayout(layout, numElements, pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), m_pVertexLayout.GetAddressOf());
+	device->CreateInputLayout(layout, numElements, pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), m_vertexLayout.GetAddressOf());
 }

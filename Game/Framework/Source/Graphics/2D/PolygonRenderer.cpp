@@ -34,7 +34,7 @@ void PolygonRenderer::drawTriangle(const XMFLOAT3 & position, const XMFLOAT2 & s
 	info.color = color;
 	info.orgin = orgin;
 	info.angle = angle;
-	m_DrawPolygons.emplace_back(info);
+	m_drawPolygons.emplace_back(info);
 }
 
 void PolygonRenderer::drawSquare(const XMFLOAT3 & position, const XMFLOAT2 & scale, const XMFLOAT4 & color, const XMFLOAT2 & orgin, float angle)
@@ -73,8 +73,8 @@ void PolygonRenderer::createVertexBuffer()
 	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	bd.MiscFlags = 0;
 
-	HRESULT result = D3d11::Device()->CreateBuffer(&bd, nullptr, m_pVertexBuffer.GetAddressOf());
-	utility::checkError(result, "バーテックスバッファーの作成失敗");
+	HRESULT result = D3d11::Device()->CreateBuffer(&bd, nullptr, m_vertexBuffer.GetAddressOf());
+	utility::CheckError(result, "バーテックスバッファーの作成失敗");
 }
 
 void PolygonRenderer::createIndexBuffer()
@@ -86,8 +86,8 @@ void PolygonRenderer::createIndexBuffer()
 	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 	bd.MiscFlags = 0;
 
-	HRESULT result = D3d11::Device()->CreateBuffer(&bd, nullptr, m_pIndexBuffer.GetAddressOf());
-	utility::checkError(result, "インデックスバッファーの作成失敗");
+	HRESULT result = D3d11::Device()->CreateBuffer(&bd, nullptr, m_indexBuffer.GetAddressOf());
+	utility::CheckError(result, "インデックスバッファーの作成失敗");
 }
 
 void PolygonRenderer::createConstantBuffer()
@@ -100,8 +100,8 @@ void PolygonRenderer::createConstantBuffer()
 	bd.StructureByteStride = 0;
 	bd.Usage = D3D11_USAGE_DEFAULT;
 
-	HRESULT result = D3d11::Device()->CreateBuffer(&bd, nullptr, m_pConstantBuffer.GetAddressOf());
-	if (utility::checkError(result, "コンスタントバッファー作成失敗"));
+	HRESULT result = D3d11::Device()->CreateBuffer(&bd, nullptr, m_constantBuffer.GetAddressOf());
+	if (utility::CheckError(result, "コンスタントバッファー作成失敗"));
 
 	XMMATRIX view = CameraComponent::GetMainCamera().lock()->getView();
 	XMMATRIX proj = DirectX::XMMatrixSet(
@@ -112,7 +112,7 @@ void PolygonRenderer::createConstantBuffer()
 	);
 	SimpleConstantBuffer cb;
 	XMStoreFloat4x4(&cb.matrix, DirectX::XMMatrixMultiplyTranspose(view, proj));
-	D3d11::DeviceContext()->UpdateSubresource(m_pConstantBuffer.Get(), 0, nullptr, &cb, 0, 0);
+	D3d11::DeviceContext()->UpdateSubresource(m_constantBuffer.Get(), 0, nullptr, &cb, 0, 0);
 }
 
 void PolygonRenderer::sortPolygons()
@@ -127,12 +127,12 @@ void PolygonRenderer::setPolygonInfo()
 	D3D11_MAPPED_SUBRESOURCE mappedVertexBuffer;
 	D3D11_MAPPED_SUBRESOURCE mappedIndexBuffer;
 
-	deviceContext->Map(m_pVertexBuffer.Get(), 0, mapType, 0, &mappedVertexBuffer);
-	deviceContext->Map(m_pIndexBuffer.Get(), 0, mapType, 0, &mappedIndexBuffer);
+	deviceContext->Map(m_vertexBuffer.Get(), 0, mapType, 0, &mappedVertexBuffer);
+	deviceContext->Map(m_indexBuffer.Get(), 0, mapType, 0, &mappedIndexBuffer);
 	auto vertices = static_cast<SimpleVertex*>(mappedVertexBuffer.pData);
 	auto indexes = static_cast<int*>(mappedIndexBuffer.pData);
 
-	for (const auto& x : m_SortPolygons)
+	for (const auto& x : m_sortPolygons)
 	{
 		switch (x->polygonMesh)
 		{
@@ -153,21 +153,21 @@ void PolygonRenderer::setPolygonInfo()
 			break;
 		}
 	}
-	deviceContext->Unmap(m_pIndexBuffer.Get(), 0);
-	deviceContext->Unmap(m_pVertexBuffer.Get(), 0);
+	deviceContext->Unmap(m_indexBuffer.Get(), 0);
+	deviceContext->Unmap(m_vertexBuffer.Get(), 0);
 }
 
 void PolygonRenderer::setTriangleInfo(PolygonInfo* info, SimpleVertex* vertices, int* indexes)
 {
 	short count = 3;
 	int l = 1;
-	float h = mathf::sqrt(l * l - (l / 2.0) * (l / 2.0));
-	vertices[m_VertexBufferPos].pos = XMFLOAT3(info->position.x, info->position.y - h * 2.0 / 3.0, 0);
-	vertices[m_VertexBufferPos + 1].pos = XMFLOAT3(info->position.x + l / 2.0, info->position.y + h * 1.0 / 3.0, 0);
-	vertices[m_VertexBufferPos + 2].pos = XMFLOAT3(info->position.x - l / 2.0, vertices[1].pos.y, 0);
+	float h = mathf::Sqrt(l * l - (l / 2.0) * (l / 2.0));
+	vertices[m_vertexBufferPos].pos = XMFLOAT3(info->position.x, info->position.y - h * 2.0 / 3.0, 0);
+	vertices[m_vertexBufferPos + 1].pos = XMFLOAT3(info->position.x + l / 2.0, info->position.y + h * 1.0 / 3.0, 0);
+	vertices[m_vertexBufferPos + 2].pos = XMFLOAT3(info->position.x - l / 2.0, vertices[1].pos.y, 0);
 	setWorldMatrix(info, vertices);
 	setIndex(indexes, count);
-	m_VertexBufferPos += count;
+	m_vertexBufferPos += count;
 }
 
 void PolygonRenderer::setWorldMatrix(PolygonInfo* info, SimpleVertex* vertices)
@@ -190,9 +190,9 @@ void PolygonRenderer::setIndex(int* indexes, int count)
 {
 	for (int i = 0; i < count - 2; i++) 
 	{
-		indexes[m_VertexBufferPos + i] = m_VertexBufferPos;
-		indexes[m_VertexBufferPos + i + 1] = m_VertexBufferPos + i + 1;
-		indexes[m_VertexBufferPos + i + 2] = m_VertexBufferPos + i + 2;
+		indexes[m_vertexBufferPos + i] = m_vertexBufferPos;
+		indexes[m_vertexBufferPos + i + 1] = m_vertexBufferPos + i + 1;
+		indexes[m_vertexBufferPos + i + 2] = m_vertexBufferPos + i + 2;
 	}
 	//頂点バッファの書きかえってmap使わないとできないのかな、
 	//d3dにセットする前だったら書き換えられるのか？
