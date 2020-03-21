@@ -218,7 +218,7 @@ bool D3d11::Init(const HWND &pcd)
 	ZeroMemory(&rdc, sizeof(rdc));
 
 	//ラスタライズの定義
-	rdc.CullMode = D3D11_CULL_NONE;
+	rdc.CullMode = D3D11_CULL_BACK;
 	rdc.FillMode = D3D11_FILL_SOLID;
 	//rdc.FillMode = D3D11_FILL_WIREFRAME;
 	//rdc.FrontCounterClockwise = TRUE;

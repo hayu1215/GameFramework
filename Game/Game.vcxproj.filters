@@ -297,6 +297,24 @@
     <ClCompile Include="Framework\Source\Component\CameraComponent.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Framework\Source\Graphics\2D\PolygonRenderer.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Source\Graphics\Shader\PolygonShader.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Source\Component\Graphics\MeshComponent.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Source\Component\DrawComponent.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\Source\Component\TestComponent1.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Source\Utility\Debug\Log.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\Source\Application\Window\Window.h">
@@ -614,6 +632,27 @@
     <ClInclude Include="Framework\Source\Component\CameraComponent.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Framework\Source\Graphics\2D\PolygonRenderer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Source\Graphics\Shader\PolygonShader.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Source\Component\Graphics\MeshComponent.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Source\Component\DrawComponent.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Source\Application\Task\UpdateSystem.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Source\Component\TestComponent1.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Source\Utility\Debug\Log.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Framework\Resource\Shader\Texture.hlsl" />
@@ -621,6 +660,7 @@
     <FxCompile Include="Framework\Resource\Shader\TestShader.hlsl" />
     <FxCompile Include="Framework\Resource\Shader\LineShader.hlsl" />
     <FxCompile Include="Framework\Resource\Shader\LineShaderTest.hlsl" />
+    <FxCompile Include="Framework\Resource\Shader\PolygonShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Framework\Include\Box2D\Documentation\footer.html" />

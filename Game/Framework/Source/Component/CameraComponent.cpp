@@ -23,7 +23,7 @@ void CameraComponent::onCreate()
 
 void CameraComponent::update()
 {
-	m_camera.setPosition(m_entity.lock()->getPosition());
+	m_camera.setPosition(m_entity.lock()->position());
 }
 
 void CameraComponent::onActive()

@@ -11,6 +11,7 @@
 #include<Framework/Source/Application/Resource/ResourceManager.h>
 #include<Framework/Source/Graphics/Shader/SpriteShader.h>
 #include<Framework/Source/Graphics/Shader/TestShader.h>
+#include<Framework/Source/Graphics/Shader/PolygonShader.h>
 #include<Framework/Source/Device/DeviceLocator.h>
 #include<Framework/Source/Device/Input/Keyboard.h>
 #include<Framework/Source/Graphics/2D/Texture.h>
@@ -43,6 +44,7 @@ bool Application::init(HINSTANCE hInstance)
 	ResourceManager::LoadShader<SpriteShader>("SpritebatchShader.hlsl");
 	ResourceManager::LoadShader<TestShader>("LineShader.hlsl");
 	ResourceManager::LoadShader<TestShader>("LineShaderTest.hlsl");
+	ResourceManager::LoadShader<PolygonShader>("PolygonShader.hlsl");
 	ResourceManager::LoadTexture("blue.png");
 	ResourceManager::LoadTexture("red.png"); 
 	ResourceManager::LoadTexture("green_pepper.png");
@@ -89,6 +91,7 @@ void Application::loop()
 	D3d11::Clear();
 	TaskManager::Update();
 	TaskManager::Draw();
+	TaskManager::SystemUpdate();
 	D3d11::Present();
 
 	DeviceLocator::Keyboard().update();

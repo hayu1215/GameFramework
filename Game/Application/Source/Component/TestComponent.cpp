@@ -1,10 +1,18 @@
 #include "TestComponent.h"
 #include<Framework/Source/Utility/Judge.h>
 #include<Framework/Source/Graphics/2D/Spritebatch.h>
+#include<Framework/Source/Component/Graphics/MeshComponent.h>
 
 TestComponent::TestComponent()
 {
-	lineRenderer = std::make_unique<LineRenderer>();
+	//m_isActive = true;
+	//lineRenderer = std::make_unique<LineRenderer>();
+	//polygonRenderer = std::make_unique<PolygonRenderer>();
+}
+
+TestComponent::TestComponent(bool isActive)
+	:UpdateComponent(isActive)
+{
 }
 
 TestComponent::~TestComponent()
@@ -14,6 +22,7 @@ TestComponent::~TestComponent()
 void TestComponent::onCreate()
 {
 	//m_pEntity.lock()->destroy();
+	m_entity.lock()->getComponent<MeshComponent>().lock()->setRegularPolygon(30, XMFLOAT4(0.0f, 1.0f, 1.0f, 0.5f));
 }
 
 void TestComponent::update()
@@ -32,14 +41,22 @@ void TestComponent::update()
 	//lineRenderer->drawLine(XMFLOAT3(-200, 100, 0), XMFLOAT3(200, -100, 0), XMFLOAT4(1, 1, 0, 1), XMFLOAT4(1, 0, 0, 1), 40.0f);
 	//std::vector<XMFLOAT3> pos = { XMFLOAT3(-200, 0, 0), XMFLOAT3(-100, 100, 0), XMFLOAT3(100, 100, 0), XMFLOAT3(200, 0, 0) };
 	//std::vector<XMFLOAT4> col = { XMFLOAT4(1, 1, 0, 1), XMFLOAT4(1, 0, 0, 1), XMFLOAT4(1, 0, 0, 1), XMFLOAT4(1, 1, 0, 1) };
-	std::vector<XMFLOAT3> pos1 = { XMFLOAT3(-200, 0, 0), XMFLOAT3(-100, 100, 0), XMFLOAT3(100, 100, 0), XMFLOAT3(200, 0, 0) };
-	std::vector<XMFLOAT4> col1 = { XMFLOAT4(1, 1, 0, 1), XMFLOAT4(1, 0, 0, 1), XMFLOAT4(1, 1, 0, 1), XMFLOAT4(1, 1, 0, 1) };
-	std::vector<XMFLOAT3> pos2 = { XMFLOAT3(-200, -1, 0), XMFLOAT3(-100, 99, 0), XMFLOAT3(100, 99, 0), XMFLOAT3(200, -1, 0), XMFLOAT3(100, -99, 0) };
-	std::vector<XMFLOAT4> col2 = { XMFLOAT4(1, 0, 0, 1), XMFLOAT4(0, 1, 0, 1), XMFLOAT4(0, 0, 1, 1), XMFLOAT4(1, 0, 0, 1) , XMFLOAT4(0, 1, 0, 1) };
+	//std::vector<XMFLOAT3> pos1 = { XMFLOAT3(-200, 0, 0), XMFLOAT3(-100, 100, 0), XMFLOAT3(100, 100, 0), XMFLOAT3(200, 0, 0) };
+	//std::vector<XMFLOAT4> col1 = { XMFLOAT4(1, 1, 0, 1), XMFLOAT4(1, 0, 0, 1), XMFLOAT4(1, 1, 0, 1), XMFLOAT4(1, 1, 0, 1) };
+	//std::vector<XMFLOAT3> pos2 = { XMFLOAT3(-200, -1, 0), XMFLOAT3(-100, 99, 0), XMFLOAT3(100, 99, 0), XMFLOAT3(200, -1, 0), XMFLOAT3(100, -99, 0) };
+	//std::vector<XMFLOAT4> col2 = { XMFLOAT4(1, 0, 0, 1), XMFLOAT4(0, 1, 0, 1), XMFLOAT4(0, 0, 1, 1), XMFLOAT4(1, 0, 0, 1) , XMFLOAT4(0, 1, 0, 1) };
 	//lineRenderer->drawLine("LineShaderTest.hlsl",pos1, col1, 40.0f);
 	//lineRenderer->drawLine("LineShader.hlsl", pos1, col1, 3.0f);
 
 	//drawBezier(XMFLOAT3(-200, 0, 0), XMFLOAT3(-100, 200, 0), XMFLOAT3(100, -200, 0), XMFLOAT3(200, 0, 0), 30);
+	//polygonRenderer->drawCircle(XMFLOAT3(0, 0, 1), XMFLOAT2(100.0f, 100.0f), XMFLOAT4(0.0f, 1.0f, 1.0f, 0.5f), XMFLOAT2(0.0f, 0.0f), angle);
+	//polygonRenderer->drawHexagon(XMFLOAT3(-300, 0, 1), XMFLOAT2(100.0f, 100.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 0.5f), XMFLOAT2(0.0f, 0.0f), angle);
+	//polygonRenderer->drawPentagon(XMFLOAT3(300, 0, 1), XMFLOAT2(100.0f, 100.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 0.5f), XMFLOAT2(0.0f, 0.0f), angle);
+	//polygonRenderer->drawSquare(XMFLOAT3(-150, 0, 1), XMFLOAT2(80.0f, 80.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 0.5f),XMFLOAT2(0.0f, 0.0f), angle);
+	//polygonRenderer->drawTriangle(XMFLOAT3(150, 0, 0), XMFLOAT2(100.0f, 100.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 0.5f), XMFLOAT2(0.0f, 0.0f), angle);
+
+	//angle += 0.01f;
+	//polygonRenderer->end();
 }
 
 void TestComponent::onActive()
@@ -65,7 +82,7 @@ void TestComponent::drawBezier(const XMFLOAT3 & p0, const XMFLOAT3 & p1, const X
 		pos.emplace_back(v);
 	}
 	std::vector<XMFLOAT4> col = { XMFLOAT4(1, 0, 0, 1) };
-	lineRenderer->drawLine("LineShader.hlsl", pos, col, 20.0f);
+	//lineRenderer->drawLine("LineShader.hlsl", pos, col, 20.0f);
 }
 
 XMFLOAT3 TestComponent::bezier(const XMFLOAT3 & p0, const XMFLOAT3 & p1, const XMFLOAT3 & p2, const XMFLOAT3 & p3, float t)

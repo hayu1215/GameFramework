@@ -11,12 +11,12 @@ AScene::~AScene()
 {
 }
 
-Entity * AScene::addEntity(std::shared_ptr<Entity>entitiy)
-{
-	Entity* pEntity = entitiy.get();
-	m_entities.push_back(std::move(entitiy));
-	return pEntity;
-}
+//Entity * AScene::addEntity(std::shared_ptr<Entity>entitiy)
+//{
+//	Entity* pEntity = entitiy.get();
+//	m_entities.push_back(std::move(entitiy));
+//	return pEntity;
+//}
 
 void AScene::addRemoveEntity(const std::weak_ptr<Entity>& removeEntity)
 {

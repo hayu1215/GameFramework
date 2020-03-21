@@ -5,12 +5,12 @@
 #include<Framework/Source/Application/Scene/SceneManager.h>
 
 Entity::Entity()
-	:m_position(XMFLOAT3(0, 0, 0)), m_tag(""), m_name(""), m_isActive(false)
+	:m_position(XMFLOAT3(0, 0, 0)), m_rotate(XMFLOAT3(0, 0, 0)), m_scale(XMFLOAT3(1, 1, 1)), m_tag(""), m_name(""), m_isActive(false)
 {
 }
 
-Entity::Entity(const XMFLOAT3& position, const std::string& tag, const std::string& name)
-	:m_position(position), m_tag(tag), m_name(name), m_isActive(false)
+Entity::Entity(const XMFLOAT3& position, const XMFLOAT3& rotate, const XMFLOAT3& scale, const std::string& tag, const std::string& name)
+	:m_position(position), m_rotate(rotate), m_scale(scale), m_tag(tag), m_name(name), m_isActive(false)
 {
 }
 
@@ -18,14 +18,14 @@ Entity::~Entity()
 {
 }
 
-Entity* Entity::addComponent(const std::shared_ptr<AComponent>& component)
-{
-	m_components.emplace_back(component);
-	component->setEntity(shared_from_this());
-	component->init();
-	component->onCreate();
-	return this;
-}
+//Entity* Entity::addComponent(const std::shared_ptr<AComponent>& component)
+//{
+//	m_components.emplace_back(component);
+//	component->setEntity(shared_from_this());
+//	component->onCreate();
+//	component->init();
+//	return this;
+//}
 
 void Entity::addRemoveComponent(const std::weak_ptr<AComponent>& component)
 {
@@ -82,7 +82,32 @@ const std::string& Entity::getName()
 	return m_name;
 }
 
-const XMFLOAT3& Entity::getPosition()
+const XMFLOAT3& Entity::position()
 {
 	return m_position;
+}
+
+void Entity::position(const XMFLOAT3 & pos)
+{
+	m_position = pos;
+}
+
+const XMFLOAT3 & Entity::rotate()
+{
+	return m_rotate;
+}
+
+void Entity::rotate(const XMFLOAT3 & rotate)
+{
+	m_rotate = rotate;
+}
+
+const XMFLOAT3 & Entity::scale()
+{
+	return m_scale;
+}
+
+void Entity::scale(const XMFLOAT3 & scale)
+{
+	m_scale = scale;
 }

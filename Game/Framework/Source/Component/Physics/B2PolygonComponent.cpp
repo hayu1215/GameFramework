@@ -27,7 +27,7 @@ void B2PolygonComponent::onCreate()
 	if (m_isStatic)bodyDef.type = b2_staticBody;
 	else bodyDef.type = b2_dynamicBody;
 
-	XMFLOAT3 pos = m_entity.lock()->getPosition();
+	XMFLOAT3 pos = m_entity.lock()->position();
 	bodyDef.position.Set(pos.x, pos.y);
 	m_body = B2Manager::World().CreateBody(&bodyDef);
 
