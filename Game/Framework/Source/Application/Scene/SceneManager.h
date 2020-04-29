@@ -15,8 +15,6 @@ public:
 
 	static void Change(const std::string&);
 	static void Add(std::unique_ptr<AScene>);
-	static void AddRemoveEntity(const std::weak_ptr<Entity>&);
-	static void RemoveEntity();
 
 private:
 	static std::unordered_map<std::string, std::unique_ptr<AScene>> m_Scenes;

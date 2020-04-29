@@ -19,6 +19,7 @@
 #include<Framework/Source/Application/Scene/SceneManager.h>
 #include<Framework/Source/Component/Physics/B2Manager.h>
 #include<Framework/Source/Utility/Timer/FpsTimer.h>
+#include<Framework/Source/Component/Entity.h>
 
 
 Application::Application()
@@ -97,7 +98,7 @@ void Application::loop()
 	DeviceLocator::Keyboard().update();
 	B2Manager::Update();
 	TaskManager::RemoveTask();
-	SceneManager::RemoveEntity();
+	Entity::Remove();
 }
 
 void Application::finalize()

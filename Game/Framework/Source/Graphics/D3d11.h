@@ -24,13 +24,13 @@ public:
 
 private:
 	static HWND m_hWnd;
-	static ComPtr<ID3D11Device>m_Device;
-	static ComPtr<ID3D11DeviceContext>m_DeviceContext;
-	static ComPtr<IDXGISwapChain>m_SwapChain;
-	static ComPtr<ID3D11RenderTargetView>m_RenderTargetView;
-	static ComPtr<ID3D11DepthStencilView>m_DepthStencilView;
-	static ComPtr<ID3D11Texture2D>m_DepthStencil;
-	static ComPtr<ID3D11DepthStencilState>m_DepthStencilState;
-	static ComPtr<ID3D11BlendState>m_BlendState;
-	static ComPtr<ID3D11RasterizerState>m_RasterizerState;
+	static ComPtr<ID3D11Device> m_Device;
+	static ComPtr<ID3D11DeviceContext> m_DeviceContext;
+	static ComPtr<IDXGISwapChain> m_SwapChain;
+	static ComPtr<ID3D11RenderTargetView> m_RenderTargetView;
+	static ComPtr<ID3D11DepthStencilView> m_DepthStencilView;
+	static ComPtr<ID3D11Texture2D> m_DepthStencil;
+	static ComPtr<ID3D11DepthStencilState> m_DepthStencilState;
+	static ComPtr<ID3D11BlendState> m_BlendState;
+	static ComPtr<ID3D11RasterizerState> m_RasterizerState;
 };

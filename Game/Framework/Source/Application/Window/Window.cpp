@@ -43,7 +43,7 @@ bool Window::initWindow(HINSTANCE hInstance,
 	m_hWnd = CreateWindow(WindowName, WindowName, WS_OVERLAPPEDWINDOW,
 		0, 0, iWidth, iHeight, 0, 0, hInstance, 0);
 
-	if (!m_hWnd)return false;
+	if (!m_hWnd) return false;
 
 	//ウインドウの表示
 	ShowWindow(m_hWnd, SW_SHOW);

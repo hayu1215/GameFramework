@@ -2,6 +2,7 @@
 
 #include<memory>
 #include<Framework/Source/Component/DrawComponent.h>
+#include<Framework/Source/Component/Graphics/MeshRendererComponent.h>
 #include<Framework/Source/Graphics/2D/PolygonRenderer.h>
 
 class MeshComponent :public DrawComponent
@@ -17,17 +18,19 @@ public:
 	void onDeActive()override;
 	void onDestory()override;
 
-	void setRegularPolygon(unsigned int vertexCount = 3, const XMFLOAT4& color = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
-	std::vector<XMFLOAT3> regularPolygonVertices(float radius, unsigned int count);
-	std::vector<SimpleVertex> getVertices();
-	std::vector<unsigned short> getIndexes();
+	//std::vector<SimpleVertex> getVertices();
+	//std::vector<unsigned short> getIndexes();
+	const Mesh& mesh();
+	const std::vector<SimpleVertex>& model();
+
+protected:
+	void setIndex(unsigned int count, bool isStrip = true);
+	std::vector<SimpleVertex> m_model;
+	Mesh m_mesh;
+	//std::vector<SimpleVertex> m_vertices;
+	//std::vector<unsigned short> m_indexes;
 
 private:
-	void setIndex(unsigned int count, bool isStrip = true);
-	void updateTransform();
-
-	static std::shared_ptr<PolygonRenderer> m_PolygonRenderer;
-	std::vector<SimpleVertex> m_model;
-	std::vector<SimpleVertex> m_vertices;
-	std::vector<unsigned short> m_indexes;
+	//static std::shared_ptr<PolygonRenderer> m_PolygonRenderer;
+	std::weak_ptr<MeshRendererComponent> m_polygonRenderer;
 };

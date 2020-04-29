@@ -27,7 +27,7 @@ void DrawComponent::init()
 
 void DrawComponent::active()
 {
-	if (m_isActive)return;
+	if (m_isActive) return;
 	onActive();
 	TaskManager::AddTask(std::dynamic_pointer_cast<DrawComponent>(shared_from_this()));
 	m_isActive = true;
@@ -35,7 +35,7 @@ void DrawComponent::active()
 
 void DrawComponent::deActive()
 {
-	if (!m_isActive)return;
+	if (!m_isActive) return;
 	onDeActive();
 	TaskManager::AddRemoveTask(std::dynamic_pointer_cast<DrawComponent>(shared_from_this()));
 	m_isActive = false;

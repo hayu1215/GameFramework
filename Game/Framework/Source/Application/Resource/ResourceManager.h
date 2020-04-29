@@ -21,8 +21,8 @@ public:
 	static void Clear();
 
 private:
-	static std::unordered_map<std::string, std::unique_ptr<AShader>>m_Shaders;
-	static std::unordered_map<std::string, std::unique_ptr<Texture>>m_Textures;
+	static std::unordered_map<std::string, std::unique_ptr<AShader>> m_Shaders;
+	static std::unordered_map<std::string, std::unique_ptr<Texture>> m_Textures;
 };
 
 template<class T>

@@ -22,7 +22,7 @@ TestComponent::~TestComponent()
 void TestComponent::onCreate()
 {
 	//m_pEntity.lock()->destroy();
-	m_entity.lock()->getComponent<MeshComponent>().lock()->setRegularPolygon(30, XMFLOAT4(0.0f, 1.0f, 1.0f, 0.5f));
+	//m_entity.lock()->getComponent<MeshComponent>().lock()->setRegularPolygon(30, XMFLOAT4(0.0f, 1.0f, 1.0f, 0.5f));
 }
 
 void TestComponent::update()

@@ -4,6 +4,9 @@
 #include<Framework/Source/Application/Task/TaskManager.h>
 #include<Framework/Source/Application/Scene/SceneManager.h>
 
+std::list<std::shared_ptr<Entity>> Entity::m_Entities = {};
+std::list<std::weak_ptr<Entity>> Entity::m_RemoveEntities = {};
+
 Entity::Entity()
 	:m_position(XMFLOAT3(0, 0, 0)), m_rotate(XMFLOAT3(0, 0, 0)), m_scale(XMFLOAT3(1, 1, 1)), m_tag(""), m_name(""), m_isActive(false)
 {
@@ -16,6 +19,35 @@ Entity::Entity(const XMFLOAT3& position, const XMFLOAT3& rotate, const XMFLOAT3&
 
 Entity::~Entity()
 {
+}
+
+void Entity::Remove()
+{
+	for (auto& v : m_Entities)
+	{
+		v->removeComponent();
+	}
+	for (auto& v : m_RemoveEntities)
+	{
+		m_Entities.remove_if([&](const std::weak_ptr<Entity>& x) {return x.lock().get() == v.lock().get(); });
+	}
+	m_RemoveEntities.clear();
+}
+
+void Entity::Clear()
+{
+	m_Entities.clear();
+	m_RemoveEntities.clear();
+}
+
+std::list<std::weak_ptr<Entity>> Entity::GetEntities()
+{
+	std::list<std::weak_ptr<Entity>> entities;
+	for (const auto& v : m_Entities)
+	{
+		entities.emplace_back(v);
+	}
+	return entities;
 }
 
 //Entity* Entity::addComponent(const std::shared_ptr<AComponent>& component)
@@ -64,7 +96,7 @@ void Entity::destroy()
 		v->onDestory();
 		v->deActive();
 	}
-	SceneManager::AddRemoveEntity(shared_from_this());
+	m_RemoveEntities.emplace_back(shared_from_this());
 }
 
 bool Entity::isActive()

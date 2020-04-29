@@ -1,6 +1,6 @@
 #include"B2Manager.h"
 
-b2World B2Manager::m_World(b2Vec2(0.0f, -10.0f));
+b2World B2Manager::m_World(b2Vec2(0.0f, -40.0f));
 
 void B2Manager::Update()
 {

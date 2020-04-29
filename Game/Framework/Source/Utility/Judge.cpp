@@ -14,7 +14,7 @@ namespace internal
 
 void AssertMsg(bool expr, const char* file, int line, const char* msg)
 {
-	if (expr)return;
+	if (expr) return;
 	std::stringstream ss;
 	ss << "ERROR : Assert Faild\n" << msg << "\n" << file << "(" + line << ")\n";
 	std::string str = ss.str();

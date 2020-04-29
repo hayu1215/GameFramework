@@ -12,7 +12,7 @@ public:
 
 	static IKeyboard& Keyboard() 
 	{ 
-		if (!m_Keyboard)return m_NullDevice;
+		if (!m_Keyboard) return m_NullDevice;
 		return *m_Keyboard.get(); 
 	}
 
@@ -27,7 +27,7 @@ public:
 
 	static IAudio& Audio()
 	{
-		if (!m_Audio)return m_NullDevice;
+		if (!m_Audio) return m_NullDevice;
 		return *m_Audio.get();
 	}
 

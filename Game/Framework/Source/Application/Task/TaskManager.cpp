@@ -1,16 +1,16 @@
 #include"TaskManager.h"
 #include<algorithm>
-#include"UpdateSystem.h"
 #include<Framework/Source/Component/UpdateComponent.h>
 #include<Framework/Source/Component/DrawComponent.h>
+#include<Framework/Source/Component/SystemComponent.h>
 #include<Framework/Source/Utility/Judge.h>
 
 std::list<std::weak_ptr<UpdateComponent>> TaskManager::m_UpdateComponents = {};
 std::list<std::weak_ptr<UpdateComponent>> TaskManager::m_RemoveUpdateComponents = {};
 std::list<std::weak_ptr<DrawComponent>> TaskManager::m_DrawComponents = {};
 std::list<std::weak_ptr<DrawComponent>> TaskManager::m_RemoveDrawComponents = {};
-std::list<std::weak_ptr<UpdateSystem>> TaskManager::m_UpdateSystems = {};
-std::list<std::weak_ptr<UpdateSystem>> TaskManager::m_RemoveUpdateSystems = {};
+std::list<std::weak_ptr<SystemComponent>> TaskManager::m_SystemComponents = {};
+std::list<std::weak_ptr<SystemComponent>> TaskManager::m_RemoveSystemComponents = {};
 
 void TaskManager::AddTask(const std::weak_ptr<UpdateComponent>& task)
 {
@@ -22,9 +22,9 @@ void TaskManager::AddTask(const std::weak_ptr<DrawComponent>& task)
 	m_DrawComponents.emplace_back(task);
 }
 
-void TaskManager::AddTask(const std::weak_ptr<UpdateSystem>& task)
+void TaskManager::AddTask(const std::weak_ptr<SystemComponent>& task)
 {
-	m_UpdateSystems.emplace_back(task);
+	m_SystemComponents.emplace_back(task);
 }
 
 void TaskManager::AddRemoveTask(const std::weak_ptr<UpdateComponent>& task)
@@ -37,9 +37,9 @@ void TaskManager::AddRemoveTask(const std::weak_ptr<DrawComponent>& task)
 	m_RemoveDrawComponents.emplace_back(task);
 }
 
-void TaskManager::AddRemoveTask(const std::weak_ptr<UpdateSystem>& task)
+void TaskManager::AddRemoveTask(const std::weak_ptr<SystemComponent>& task)
 {
-	m_RemoveUpdateSystems.emplace_back(task);
+	m_RemoveSystemComponents.emplace_back(task);
 }
 
 void TaskManager::Update()
@@ -60,7 +60,7 @@ void TaskManager::Draw()
 
 void TaskManager::SystemUpdate()
 {
-	for (auto& e : m_UpdateSystems)
+	for (auto& e : m_SystemComponents)
 	{
 		e.lock()->update();
 	}
@@ -80,9 +80,19 @@ void TaskManager::RemoveTask()
 	}
 	m_RemoveDrawComponents.clear();
 
-	for (auto& v : m_RemoveUpdateSystems)
+	for (auto& v : m_RemoveSystemComponents)
 	{
-		m_UpdateSystems.remove_if([&](const std::weak_ptr<UpdateSystem>& x) {return x.lock().get() == v.lock().get(); });
+		m_SystemComponents.remove_if([&](const std::weak_ptr<SystemComponent>& x) {return x.lock().get() == v.lock().get(); });
 	}
-	m_RemoveUpdateSystems.clear();
+	m_RemoveSystemComponents.clear();
+}
+
+void TaskManager::Clear()
+{
+	m_UpdateComponents.clear();
+	m_RemoveUpdateComponents.clear();
+	m_DrawComponents.clear();
+	m_RemoveDrawComponents.clear();
+	m_SystemComponents.clear();
+	m_RemoveSystemComponents.clear();
 }

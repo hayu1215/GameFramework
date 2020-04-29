@@ -1,0 +1,18 @@
+#pragma once
+
+#include<vector>
+#include "MeshComponent.h"
+#include<Framework/Source/Utility/Math/XMath.h>
+
+class LineComponent :public MeshComponent
+{
+public:
+	LineComponent();
+	LineComponent(bool isActive);
+	LineComponent(bool isActive, const std::vector<XMFLOAT3>& positions, const XMFLOAT4& color, float width, bool isLoop);
+	~LineComponent();
+
+	void draw()override;
+
+	void setLine(const std::vector<XMFLOAT3>& positions, const XMFLOAT4& color, float width, bool isLoop);
+};

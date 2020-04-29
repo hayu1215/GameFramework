@@ -23,8 +23,8 @@ public:
 	bool keyUp(KeyCode)override;
 
 private:
-	ComPtr<IDirectInput8A>m_dInput;
-	ComPtr<IDirectInputDevice8A>m_keyDevice;
+	ComPtr<IDirectInput8A> m_dInput;
+	ComPtr<IDirectInputDevice8A> m_keyDevice;
 
 	BYTE m_keys[256];
 	BYTE m_currentKeys[256];

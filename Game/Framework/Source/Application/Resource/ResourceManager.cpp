@@ -12,13 +12,13 @@ bool ResourceManager::LoadTexture(const std::string & name)
 
 AShader* ResourceManager::FindShader(const std::string & name)
 {
-	if (m_Shaders.count(name) == 0)return nullptr;
+	if (m_Shaders.count(name) == 0) return nullptr;
 	return m_Shaders[name].get();
 }
 
 Texture* ResourceManager::FindTexture(const std::string & name)
 {
-	if (m_Textures.count(name) == 0)return nullptr;
+	if (m_Textures.count(name) == 0) return nullptr;
 	return m_Textures[name].get();
 }
 

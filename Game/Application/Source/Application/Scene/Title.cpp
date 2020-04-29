@@ -7,7 +7,10 @@
 #include<Framework/Source/Component/Physics/B2BoxComponent.h>
 #include<Framework/Source/Component/Physics/B2PolygonComponent.h>
 #include<Framework/Source/Component/CameraComponent.h>
-#include<Framework/Source/Component//Graphics/MeshComponent.h>
+#include<Framework/Source/Component/Graphics/MeshComponent.h>
+#include<Framework/Source/Component/Graphics/LineComponent.h>
+#include<Framework/Source/Component/Graphics/RegularPolygonComponent.h>
+#include<Framework/Source/Component/Graphics/MeshRendererComponent.h>
 
 Title::Title(const std::string name)
 	:AScene(name)
@@ -20,31 +23,31 @@ Title::~Title()
 
 void Title::start()
 {
-	auto camera = addEntity(XMFLOAT3(0, 0, 0), XMFLOAT3(0, 0, 0), XMFLOAT3(0, 0, 0), "camera", "camera1");
+	auto camera = Entity::Add(XMFLOAT3(0, 0, 0), XMFLOAT3(0, 0, 0), XMFLOAT3(0, 0, 0), "camera", "camera1");
 	camera->addComponent<CameraComponent>(true);
 
-	//auto a = addEntity(std::make_shared<Entity>(XMFLOAT3(0, -100, 0), "entity", "entity1"));
-	//a->addComponent(std::make_shared<B2BoxComponent>(true, true, XMFLOAT2(100, 10)));
-
-	auto b = addEntity(XMFLOAT3(25, 0, 0), XMFLOAT3(0, 0, 0), XMFLOAT3(100, 100, 1), "", "");
-	b->addComponent<MeshComponent>(true);
-	b->addComponent<TestComponent>(true);
-
-	auto c = addEntity(XMFLOAT3(-25, 0, 1), XMFLOAT3(0, 0, 0), XMFLOAT3(100, 100, 1), "", "");
-	c->addComponent<MeshComponent>(true);
-	c->addComponent<TestComponent1>(true);
-
-	//auto c = addEntity(std::make_shared<Entity>(XMFLOAT3(0, 0, 0), "", ""));
-	//c->addComponent(std::make_shared<MeshComponent>(true));
-
-	//for (int i = 0; i < 10; i++) 
+	//for (int i = 0; i < 11; ++i) 
 	//{
-	//	auto b = addEntity(std::make_shared<Entity>(XMFLOAT3(0, 100 + i * 20, 0), "entity", "entity2"));
-	//	b->addComponent(std::make_shared<TestComponent>());
-	//	b->addComponent(std::make_shared<B2PolygonComponent>(true,false, std::vector<b2Vec2>{ b2Vec2(0,10), b2Vec2(-5,5), b2Vec2(-5,-5), b2Vec2(0,-10), b2Vec2(5,-5), b2Vec2(5,5) }));
-	//	//b->addComponent(std::make_shared<B2PolygonComponent>());
-	//	//b->addComponent(std::make_shared<B2BoxComponent>(false, XMFLOAT2(10 + i * 5, 10)));
+	//	for (int j = 0; j < 10; ++j)
+	//	{
+	//		auto c = Entity::Add(XMFLOAT3(-100 + i * 20, 100 + j * 20, 1), XMFLOAT3(0, 0, 0), XMFLOAT3(20, 20, 1), "", "");
+	//		c->addComponent<MeshRendererComponent>(true);
+	//		c->addComponent<RegularPolygonComponent>(true, 4, XMFLOAT4(0.0f, 1.0f, 1.0f, 0.5f));
+	//		c->addComponent<B2BoxComponent>(true, false);
+	//		//c->addComponent<TestComponent1>(true);
+	//	}
 	//}
+
+	auto a = Entity::Add(XMFLOAT3(0, 200, 1), XMFLOAT3(0, 0, 0), XMFLOAT3(10, 10, 1), "", "");
+	a->addComponent<MeshRendererComponent>(true);
+	a->addComponent<RegularPolygonComponent>(true, 5, XMFLOAT4(1.0f, 0.0f, 1.0f, 0.5f));
+	a->addComponent<B2PolygonComponent>(true, true);
+
+	auto b = Entity::Add(XMFLOAT3(0, -200, 1), XMFLOAT3(0, 0, 0), XMFLOAT3(100, 10, 1), "", "");
+	b->addComponent<MeshRendererComponent>(true);
+	b->addComponent<RegularPolygonComponent>(true, 4, XMFLOAT4(1.0f, 0.0f, 1.0f, 0.5f));
+	b->addComponent<B2BoxComponent>(true, true);
+	//b->addComponent<TestComponent>(true);
 }
 
 void Title::end()

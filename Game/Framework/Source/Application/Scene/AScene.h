@@ -12,26 +12,10 @@ public:
 	AScene(const std::string& name);
 	virtual ~AScene();
 
-	template<class... Args>
-	Entity* addEntity(const Args&... args);
-
 	virtual void start() = 0;
 	virtual void end() = 0;
-	//Entity* addEntity(std::shared_ptr<Entity>);
-	void addRemoveEntity(const std::weak_ptr<Entity>&);
-	void removeEntity();
 	const std::string name();
 
 private:
 	const std::string m_name;
-	std::list<std::shared_ptr<Entity>>m_entities;
-	std::list<std::weak_ptr<Entity>>m_removeEntities;
 };
-
-template<class... Args>
-Entity* AScene::addEntity(const Args&... args)
-{
-	auto entitiy = std::make_shared<Entity>(args...);
-	m_entities.push_back(entitiy);
-	return entitiy.get();
-}

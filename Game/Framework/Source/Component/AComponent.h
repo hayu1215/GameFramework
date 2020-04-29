@@ -25,6 +25,6 @@ protected:
 	virtual void onActive() = 0;
 	virtual void onDeActive() = 0;
 
-	std::weak_ptr<Entity>m_entity;
+	std::weak_ptr<Entity> m_entity;
 	bool m_isActive;
 };

@@ -25,16 +25,16 @@ void AComponent::destroy()
 
 void AComponent::active()
 {
-	if (m_isActive)return;
-	onActive();
+	if (m_isActive) return;
 	m_isActive = true;
+	onActive();
 }
 
 void AComponent::deActive()
 {
-	if (!m_isActive)return;
-	onDeActive();
+	if (!m_isActive) return;
 	m_isActive = false;
+	onDeActive();
 }
 
 void AComponent::setEntity(const std::weak_ptr<Entity>& entity)

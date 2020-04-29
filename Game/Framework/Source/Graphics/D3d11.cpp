@@ -80,7 +80,7 @@ bool D3d11::Init(const HWND &pcd)
 
 		//深度ステンシルビューの作成
 		result = m_Device->CreateDepthStencilView(m_DepthStencil.Get(), NULL, m_DepthStencilView.GetAddressOf());
-		if (utility::CheckError(result, "深度ステンシルビューの作成失敗"))return false;
+		if (utility::CheckError(result, "深度ステンシルビューの作成失敗")) return false;
 	}
 	else 
 	{
@@ -151,7 +151,7 @@ bool D3d11::Init(const HWND &pcd)
 
 		//バックバッファーを渡し、それに対するレンダーターゲットビューを作成
 		result = m_Device->CreateRenderTargetView(pBackBuffer.Get(), NULL, m_RenderTargetView.GetAddressOf());
-		if (utility::CheckError(result, "レンダーターゲットビューの作成失敗"))return false;
+		if (utility::CheckError(result, "レンダーターゲットビューの作成失敗")) return false;
 
 		//深度ステンシルビューの宣言
 		D3D11_TEXTURE2D_DESC descDepth;
@@ -178,7 +178,7 @@ bool D3d11::Init(const HWND &pcd)
 
 		//深度ステンシルビューの作成
 		result = m_Device->CreateDepthStencilView(m_DepthStencil.Get(), &dsvDesc, m_DepthStencilView.GetAddressOf());
-		if (utility::CheckError(result, "深度ステンシルビューの作成失敗"))return false;
+		if (utility::CheckError(result, "深度ステンシルビューの作成失敗")) return false;
 	}
 
 	//レンダーターゲットビューと深度ステンシルビューをパイプラインにバインド
@@ -196,7 +196,7 @@ bool D3d11::Init(const HWND &pcd)
 	dc.StencilEnable = false;
 
 	result = m_Device->CreateDepthStencilState(&dc, m_DepthStencilState.GetAddressOf());
-	if (utility::CheckError(result, "深度ステンシルステートの作成失敗"))return false;
+	if (utility::CheckError(result, "深度ステンシルステートの作成失敗")) return false;
 
 	//深度ステンシルステートを適用
 	m_DeviceContext->OMSetDepthStencilState(m_DepthStencilState.Get(), 0);
@@ -225,7 +225,7 @@ bool D3d11::Init(const HWND &pcd)
 
 	//ラスタライズの作成
 	result = m_Device->CreateRasterizerState(&rdc, m_RasterizerState.GetAddressOf());
-	if (utility::CheckError(result, "ラスタライズの作成失敗"))return false;
+	if (utility::CheckError(result, "ラスタライズの作成失敗")) return false;
 
 	//ラスタライズステートのセット
 	m_DeviceContext->RSSetState(m_RasterizerState.Get());
@@ -246,7 +246,7 @@ bool D3d11::Init(const HWND &pcd)
 	bd.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
 
 	result = m_Device->CreateBlendState(&bd, m_BlendState.GetAddressOf());
-	if (utility::CheckError(result, "アルファブレンド用ブレンドステートの作成失敗"))return false;
+	if (utility::CheckError(result, "アルファブレンド用ブレンドステートの作成失敗")) return false;
 
 	UINT mask = 0xffffffff;
 	m_DeviceContext->OMSetBlendState(m_BlendState.Get(), NULL, mask);
