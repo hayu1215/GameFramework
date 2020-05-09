@@ -2,25 +2,15 @@
 #include<Framework/Source/Component/Entity.h>
 #include<Framework/Source/Application/Task/TaskManager.h>
 
-AComponent::AComponent():
-	m_isActive(false)
+AComponent::AComponent() = default;
+AComponent::~AComponent() = default;
+
+void AComponent::onCreate()
 {
 }
 
-AComponent::AComponent(bool isActive)
-	:m_isActive(isActive)
+void AComponent::onDestory()
 {
-}
-
-AComponent::~AComponent()
-{
-}
-
-void AComponent::destroy()
-{
-	onDestory();
-	deActive();
-	m_entity.lock()->addRemoveComponent(shared_from_this());
 }
 
 void AComponent::active()
@@ -37,12 +27,34 @@ void AComponent::deActive()
 	onDeActive();
 }
 
+void AComponent::init(bool isActive)
+{
+	m_isActive = isActive ? false : true;
+	if (isActive) active();
+	else deActive();
+}
+
 void AComponent::setEntity(const std::weak_ptr<Entity>& entity)
 {
 	m_entity = entity;
 }
 
+void AComponent::destroy()
+{
+	onDestory();
+	deActive();
+	m_entity.lock()->addRemoveComponent(shared_from_this());
+}
+
 bool AComponent::isActive()
 {
 	return m_isActive;
+}
+
+void AComponent::onActive()
+{
+}
+
+void AComponent::onDeActive()
+{
 }

@@ -1,23 +1,12 @@
 #include "LineComponent.h"
 #include<Framework/Source/Graphics/2D/PolygonRenderer.h>
 
-LineComponent::LineComponent()
-{
-}
+LineComponent::LineComponent() = default;
+LineComponent::~LineComponent() = default;
 
-LineComponent::LineComponent(bool isActive)
-	:MeshComponent(isActive)
-{
-}
-
-LineComponent::LineComponent(bool isActive, const std::vector<XMFLOAT3>& positions, const XMFLOAT4 & color, float width, bool isLoop)
-	:MeshComponent(isActive)
+void LineComponent::onCreate(const std::vector<XMFLOAT3>& positions, const XMFLOAT4 & color, float width, bool isLoop)
 {
 	setLine(positions, color, width, isLoop);
-}
-
-LineComponent::~LineComponent()
-{
 }
 
 void LineComponent::draw()

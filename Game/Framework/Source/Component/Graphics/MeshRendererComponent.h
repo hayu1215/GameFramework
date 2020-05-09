@@ -8,12 +8,9 @@ class MeshRendererComponent : public SystemComponent
 {
 public:
 	MeshRendererComponent();
-	MeshRendererComponent(bool isActive);
 	~MeshRendererComponent();
 
 	void update()override;
-	void init()override;
-	void onCreate()override;
 	void onActive()override;
 	void onDeActive()override;
 	PolygonRenderer& polygonRenderer();

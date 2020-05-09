@@ -26,9 +26,8 @@ public:
 	template<class T>
 	std::vector<std::weak_ptr<T>> getComponents();
 	template<class T, class ...Args>
-	void addComponent(const Args&... args);
+	void addComponent(bool isActive, const Args&... args);
 
-	//Entity* addComponent(const std::shared_ptr<AComponent>&);
 	void addRemoveComponent(const std::weak_ptr<AComponent>&);
 	void removeComponent();
 	void active();
@@ -96,12 +95,12 @@ std::vector<std::weak_ptr<T>> Entity::getComponents()
 }
 
 template<class T, class ...Args>
-void Entity::addComponent(const Args&... args)
+void Entity::addComponent(bool isActive, const Args&... args)
 {
 	if (!std::is_base_of<AComponent, T>::value) return;//デバッグ時だけでいいかも
-	auto component = std::make_shared<T>(args...);
+	auto component = std::make_shared<T>();
 	m_components.emplace_back(component);
 	component->setEntity(shared_from_this());
-	component->onCreate();
-	component->init();
+	component->init(isActive);
+	component->onCreate(args...);
 }

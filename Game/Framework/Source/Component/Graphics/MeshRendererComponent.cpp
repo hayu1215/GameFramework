@@ -3,42 +3,18 @@
 
 std::shared_ptr<PolygonRenderer> MeshRendererComponent::m_PolygonRenderer = nullptr;
 
-MeshRendererComponent::MeshRendererComponent()
-{
-}
-
-MeshRendererComponent::MeshRendererComponent(bool isActive)
-	:SystemComponent(isActive)
-{
-}
-
-MeshRendererComponent::~MeshRendererComponent()
-{
-}
+MeshRendererComponent::MeshRendererComponent() = default;
+MeshRendererComponent::~MeshRendererComponent() = default;
 
 void MeshRendererComponent::update()
 {
 	m_PolygonRenderer->update();
 }
 
-void MeshRendererComponent::init()
-{
-	if (m_isActive)
-	{
-		onActive();
-		if (TaskManager::GetSystemTask<SystemComponent>().expired()) TaskManager::AddTask(std::dynamic_pointer_cast<SystemComponent>(shared_from_this()));
-	}
-	else onDeActive();
-}
-
-void MeshRendererComponent::onCreate()
-{
-	if (m_PolygonRenderer == nullptr) m_PolygonRenderer = std::make_shared<PolygonRenderer>();
-}
-
 void MeshRendererComponent::onActive()
 {
-	if (TaskManager::GetSystemTask<SystemComponent>().expired()) TaskManager::AddTask(std::dynamic_pointer_cast<SystemComponent>(shared_from_this()));
+	if (m_PolygonRenderer == nullptr) m_PolygonRenderer = std::make_shared<PolygonRenderer>();
+	if (TaskManager::GetSystemTask<MeshRendererComponent>().expired()) TaskManager::AddTask(std::dynamic_pointer_cast<SystemComponent>(shared_from_this()));
 }
 
 void MeshRendererComponent::onDeActive()

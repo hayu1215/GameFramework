@@ -11,14 +11,10 @@ class B2BoxComponent :public UpdateComponent
 {
 public:
 	B2BoxComponent();
-	B2BoxComponent(bool isActive, bool isStatic, const XMFLOAT2& size = XMFLOAT2(1.0f, 1.0f));
 	~B2BoxComponent();
 
-	void onCreate()override;
+	void onCreate(bool isStatic, const XMFLOAT2& size = XMFLOAT2(1.0f, 1.0f));
 	void update()override;
-	void onActive()override;
-	void onDeActive()override;
-	void onDestory()override;
 
 	float angle();
 	const XMFLOAT3& position();
@@ -26,6 +22,6 @@ public:
 
 private:
 	b2Body* m_body;
-	const bool m_isStatic;
-	const XMFLOAT2 m_size;
+	bool m_isStatic = false;
+	XMFLOAT2 m_size{ 1.0f, 1.0f };
 };

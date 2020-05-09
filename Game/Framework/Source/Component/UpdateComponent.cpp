@@ -2,28 +2,8 @@
 #include<Framework/Source/Application/Task/TaskManager.h>
 #include<Framework/Source/Utility/Judge.h>
 
-UpdateComponent::UpdateComponent()
-{
-}
-
-UpdateComponent::UpdateComponent(bool isActive)
-	:AComponent(isActive)
-{
-}
-
-UpdateComponent::~UpdateComponent()
-{
-}
-
-void UpdateComponent::init()
-{
-	if (m_isActive)
-	{
-		onActive();
-		TaskManager::AddTask(std::dynamic_pointer_cast<UpdateComponent>(shared_from_this()));
-	}
-	else onDeActive();
-}
+UpdateComponent::UpdateComponent() = default;
+UpdateComponent::~UpdateComponent() = default;
 
 void UpdateComponent::active()
 {

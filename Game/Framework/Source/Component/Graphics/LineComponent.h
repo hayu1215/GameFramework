@@ -8,10 +8,9 @@ class LineComponent :public MeshComponent
 {
 public:
 	LineComponent();
-	LineComponent(bool isActive);
-	LineComponent(bool isActive, const std::vector<XMFLOAT3>& positions, const XMFLOAT4& color, float width, bool isLoop);
 	~LineComponent();
 
+	void onCreate(const std::vector<XMFLOAT3>& positions, const XMFLOAT4& color, float width, bool isLoop);
 	void draw()override;
 
 	void setLine(const std::vector<XMFLOAT3>& positions, const XMFLOAT4& color, float width, bool isLoop);

@@ -4,17 +4,14 @@
 #include<Framework/Source/Component/Graphics/MeshComponent.h>
 #include"B2Manager.h"
 
-B2PolygonComponent::B2PolygonComponent()
-{
-	createBody(false, { XMFLOAT3(0, 10, 0), XMFLOAT3(-10, -10, 0), XMFLOAT3(10, -10, 0) });
-}
+B2PolygonComponent::B2PolygonComponent() = default;
+B2PolygonComponent::~B2PolygonComponent() = default;
 
-B2PolygonComponent::B2PolygonComponent(bool isActive, bool isStatic)
-	:UpdateComponent(isActive)
+void B2PolygonComponent::onCreate(bool isStatic)
 {
-	if (true)
+	if (auto mc = m_entity.lock()->getComponent<MeshComponent>().lock())
 	{
-		auto vertexes = m_entity.lock()->getComponent<MeshComponent>().lock()->model();
+		auto vertexes = mc->model();
 		std::vector<XMFLOAT3> vs;
 		for (const auto& v : vertexes) {
 			vs.emplace_back(v.pos);
@@ -25,45 +22,19 @@ B2PolygonComponent::B2PolygonComponent(bool isActive, bool isStatic)
 	{
 		createBody(isStatic, { XMFLOAT3(0, 10, 0), XMFLOAT3(-10, -10, 0), XMFLOAT3(10, -10, 0) });
 	}
-	//auto vertexes = m_entity.lock()->getComponent<MeshComponent>().lock()->model();
-	//std::vector<XMFLOAT3> vs;
-	//for (const auto& v : vertexes) {
-	//	vs.emplace_back(v.pos);
-	//}
-	//createBody(isStatic, vs);
 }
 
-B2PolygonComponent::B2PolygonComponent(bool isActive, bool isStatic, const std::vector<XMFLOAT3>& vertexes)
-	:UpdateComponent(isActive)
+void B2PolygonComponent::onCreate(bool isStatic, const std::vector<XMFLOAT3>& vertexes)
 {
 	createBody(isStatic, vertexes);
-}
-
-B2PolygonComponent::~B2PolygonComponent()
-{
-}
-
-void B2PolygonComponent::onCreate()
-{
 }
 
 void B2PolygonComponent::update()
 {
 	auto entity = m_entity.lock();
-	entity->position(position());
+	auto pos = position();
+	entity->position(pos);
 	entity->rotate(XMFLOAT3(0, 0, angle()));
-}
-
-void B2PolygonComponent::onActive()
-{
-}
-
-void B2PolygonComponent::onDeActive()
-{
-}
-
-void B2PolygonComponent::onDestory()
-{
 }
 
 float B2PolygonComponent::angle()
@@ -97,7 +68,7 @@ void B2PolygonComponent::createBody(bool isStatic, const std::vector<XMFLOAT3>& 
 	XMMATRIX scaleM = DirectX::XMMatrixScaling(scale.x, scale.y, 1.0f);
 	for (unsigned int i = 0; i < vertexes.size(); ++i) {
 		auto vertex = vertexes[i];
-		DirectX::XMVector3Transform(DirectX::XMLoadFloat3(&vertex), scaleM);
+		XMStoreFloat3(&vertex, DirectX::XMVector3Transform(DirectX::XMLoadFloat3(&vertex), scaleM));
 		vs.emplace_back(b2Vec2(vertex.x, vertex.y));
 	}
 
@@ -107,6 +78,7 @@ void B2PolygonComponent::createBody(bool isStatic, const std::vector<XMFLOAT3>& 
 
 	XMFLOAT3 pos = m_entity.lock()->position();
 	bodyDef.position.Set(pos.x, pos.y);
+	bodyDef.angle = m_entity.lock()->rotate().z;
 	m_body = B2Manager::World().CreateBody(&bodyDef);
 
 	b2PolygonShape shape;

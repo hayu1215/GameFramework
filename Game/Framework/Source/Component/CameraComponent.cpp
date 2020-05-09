@@ -2,24 +2,12 @@
 
 std::weak_ptr<CameraComponent> CameraComponent::m_MainCamera;
 
-CameraComponent::CameraComponent() :
-	m_camera(XMFLOAT3(0, 0, 0), XMFLOAT3(0, 0, 1))
-{
-}
+CameraComponent::CameraComponent() = default;
+CameraComponent::~CameraComponent() = default;
 
-CameraComponent::CameraComponent(bool isActive) :
-	UpdateComponent(isActive),m_camera(XMFLOAT3(0, 0, 0), XMFLOAT3(0, 0, 1))
-{
-}
-
-CameraComponent::~CameraComponent()
-{
-}
-
-void CameraComponent::onCreate()
-{
-	//if (m_MainCamera.lock() == nullptr) m_MainCamera = shared_from_this();
-}
+//void CameraComponent::onCreate(bool isActive, int num)
+//{
+//}
 
 void CameraComponent::update()
 {

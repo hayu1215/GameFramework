@@ -9,15 +9,11 @@ class B2PolygonComponent :public UpdateComponent
 {
 public:
 	B2PolygonComponent();
-	B2PolygonComponent(bool isActive, bool isStatic);
-	B2PolygonComponent(bool isActive, bool isStatic, const std::vector<XMFLOAT3>& vertexes);
 	~B2PolygonComponent();
 
-	void onCreate()override;
+	void onCreate(bool isStatic);
+	void onCreate(bool isStatic, const std::vector<XMFLOAT3>& vertexes);
 	void update()override;
-	void onActive()override;
-	void onDeActive()override;
-	void onDestory()override;
 
 	float angle();
 	const XMFLOAT3& position();

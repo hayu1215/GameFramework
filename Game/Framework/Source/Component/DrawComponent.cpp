@@ -2,28 +2,8 @@
 #include<Framework/Source/Application/Task/TaskManager.h>
 #include<Framework/Source/Utility/Judge.h>
 
-DrawComponent::DrawComponent()
-{
-}
-
-DrawComponent::DrawComponent(bool isActive)
-	:AComponent(isActive)
-{
-}
-
-DrawComponent::~DrawComponent()
-{
-}
-
-void DrawComponent::init()
-{
-	if (m_isActive)
-	{
-		onActive();
-		TaskManager::AddTask(std::dynamic_pointer_cast<DrawComponent>(shared_from_this()));
-	}
-	else onDeActive();
-}
+DrawComponent::DrawComponent() = default;
+DrawComponent::~DrawComponent() = default;
 
 void DrawComponent::active()
 {

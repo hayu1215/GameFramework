@@ -3,56 +3,18 @@
 #include<Framework/Source/Utility/Math/XMath.h>
 #include<Framework/Source/Utility/Math/Mathf.h>
 
-//std::shared_ptr<PolygonRenderer> MeshComponent::m_PolygonRenderer = nullptr;
-
-MeshComponent::MeshComponent()
-{
-}
-
-MeshComponent::MeshComponent(bool isActive)
-	:DrawComponent(isActive)
-{
-}
-
-MeshComponent::~MeshComponent()
-{
-}
+MeshComponent::MeshComponent() = default;
+MeshComponent::~MeshComponent() = default;
 
 void MeshComponent::onCreate()
 {
-	//if(m_PolygonRenderer == nullptr) m_PolygonRenderer = std::make_shared<PolygonRenderer>();
 	m_polygonRenderer = m_entity.lock()->getComponent<MeshRendererComponent>();
 }
 
 void MeshComponent::draw()
 {
-	//updateTransform();
-	//m_PolygonRenderer->addMeshComponent(std::dynamic_pointer_cast<MeshComponent>(shared_from_this()));
 	m_polygonRenderer.lock()->polygonRenderer().addMeshComponent(std::dynamic_pointer_cast<MeshComponent>(shared_from_this()));
 }
-
-void MeshComponent::onActive()
-{
-	//if(TaskManager::GetSystemTask<PolygonRenderer>().expired()) TaskManager::AddTask(m_PolygonRenderer);
-}
-
-void MeshComponent::onDeActive()
-{
-}
-
-void MeshComponent::onDestory()
-{
-}
-
-//std::vector<SimpleVertex> MeshComponent::getVertices()
-//{
-//	return m_vertices;
-//}
-
-//std::vector<unsigned short> MeshComponent::getIndexes()
-//{
-//	return m_indexes;
-//}
 
 const Mesh& MeshComponent::mesh()
 {

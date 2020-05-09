@@ -50,15 +50,6 @@ std::list<std::weak_ptr<Entity>> Entity::GetEntities()
 	return entities;
 }
 
-//Entity* Entity::addComponent(const std::shared_ptr<AComponent>& component)
-//{
-//	m_components.emplace_back(component);
-//	component->setEntity(shared_from_this());
-//	component->onCreate();
-//	component->init();
-//	return this;
-//}
-
 void Entity::addRemoveComponent(const std::weak_ptr<AComponent>& component)
 {
 	m_removeComponents.emplace_back(component);

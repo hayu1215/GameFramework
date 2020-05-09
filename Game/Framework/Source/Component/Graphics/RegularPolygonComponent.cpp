@@ -2,23 +2,12 @@
 #include<Framework/Source/Utility/Math/XMath.h>
 #include<Framework/Source/Utility/Math/Mathf.h>
 
-RegularPolygonComponent::RegularPolygonComponent()
-{
-}
+RegularPolygonComponent::RegularPolygonComponent() = default;
+RegularPolygonComponent::~RegularPolygonComponent() = default;
 
-RegularPolygonComponent::RegularPolygonComponent(bool isActive)
-	:MeshComponent(isActive)
-{
-}
-
-RegularPolygonComponent::RegularPolygonComponent(bool isActive, unsigned int vertexCount, const XMFLOAT4 & color)
-	:MeshComponent(isActive)
+void RegularPolygonComponent::onCreate(unsigned int vertexCount, const XMFLOAT4 & color)
 {
 	setRegularPolygon(vertexCount, color);
-}
-
-RegularPolygonComponent::~RegularPolygonComponent()
-{
 }
 
 void RegularPolygonComponent::draw()

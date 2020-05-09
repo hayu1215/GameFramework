@@ -9,10 +9,9 @@ class CameraComponent :public UpdateComponent
 {
 public:
 	CameraComponent();
-	CameraComponent(bool isActive);
 	~CameraComponent();
 
-	void onCreate()override;
+	//void onCreate(bool isActive, int num);
 	void update()override;
 	void onActive()override;
 	void onDeActive()override;
@@ -24,5 +23,5 @@ public:
 
 private:
 	static std::weak_ptr<CameraComponent> m_MainCamera;
-	Camera m_camera;
+	Camera m_camera{ XMFLOAT3(0, 0, 0), XMFLOAT3(0, 0, 1) };
 };
