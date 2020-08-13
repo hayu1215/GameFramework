@@ -1,5 +1,6 @@
 #include "MeshComponent.h"
 #include<Framework/Source/Application/Task/TaskManager.h>
+#include<Framework/Source/Component/Graphics/MeshRendererComponent.h>
 #include<Framework/Source/Utility/Math/XMath.h>
 #include<Framework/Source/Utility/Math/Mathf.h>
 

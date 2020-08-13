@@ -82,6 +82,10 @@ void Entity::deActive()
 
 void Entity::destroy()
 {
+	for (auto& v : m_children)
+	{
+		v->destroy();
+	}
 	for (auto& v : m_components)
 	{
 		v->onDestory();
@@ -93,6 +97,11 @@ void Entity::destroy()
 bool Entity::isActive()
 {
 	return m_isActive;
+}
+
+std::shared_ptr<Entity> Entity::getChild(unsigned int index)
+{
+	return m_children[index];
 }
 
 const std::string& Entity::getTag()

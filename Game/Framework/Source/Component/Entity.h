@@ -16,11 +16,14 @@ public:
 	virtual ~Entity();
 
 	template<class ...Args>
-	static Entity* Add(const Args&... args);
+	static std::shared_ptr<Entity> Add(const Args&... args);
+	//static Entity* Add(const Args&... args);
 	static void Remove();
 	static void Clear();
 	static std::list<std::weak_ptr<Entity>> GetEntities();
 
+	template<class ...Args>
+	std::shared_ptr<Entity> addCild(const Args&... args);
 	template<class T>
 	std::weak_ptr<T> getComponent();
 	template<class T>
@@ -35,6 +38,7 @@ public:
 	void destroy();
 
 	bool isActive();
+	std::shared_ptr<Entity> getChild(unsigned int index);
 	const std::string& getTag();
 	const std::string& getName();
 	const XMFLOAT3& position();
@@ -49,6 +53,7 @@ private:
 	static std::list<std::weak_ptr<Entity>>m_RemoveEntities;
 	std::list<std::shared_ptr<AComponent>>m_components;
 	std::list<std::weak_ptr<AComponent>>m_removeComponents;
+	std::vector<std::shared_ptr<Entity>>m_children;
 	XMFLOAT3 m_position;
 	XMFLOAT3 m_rotate;
 	XMFLOAT3 m_scale;
@@ -58,11 +63,19 @@ private:
 };
 
 template<class ...Args>
-Entity* Entity::Add(const Args&...args)
+std::shared_ptr<Entity> Entity::Add(const Args&...args)
 {
 	auto entitiy = std::make_shared<Entity>(args...);
 	m_Entities.push_back(entitiy);
-	return entitiy.get();
+	return entitiy;
+}
+
+template<class ...Args>
+std::shared_ptr<Entity> Entity::addCild(const Args & ...args)
+{
+	auto entitiy = std::make_shared<Entity>(args...);
+	m_children.push_back(entitiy);
+	return entitiy;
 }
 
 template<class T>

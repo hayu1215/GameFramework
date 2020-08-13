@@ -13,7 +13,7 @@ public:
 	B2BoxComponent();
 	~B2BoxComponent();
 
-	void onCreate(bool isStatic, const XMFLOAT2& size = XMFLOAT2(1.0f, 1.0f));
+	void onCreate(const std::weak_ptr<Entity>& world, bool isStatic, const XMFLOAT2& size = XMFLOAT2(1.0f, 1.0f));
 	void update()override;
 
 	float angle();

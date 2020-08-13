@@ -1,4 +1,6 @@
 #include "FpsTimer.h"
+#include<string>
+#include<Framework/Source/Utility/Debug/Log.h>
 
 namespace utility
 {
@@ -28,6 +30,7 @@ namespace utility
 			m_fps = 1.0f / ((m_timer.elapsed() / (float)m_sampleNum)) * 1000.0f;
 			m_count = 0;
 			m_timer.restart();
+			debug::Log(std::to_string(m_fps));
 		}
 		m_count += 1;
 	}

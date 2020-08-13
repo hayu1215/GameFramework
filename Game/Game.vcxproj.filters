@@ -111,9 +111,6 @@
     <ClCompile Include="Framework\Source\Graphics\2D\LineRenderer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Source\Component\LiquidFunComponent.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Framework\Include\Box2D\Collision\Shapes\b2ChainShape.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -276,15 +273,6 @@
     <ClCompile Include="Framework\Include\Box2D\Rope\b2Rope.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Framework\Source\Component\Physics\B2Manager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\Source\Component\Physics\B2BoxComponent.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Framework\Source\Component\Physics\B2PolygonComponent.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Framework\Source\Utility\Timer\FpsTimer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -309,9 +297,6 @@
     <ClCompile Include="Framework\Source\Component\DrawComponent.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Source\Component\TestComponent1.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Framework\Source\Utility\Debug\Log.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -321,13 +306,28 @@
     <ClCompile Include="Framework\Source\Component\Graphics\LineComponent.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Framework\Source\Component\Physics\B2ParticleComponent.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Framework\Source\Component\Graphics\MeshRendererComponent.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Framework\Source\Component\SystemComponent.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Source\Component\Physics\Box2D\B2BoxComponent.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Source\Component\Physics\Box2D\B2ParticleComponent.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Source\Component\Physics\Box2D\B2PolygonComponent.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Source\Component\Physics\Box2D\B2WorldComponent.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Source\Component\DestroyBoundaryComponent.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\Source\Graphics\3D\Model.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -444,9 +444,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Framework\Source\Utility\Math\XMath.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Application\Source\Component\LiquidFunComponent.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Framework\Include\Box2D\Collision\Shapes\b2ChainShape.h">
@@ -626,15 +623,6 @@
     <ClInclude Include="Framework\Include\Box2D\Box2D.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Framework\Source\Component\Physics\B2Manager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\Source\Component\Physics\B2BoxComponent.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\Source\Component\Physics\B2PolygonComponent.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Framework\Source\Utility\Timer\FpsTimer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -662,9 +650,6 @@
     <ClInclude Include="Framework\Source\Application\Task\UpdateSystem.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Source\Component\TestComponent1.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Framework\Source\Utility\Debug\Log.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -674,13 +659,31 @@
     <ClInclude Include="Framework\Source\Component\Graphics\LineComponent.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Framework\Source\Component\Physics\B2ParticleComponent.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Framework\Source\Component\Graphics\MeshRendererComponent.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Framework\Source\Component\SystemComponent.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Source\Component\Physics\Box2D\B2BoxComponent.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Source\Component\Physics\Box2D\B2ParticleComponent.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Source\Component\Physics\Box2D\B2PolygonComponent.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Source\Component\Physics\Box2D\B2WorldComponent.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Source\Component\DestroyBoundaryComponent.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Source\Graphics\3D\Model.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Source\Graphics\VertexType.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

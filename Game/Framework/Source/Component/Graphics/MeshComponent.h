@@ -2,8 +2,9 @@
 
 #include<memory>
 #include<Framework/Source/Component/DrawComponent.h>
-#include<Framework/Source/Component/Graphics/MeshRendererComponent.h>
 #include<Framework/Source/Graphics/2D/PolygonRenderer.h>
+
+class MeshRendererComponent;
 
 class MeshComponent :public DrawComponent
 {

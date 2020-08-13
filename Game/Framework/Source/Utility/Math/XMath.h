@@ -1,6 +1,6 @@
 #pragma once
 
-#include<DirectXMath.h>
+#include <DirectXMath.h>
 
 using DirectX::XMFLOAT4;
 using DirectX::XMFLOAT3;

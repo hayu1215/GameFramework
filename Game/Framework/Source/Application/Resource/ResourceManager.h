@@ -5,8 +5,10 @@
 #include<unordered_map>
 #include<Framework/Source/Utility/Judge.h>
 #include<Framework/Source/Graphics/Shader/AShader.h>
+#include<Framework/Source/Graphics/VertexType.h>
 
 class Texture;
+class Model;
 
 class ResourceManager
 {
@@ -16,13 +18,16 @@ public:
 	template<class T>
 	static bool LoadShader(const std::string &name);
 	static bool LoadTexture(const std::string &name);
+	static bool LoadModel(const std::string &name);
 	static AShader* FindShader(const std::string &name);
 	static Texture* FindTexture(const std::string &name);
+	static Model* FindModel(const std::string &name);
 	static void Clear();
 
 private:
 	static std::unordered_map<std::string, std::unique_ptr<AShader>> m_Shaders;
 	static std::unordered_map<std::string, std::unique_ptr<Texture>> m_Textures;
+	static std::unordered_map<std::string, std::unique_ptr<Model>> m_Models;
 };
 
 template<class T>

@@ -2,12 +2,12 @@
 #include<Framework/Source/Utility/Judge.h>
 #include<Framework/Source/Graphics/2D/Spritebatch.h>
 #include<Framework/Source/Component/Graphics/MeshComponent.h>
-#include"B2Manager.h"
+#include<Framework/Source/Component/Physics/Box2D/B2WorldComponent.h>
 
 B2PolygonComponent::B2PolygonComponent() = default;
 B2PolygonComponent::~B2PolygonComponent() = default;
 
-void B2PolygonComponent::onCreate(bool isStatic)
+void B2PolygonComponent::onCreate(const std::weak_ptr<Entity>& world, bool isStatic)
 {
 	if (auto mc = m_entity.lock()->getComponent<MeshComponent>().lock())
 	{
@@ -16,17 +16,17 @@ void B2PolygonComponent::onCreate(bool isStatic)
 		for (const auto& v : vertexes) {
 			vs.emplace_back(v.pos);
 		}
-		createBody(isStatic, vs);
+		createBody(world, isStatic, vs);
 	}
 	else
 	{
-		createBody(isStatic, { XMFLOAT3(0, 10, 0), XMFLOAT3(-10, -10, 0), XMFLOAT3(10, -10, 0) });
+		createBody(world, isStatic, { XMFLOAT3(0, 10, 0), XMFLOAT3(-10, -10, 0), XMFLOAT3(10, -10, 0) });
 	}
 }
 
-void B2PolygonComponent::onCreate(bool isStatic, const std::vector<XMFLOAT3>& vertexes)
+void B2PolygonComponent::onCreate(const std::weak_ptr<Entity>& world, bool isStatic, const std::vector<XMFLOAT3>& vertexes)
 {
-	createBody(isStatic, vertexes);
+	createBody(world, isStatic, vertexes);
 }
 
 void B2PolygonComponent::update()
@@ -61,7 +61,7 @@ const std::vector<XMFLOAT3>& B2PolygonComponent::vertices()
 	return vs;
 }
 
-void B2PolygonComponent::createBody(bool isStatic, const std::vector<XMFLOAT3>& vertexes)
+void B2PolygonComponent::createBody(const std::weak_ptr<Entity>& world, bool isStatic, const std::vector<XMFLOAT3>& vertexes)
 {
 	std::vector<b2Vec2> vs;
 	auto scale = m_entity.lock()->scale();
@@ -79,7 +79,7 @@ void B2PolygonComponent::createBody(bool isStatic, const std::vector<XMFLOAT3>& 
 	XMFLOAT3 pos = m_entity.lock()->position();
 	bodyDef.position.Set(pos.x, pos.y);
 	bodyDef.angle = m_entity.lock()->rotate().z;
-	m_body = B2Manager::World().CreateBody(&bodyDef);
+	m_body = world.lock()->getComponent<B2WorldComponent>().lock()->world().CreateBody(&bodyDef);
 
 	b2PolygonShape shape;
 	shape.Set(&vs[0], vs.size());

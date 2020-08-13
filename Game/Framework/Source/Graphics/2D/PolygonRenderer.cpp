@@ -12,6 +12,7 @@ PolygonRenderer::PolygonRenderer()
 	createVertexBuffer();
 	createIndexBuffer();
 	createConstantBuffer();
+	setInfo();
 }
 
 PolygonRenderer::~PolygonRenderer()
@@ -32,10 +33,10 @@ void PolygonRenderer::draw()
 	}
 
 	if (meshes.empty()) return;
-	std::sort(meshes.begin(), meshes.end(), [](Mesh x, Mesh y) -> bool
-	{
-		return x.vertices[0].pos.z > y.vertices[0].pos.z;
-	});
+	//std::sort(meshes.begin(), meshes.end(), [](Mesh x, Mesh y) -> bool
+	//{
+	//	return x.vertices[0].pos.z > y.vertices[0].pos.z;
+	//});
 
 	//if (m_meshComponents.empty()) return;
 	////sort‚ÌŽd•ûŒ©’¼‚µ‚½‚Ù‚¤‚ª—Ç‚¢
@@ -44,7 +45,7 @@ void PolygonRenderer::draw()
 	//{
 	//	return x.lock()->getVertices()[0].pos.z > y.lock()->getVertices()[0].pos.z;
 	//});
-	setInfo();
+	
 	auto deviceContext = D3d11::DeviceContext();
 	D3D11_MAP mapType = D3D11_MAP_WRITE_DISCARD;
 	D3D11_MAPPED_SUBRESOURCE mappedVertexBuffer;
@@ -79,6 +80,7 @@ void PolygonRenderer::draw()
 	m_vertexBufferPos = 0;
 	m_indexBufferPos = 0;
 	m_meshComponents.clear();
+	m_meshes.clear();
 }
 
 void PolygonRenderer::addMeshComponent(const std::weak_ptr<MeshComponent>& component)

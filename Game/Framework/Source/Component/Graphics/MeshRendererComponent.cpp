@@ -1,5 +1,6 @@
 #include "MeshRendererComponent.h"
 #include<Framework/Source/Application/Task/TaskManager.h>
+#include<Framework/Source/Graphics/2D/PolygonRenderer.h>
 
 std::shared_ptr<PolygonRenderer> MeshRendererComponent::m_PolygonRenderer = nullptr;
 

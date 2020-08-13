@@ -6,6 +6,8 @@ INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, INT)
 {
 	Application app;
 	app.run(hInstance);
-
+	//Application* app = new Application;
+	//app->run(hInstance);
+	//delete app;
 	return 0;
 }

@@ -1,12 +1,12 @@
 #include "B2BoxComponent.h"
 #include<Framework/Source/Utility/Judge.h>
 #include<Framework/Source/Graphics/2D/Spritebatch.h>
-#include"B2Manager.h"
+#include<Framework/Source/Component/Physics/Box2D/B2WorldComponent.h>
 
 B2BoxComponent::B2BoxComponent() = default;
 B2BoxComponent::~B2BoxComponent() = default;
 
-void B2BoxComponent::onCreate(bool isStatic, const XMFLOAT2& size)
+void B2BoxComponent::onCreate(const std::weak_ptr<Entity>& world, bool isStatic, const XMFLOAT2& size)
 {
 	m_isStatic = isStatic;
 	m_size = size;
@@ -20,7 +20,7 @@ void B2BoxComponent::onCreate(bool isStatic, const XMFLOAT2& size)
 
 	XMFLOAT3 pos = entity->position();
 	bodyDef.position.Set(pos.x, pos.y);
-	m_body = B2Manager::World().CreateBody(&bodyDef);
+	m_body = world.lock()->getComponent<B2WorldComponent>().lock()->world().CreateBody(&bodyDef);
 
 	b2PolygonShape shape;
 	shape.SetAsBox(entity->scale().x / 2, entity->scale().y / 2);

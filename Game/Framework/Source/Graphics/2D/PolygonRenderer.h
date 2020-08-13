@@ -6,6 +6,7 @@
 #include<vector>
 #include"Texture.h"
 #include<Framework/Source/Graphics/D3d11.h>
+#include<Framework/Source/Graphics/VertexType.h>
 #include<Framework/Source/Utility/Math/XMath.h>
 #include<Framework/Source/Utility/Math/XMath.h>
 #include<Framework/Source/Utility/Math/XMath.h>
@@ -16,12 +17,6 @@
 using Microsoft::WRL::ComPtr;
 
 class MeshComponent;
-
-struct SimpleVertex
-{
-	XMFLOAT3 pos;
-	XMFLOAT4 color;
-};
 
 struct Mesh
 {

@@ -23,9 +23,7 @@
     <ClCompile Include="Application\Source\Application\Entry.cpp" />
     <ClCompile Include="Application\Source\Application\Scene\TestScene.cpp" />
     <ClCompile Include="Application\Source\Application\Scene\Title.cpp" />
-    <ClCompile Include="Application\Source\Component\LiquidFunComponent.cpp" />
     <ClCompile Include="Application\Source\Component\TestComponent.cpp" />
-    <ClCompile Include="Application\Source\Component\TestComponent1.cpp" />
     <ClCompile Include="Framework\Include\Box2D\Collision\b2BroadPhase.cpp" />
     <ClCompile Include="Framework\Include\Box2D\Collision\b2CollideCircle.cpp" />
     <ClCompile Include="Framework\Include\Box2D\Collision\b2CollideEdge.cpp" />
@@ -81,18 +79,20 @@
     <ClCompile Include="Framework\Include\Box2D\Particle\b2VoronoiDiagram.cpp" />
     <ClCompile Include="Framework\Include\Box2D\Rope\b2Rope.cpp" />
     <ClCompile Include="Framework\Source\Component\CameraComponent.cpp" />
+    <ClCompile Include="Framework\Source\Component\DestroyBoundaryComponent.cpp" />
     <ClCompile Include="Framework\Source\Component\DrawComponent.cpp" />
     <ClCompile Include="Framework\Source\Component\Graphics\LineComponent.cpp" />
     <ClCompile Include="Framework\Source\Component\Graphics\MeshComponent.cpp" />
     <ClCompile Include="Framework\Source\Component\Graphics\MeshRendererComponent.cpp" />
     <ClCompile Include="Framework\Source\Component\Graphics\RegularPolygonComponent.cpp" />
-    <ClCompile Include="Framework\Source\Component\Physics\B2Manager.cpp" />
-    <ClCompile Include="Framework\Source\Component\Physics\B2BoxComponent.cpp" />
-    <ClCompile Include="Framework\Source\Component\Physics\B2ParticleComponent.cpp" />
-    <ClCompile Include="Framework\Source\Component\Physics\B2PolygonComponent.cpp" />
+    <ClCompile Include="Framework\Source\Component\Physics\Box2D\B2BoxComponent.cpp" />
+    <ClCompile Include="Framework\Source\Component\Physics\Box2D\B2ParticleComponent.cpp" />
+    <ClCompile Include="Framework\Source\Component\Physics\Box2D\B2PolygonComponent.cpp" />
+    <ClCompile Include="Framework\Source\Component\Physics\Box2D\B2WorldComponent.cpp" />
     <ClCompile Include="Framework\Source\Component\SystemComponent.cpp" />
     <ClCompile Include="Framework\Source\Graphics\2D\LineRenderer.cpp" />
     <ClCompile Include="Framework\Source\Graphics\2D\PolygonRenderer.cpp" />
+    <ClCompile Include="Framework\Source\Graphics\3D\Model.cpp" />
     <ClCompile Include="Framework\Source\Graphics\Shader\AShader.cpp" />
     <ClCompile Include="Framework\Source\Application\Resource\ResourceManager.cpp" />
     <ClCompile Include="Framework\Source\Application\Scene\AScene.cpp" />
@@ -129,12 +129,7 @@
     <ClInclude Include="Application\Source\Application\Application.h" />
     <ClInclude Include="Application\Source\Application\Scene\TestScene.h" />
     <ClInclude Include="Application\Source\Application\Scene\Title.h" />
-    <ClInclude Include="Application\Source\Component\LiquidFunComponent.h" />
     <ClInclude Include="Application\Source\Component\TestComponent.h" />
-    <ClInclude Include="Application\Source\Component\TestComponent1.h">
-      <SubType>
-      </SubType>
-    </ClInclude>
     <ClInclude Include="Framework\Include\Box2D\Box2D.h" />
     <ClInclude Include="Framework\Include\Box2D\Collision\b2BroadPhase.h" />
     <ClInclude Include="Framework\Include\Box2D\Collision\b2Collision.h" />
@@ -196,6 +191,10 @@
     <ClInclude Include="Framework\Include\Box2D\Rope\b2Rope.h" />
     <ClInclude Include="Framework\Source\Application\Task\UpdateSystem.h" />
     <ClInclude Include="Framework\Source\Component\CameraComponent.h" />
+    <ClInclude Include="Framework\Source\Component\DestroyBoundaryComponent.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Framework\Source\Component\DrawComponent.h" />
     <ClInclude Include="Framework\Source\Component\Graphics\LineComponent.h">
       <SubType>
@@ -210,19 +209,26 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="Framework\Source\Component\Physics\B2Manager.h" />
-    <ClInclude Include="Framework\Source\Component\Physics\B2BoxComponent.h" />
-    <ClInclude Include="Framework\Source\Component\Physics\B2ParticleComponent.h">
+    <ClInclude Include="Framework\Source\Component\Physics\Box2D\B2BoxComponent.h" />
+    <ClInclude Include="Framework\Source\Component\Physics\Box2D\B2ParticleComponent.h">
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="Framework\Source\Component\Physics\B2PolygonComponent.h" />
+    <ClInclude Include="Framework\Source\Component\Physics\Box2D\B2PolygonComponent.h" />
+    <ClInclude Include="Framework\Source\Component\Physics\Box2D\B2WorldComponent.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Framework\Source\Component\SystemComponent.h">
       <SubType>
       </SubType>
     </ClInclude>
     <ClInclude Include="Framework\Source\Graphics\2D\LineRenderer.h" />
     <ClInclude Include="Framework\Source\Graphics\2D\PolygonRenderer.h" />
+    <ClInclude Include="Framework\Source\Graphics\3D\Model.h">
+      <SubType>
+      </SubType>
+    </ClInclude>
     <ClInclude Include="Framework\Source\Graphics\Shader\AShader.h" />
     <ClInclude Include="Framework\Source\Application\Resource\ResourceManager.h" />
     <ClInclude Include="Framework\Source\Application\Scene\AScene.h" />
@@ -249,6 +255,7 @@
     <ClInclude Include="Framework\Source\Graphics\Shader\PolygonShader.h" />
     <ClInclude Include="Framework\Source\Graphics\Shader\SpriteShader.h" />
     <ClInclude Include="Framework\Source\Graphics\Shader\TestShader.h" />
+    <ClInclude Include="Framework\Source\Graphics\VertexType.h" />
     <ClInclude Include="Framework\Source\Utility\Constant.h" />
     <ClInclude Include="Framework\Source\Utility\Debug\Log.h" />
     <ClInclude Include="Framework\Source\Utility\Judge.h" />

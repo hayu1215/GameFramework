@@ -17,7 +17,6 @@
 #include<Framework/Source/Graphics/2D/Texture.h>
 #include<Framework/Source/Application/Task/TaskManager.h>
 #include<Framework/Source/Application/Scene/SceneManager.h>
-#include<Framework/Source/Component/Physics/B2Manager.h>
 #include<Framework/Source/Utility/Timer/FpsTimer.h>
 #include<Framework/Source/Component/Entity.h>
 
@@ -49,6 +48,9 @@ bool Application::init(HINSTANCE hInstance)
 	ResourceManager::LoadTexture("blue.png");
 	ResourceManager::LoadTexture("red.png"); 
 	ResourceManager::LoadTexture("green_pepper.png");
+	ResourceManager::LoadModel("mesh.obj");
+	ResourceManager::LoadModel("cube.obj");
+
 
 	SceneManager::Add(std::make_unique<Title>("title"));
 	SceneManager::Add(std::make_unique<TestScene>("test"));
@@ -63,7 +65,7 @@ bool Application::init(HINSTANCE hInstance)
 void Application::run(HINSTANCE hInstance)
 {
 	init(hInstance);
-	utility::FpsTimer fpsTimer;
+	utility::FpsTimer fpsTimer = utility::FpsTimer(100, 60);
 	ShowWindow(m_hWnd, SW_SHOW);
 	UpdateWindow(m_hWnd);
 
@@ -96,7 +98,6 @@ void Application::loop()
 	D3d11::Present();
 
 	DeviceLocator::Keyboard().update();
-	B2Manager::Update();
 	TaskManager::RemoveTask();
 	Entity::Remove();
 }

@@ -1,8 +1,9 @@
 #pragma once
 
 #include<memory>
-#include<Framework/Source/Graphics/2D/PolygonRenderer.h>
 #include<Framework/Source/Component/SystemComponent.h>
+
+class PolygonRenderer;
 
 class MeshRendererComponent : public SystemComponent
 {
