@@ -4,7 +4,9 @@
 #include <sstream>
 #include<iostream>
 #include <string>
+#include<array>
 #include<Framework/Source/Utility/Debug/Log.h>
+#include<Framework/Source/Utility/Judge.h>
 
 Model::Model()
 {
@@ -12,9 +14,25 @@ Model::Model()
 
 Model::Model(const std::string & name)
 {
+	try
+	{
+		load(name);
+	}
+	catch (std::exception& e)
+	{
+		debug::Log(e.what());
+	}
+}
+
+Model::~Model()
+{
+}
+
+void Model::load(const std::string &name)
+{
 	std::string file = "Application/Resource/Model/" + name;
 	std::ifstream ifs(file);
-	if (ifs.fail()) return;
+	if (ifs.fail()) throw std::runtime_error("\"" + name + "\"" + " not found");
 
 	std::string str;
 	unsigned int vSize = 0;
@@ -43,8 +61,7 @@ Model::Model(const std::string & name)
 			++fSize;
 		}
 	}
-	m_Vertexes.resize(vSize);
-	m_Indexes.resize(fSize * fvCnt);
+	m_indexCount = fSize * fvCnt;
 	ifs.clear();
 	ifs.seekg(0, std::ios_base::beg);
 
@@ -56,6 +73,7 @@ Model::Model(const std::string & name)
 	auto uvs = std::vector<XMFLOAT2>(vtSize);
 	auto normals = std::vector<XMFLOAT3>(vnSize);
 	auto faces = std::vector<XMFLOAT3>(fSize * fvCnt);
+	auto indexes = std::vector<uint16_t>(fSize * fvCnt);
 	while (ifs >> str)
 	{
 		if (str == "v")
@@ -90,7 +108,7 @@ Model::Model(const std::string & name)
 				std::string v;
 				std::getline(ss, v, '/');
 				faces[fCnt].x = std::stoi(v) - 1;
-				m_Indexes[fCnt] = std::stoi(v) - 1;
+				indexes[fCnt] = std::stoi(v) - 1;
 
 				std::string u;
 				std::getline(ss, u, '/');
@@ -105,42 +123,50 @@ Model::Model(const std::string & name)
 		}
 	}
 
-	//for (unsigned char i = 0; i < vCnt; ++i)
-	//{
-	//	m_Vertexes[i].pos = poss[i];
-	//	m_Vertexes[i].uv = uvs[faces[i].y];
-	//	m_Vertexes[i].normal = normals[faces[i].z];
-	//}
-
+	auto vertexes = std::vector<ObjVertex>(vSize);
 	for (unsigned char i = 0; i < faces.size(); ++i)
 	{
-		m_Vertexes[faces[i].x].pos = poss[faces[i].x];
-		m_Vertexes[faces[i].x].uv = uvs[faces[i].y];
-		m_Vertexes[faces[i].x].normal = normals[faces[i].z];
+		vertexes[faces[i].x].pos = poss[faces[i].x];
+		vertexes[faces[i].x].uv = uvs[faces[i].y];
+		vertexes[faces[i].x].normal = normals[faces[i].z];
 	}
 
-	for (const auto& x : m_Vertexes)
-	{
-		debug::Log("pos x : " + std::to_string(x.pos.x) + " y : " + std::to_string(x.pos.y) + " z : " + std::to_string(x.pos.z));
-		debug::Log("uv x : " + std::to_string(x.uv.x) + " y : " + std::to_string(x.uv.y));
-		debug::Log("normal x : " + std::to_string(x.normal.x) + " y : " + std::to_string(x.normal.y) + " z : " + std::to_string(x.normal.z));
-	}
-	for (const auto& x : m_Indexes)
-	{
-		debug::Log("index : " + std::to_string(x));
-	}
+	D3D11_BUFFER_DESC desc1;
+	desc1.Usage = D3D11_USAGE_DEFAULT;
+	desc1.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	desc1.ByteWidth = vertexes.size() * sizeof(ObjVertex);
+	desc1.CPUAccessFlags = 0;
+	desc1.MiscFlags = 0;
+	D3D11_SUBRESOURCE_DATA initData1;
+	initData1.pSysMem = vertexes.data();
+	initData1.SysMemPitch = desc1.ByteWidth;
+	auto result1 = D3d11::Device()->CreateBuffer(&desc1, &initData1, m_vertexBuffer.GetAddressOf());
+	utility::CheckError(result1, "バーテックスバッファーの作成失敗");
+
+	D3D11_BUFFER_DESC desc2;
+	desc2.Usage = D3D11_USAGE_DEFAULT;
+	desc2.BindFlags = D3D11_BIND_INDEX_BUFFER;
+	desc2.ByteWidth = indexes.size() * sizeof(uint16_t);
+	desc2.CPUAccessFlags = 0;
+	desc2.MiscFlags = 0;
+	D3D11_SUBRESOURCE_DATA initData2;
+	initData2.pSysMem = indexes.data();
+	initData2.SysMemPitch = desc2.ByteWidth;
+	auto result2 = D3d11::Device()->CreateBuffer(&desc2, &initData2, m_indexBuffer.GetAddressOf());
+	utility::CheckError(result2, "インデックスバッファーの作成失敗");
 }
 
-Model::~Model()
+ComPtr<ID3D11Buffer> Model::getVertexBuffer()
 {
+	return m_vertexBuffer;
 }
 
-std::vector<ObjVertex> Model::getVertexes()
+ComPtr<ID3D11Buffer> Model::getIndexBuffer()
 {
-	return m_Vertexes;
+	return m_indexBuffer;
 }
 
-std::vector<unsigned int> Model::getIndexes()
+unsigned int Model::getIndexCount()
 {
-	return m_Indexes;
+	return m_indexCount;
 }

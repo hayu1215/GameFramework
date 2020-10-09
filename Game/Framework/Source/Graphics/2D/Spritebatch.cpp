@@ -162,12 +162,21 @@ void Spritebatch::setInfo(const std::string& shaderName)
 
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
+	auto shader = ResourceManager::GetShader(shaderName).lock();
+#ifdef _DEBUG
+	if (!shader)
+	{
+		debug::Log(shaderName + "is expired");
+		assert(false && "Failed Spritebatch::setInfo");
+	}
+#endif
+
 	//頂点インプットレイアウトをセット
-	deviceContext->IASetInputLayout(ResourceManager::FindShader(shaderName)->getInputLayout().Get());
+	deviceContext->IASetInputLayout(shader->getInputLayout().Get());
 
 	//使用するシェーダーの登録
-	deviceContext->VSSetShader(ResourceManager::FindShader(shaderName)->getVertexShader().Get(), nullptr, 0);
-	deviceContext->PSSetShader(ResourceManager::FindShader(shaderName)->getPixelShader().Get(), nullptr, 0);
+	deviceContext->VSSetShader(shader->getVertexShader().Get(), nullptr, 0);
+	deviceContext->PSSetShader(shader->getPixelShader().Get(), nullptr, 0);
 
 	//コンスタントバッファに関しては違う処理が必要かも
 	deviceContext->VSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
@@ -271,9 +280,18 @@ void Spritebatch::growSortSprites()
 
 void Spritebatch::renderBatch(TextureInfo** info, size_t count)
 {
-	ID3D11ShaderResourceView* texture = ResourceManager::FindTexture((*info)->textureName)->getShaderResourceView().Get();
+	std::string textureName = (*info)->textureName;
+	auto texture = ResourceManager::GetTexture(textureName).lock();
+#ifdef _DEBUG
+	if (!texture)
+	{
+		debug::Log(textureName + "is expired");
+		assert(false && "Failed Spritebatch::renderBatch");
+	}
+#endif
+	ID3D11ShaderResourceView* srv = texture->getShaderResourceView().Get();
 	auto deviceContext = D3d11::DeviceContext();
-	deviceContext->PSSetShaderResources(0, 1, &texture);
+	deviceContext->PSSetShaderResources(0, 1, &srv);
 
 	while (count > 0)
 	{
@@ -282,7 +300,7 @@ void Spritebatch::renderBatch(TextureInfo** info, size_t count)
 
 		unsigned int remainingSpace = MAX_BATCH_SIZE - m_vertexBufferPos;
 
-		XMFLOAT2 textureSize = ResourceManager::FindTexture((*info)->textureName)->getSize();
+		XMFLOAT2 textureSize = texture->getSize();
 
 		if (batchSize > remainingSpace)
 		{

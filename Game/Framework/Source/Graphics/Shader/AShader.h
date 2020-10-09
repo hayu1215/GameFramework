@@ -2,6 +2,7 @@
 
 #include<wrl/client.h>
 #include<d3d11.h>
+#include<string>
 
 //using namespace Microsoft::WRL;
 using Microsoft::WRL::ComPtr;
@@ -11,6 +12,8 @@ class AShader
 public:
 	AShader();
 	virtual ~AShader();
+
+	virtual void load(const std::string&) = 0;
 
 	ComPtr<ID3D11VertexShader> getVertexShader();
 	ComPtr<ID3D11PixelShader> getPixelShader();

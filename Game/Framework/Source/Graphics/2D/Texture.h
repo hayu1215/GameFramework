@@ -15,7 +15,7 @@ public:
 	Texture(const std::string&);
 	~Texture();
 
-	//std::pair<float, float> getSize();
+	void load(const std::string &name);
 	XMFLOAT2 getSize();
 	ComPtr<ID3D11ShaderResourceView> getShaderResourceView();
 

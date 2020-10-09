@@ -76,7 +76,7 @@ void B2ParticleComponent::update()
 		mesh.vertices[0].pos = XMFLOAT3(b2Pos.x, b2Pos.y + 3, 0);
 		mesh.vertices[1].pos = XMFLOAT3(b2Pos.x + 3, b2Pos.y - 3, 0);
 		mesh.vertices[2].pos = XMFLOAT3(b2Pos.x - 3, b2Pos.y - 3, 0);
-		m_meshRenderer.lock()->polygonRenderer().addMesh(mesh);
+		//m_meshRenderer.lock()->polygonRenderer().addMesh(mesh);
 		//auto p = m_entity.lock()->getChild(i);
 		//p->position(pos);
 	}

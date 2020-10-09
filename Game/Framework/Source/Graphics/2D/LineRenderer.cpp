@@ -16,16 +16,27 @@ LineRenderer::~LineRenderer()
 
 void LineRenderer::drawLine(const XMFLOAT3 & position1, const XMFLOAT3 & position2, const XMFLOAT4& color1, const XMFLOAT4& color2, float width)
 {
-	std::string shaderName = "LineShader.hlsl";
 	auto deviceContext = D3d11::DeviceContext();
+
 	UINT stride = sizeof(LineVertex);
 	UINT offset = 0;
 	deviceContext->IASetVertexBuffers(0, 1, m_vertexBuffer.GetAddressOf(), &stride, &offset);
-	deviceContext->IASetInputLayout(ResourceManager::FindShader(shaderName)->getInputLayout().Get());
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST_ADJ);
-	deviceContext->GSSetShader(ResourceManager::FindShader(shaderName)->getGeometryShader().Get(), nullptr, 0);
-	deviceContext->VSSetShader(ResourceManager::FindShader(shaderName)->getVertexShader().Get(), nullptr, 0);
-	deviceContext->PSSetShader(ResourceManager::FindShader(shaderName)->getPixelShader().Get(), nullptr, 0);
+
+	std::string shaderName = "LineShader.hlsl";
+	auto shader = ResourceManager::GetShader(shaderName).lock();
+#ifdef _DEBUG
+	if (!shader)
+	{
+		debug::Log(shaderName + "is expired");
+		assert(false && "Failed LineRenderer::drawLine");
+	}
+#endif
+	deviceContext->IASetInputLayout(shader->getInputLayout().Get());
+	deviceContext->GSSetShader(shader->getGeometryShader().Get(), nullptr, 0);
+	deviceContext->VSSetShader(shader->getVertexShader().Get(), nullptr, 0);
+	deviceContext->PSSetShader(shader->getPixelShader().Get(), nullptr, 0);
+
 	deviceContext->GSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
 	deviceContext->VSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
 	deviceContext->PSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
@@ -34,12 +45,10 @@ void LineRenderer::drawLine(const XMFLOAT3 & position1, const XMFLOAT3 & positio
 	D3D11_MAPPED_SUBRESOURCE mappedBuffer;
 	deviceContext->Map(m_vertexBuffer.Get(), 0, mapType, 0, &mappedBuffer);
 	auto vertices = static_cast<LineVertex*>(mappedBuffer.pData);
-
 	vertices[0].pos = position1;
 	vertices[0].color = color1;
 	vertices[1].pos = position2;
 	vertices[1].color = color2;
-
 	deviceContext->Unmap(m_vertexBuffer.Get(), 0);
 
 	XMMATRIX mView = CameraComponent::GetMainCamera().lock()->getView();
@@ -68,17 +77,27 @@ void LineRenderer::drawLine(const XMFLOAT3 & position1, const XMFLOAT3 & positio
 
 void LineRenderer::drawLine(const std::string& name,const std::vector<XMFLOAT3>& vertexes, const std::vector<XMFLOAT4>& clors, float width)
 {
-	std::string shaderName = name;
 	auto deviceContext = D3d11::DeviceContext();
+
 	UINT stride = sizeof(LineVertex);
 	UINT offset = 0;
 	deviceContext->IASetVertexBuffers(0, 1, m_vertexBuffer.GetAddressOf(), &stride, &offset);
-	deviceContext->IASetInputLayout(ResourceManager::FindShader(shaderName)->getInputLayout().Get());
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP_ADJ);
-	//deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
-	deviceContext->GSSetShader(ResourceManager::FindShader(shaderName)->getGeometryShader().Get(), nullptr, 0);
-	deviceContext->VSSetShader(ResourceManager::FindShader(shaderName)->getVertexShader().Get(), nullptr, 0);
-	deviceContext->PSSetShader(ResourceManager::FindShader(shaderName)->getPixelShader().Get(), nullptr, 0);
+
+	std::string shaderName = name;
+	auto shader = ResourceManager::GetShader(shaderName).lock();
+#ifdef _DEBUG
+	if (!shader)
+	{
+		debug::Log(shaderName + "is expired");
+		assert(false && "Failed LineRenderer::drawLine");
+	}
+#endif
+	deviceContext->IASetInputLayout(shader->getInputLayout().Get());
+	deviceContext->GSSetShader(shader->getGeometryShader().Get(), nullptr, 0);
+	deviceContext->VSSetShader(shader->getVertexShader().Get(), nullptr, 0);
+	deviceContext->PSSetShader(shader->getPixelShader().Get(), nullptr, 0);
+
 	deviceContext->GSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
 	deviceContext->VSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
 	deviceContext->PSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());

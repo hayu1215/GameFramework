@@ -49,7 +49,11 @@ bool Application::init(HINSTANCE hInstance)
 	ResourceManager::LoadTexture("red.png"); 
 	ResourceManager::LoadTexture("green_pepper.png");
 	ResourceManager::LoadModel("mesh.obj");
-	ResourceManager::LoadModel("cube.obj");
+	ResourceManager::LoadMaterial("mesh.mtl");
+	ResourceManager::LoadModel("ico_sphere.obj");
+	ResourceManager::LoadMaterial("ico_sphere.mtl");
+	//ResourceManager::LoadModel("cube.obj");
+	//ResourceManager::LoadMaterial("cube.mtl");
 
 
 	SceneManager::Add(std::make_unique<Title>("title"));

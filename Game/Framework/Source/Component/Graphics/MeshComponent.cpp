@@ -14,7 +14,7 @@ void MeshComponent::onCreate()
 
 void MeshComponent::draw()
 {
-	m_polygonRenderer.lock()->polygonRenderer().addMeshComponent(std::dynamic_pointer_cast<MeshComponent>(shared_from_this()));
+	//m_polygonRenderer.lock()->polygonRenderer().addMeshComponent(std::dynamic_pointer_cast<MeshComponent>(shared_from_this()));
 }
 
 const Mesh& MeshComponent::mesh()

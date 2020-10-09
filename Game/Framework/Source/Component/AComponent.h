@@ -15,6 +15,7 @@ public:
 	virtual void active();
 	virtual void deActive();
 	void init(bool isActive);
+	std::weak_ptr<Entity> getEntity();
 	void setEntity(const std::weak_ptr<Entity>&);
 	void destroy();
 	bool isActive();

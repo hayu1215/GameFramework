@@ -1,9 +1,25 @@
 #include"SpriteShader.h"
 #include<d3dcompiler.h>
-//#include<Framework/Source/Utility/Judge.h>
 #include<Framework/Source/Graphics/D3d11.h>
+#include<Framework/Source/Utility/Debug/Log.h>
+
+SpriteShader::SpriteShader()
+{
+}
 
 SpriteShader::SpriteShader(const std::string& name)
+{
+	try
+	{
+		load(name);
+	}
+	catch (std::exception& e)
+	{
+		debug::Log(e.what());
+	}
+}
+
+void SpriteShader::load(const std::string& name)
 {
 	auto device = D3d11::Device();
 
@@ -11,13 +27,12 @@ SpriteShader::SpriteShader(const std::string& name)
 	std::wstring wname(file.begin(), file.end());
 	ComPtr<ID3DBlob> pCompiledShader;
 
-	D3DCompileFromFile(wname.c_str(), nullptr, nullptr, "PS", "ps_5_0", 0, 0, pCompiledShader.GetAddressOf(), nullptr);
+	auto result = D3DCompileFromFile(wname.c_str(), nullptr, nullptr, "PS", "ps_5_0", 0, 0, pCompiledShader.GetAddressOf(), nullptr);
+	if (result < 0) throw std::runtime_error("Faild D3DCompileFromFile \"" + name + "\"");
 	device->CreatePixelShader(pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), nullptr, m_pixelShader.GetAddressOf());
 
-	//D3DCompileFromFile(wname.c_str(), nullptr, nullptr, "GS", "gs_5_0", 0, 0, pCompiledShader.GetAddressOf(), nullptr);
-	//device->CreateGeometryShader(pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), nullptr, m_pGeometryShader.GetAddressOf());
-
-	D3DCompileFromFile(wname.c_str(), nullptr, nullptr, "VS", "vs_5_0", 0, 0, pCompiledShader.GetAddressOf(), nullptr);
+	result = D3DCompileFromFile(wname.c_str(), nullptr, nullptr, "VS", "vs_5_0", 0, 0, pCompiledShader.GetAddressOf(), nullptr);
+	if (result < 0) throw std::runtime_error("Faild D3DCompileFromFile \"" + name + "\"");
 	device->CreateVertexShader(pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize(), nullptr, m_vertexShader.GetAddressOf());
 
 	D3D11_INPUT_ELEMENT_DESC layout[] =

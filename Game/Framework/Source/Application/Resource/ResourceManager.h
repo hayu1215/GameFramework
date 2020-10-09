@@ -6,9 +6,11 @@
 #include<Framework/Source/Utility/Judge.h>
 #include<Framework/Source/Graphics/Shader/AShader.h>
 #include<Framework/Source/Graphics/VertexType.h>
+#include<Framework/Source/Utility/Debug/Log.h>
 
 class Texture;
 class Model;
+class Material;
 
 class ResourceManager
 {
@@ -16,28 +18,51 @@ public:
 	ResourceManager() = delete;
 
 	template<class T>
-	static bool LoadShader(const std::string &name);
-	static bool LoadTexture(const std::string &name);
-	static bool LoadModel(const std::string &name);
-	static AShader* FindShader(const std::string &name);
-	static Texture* FindTexture(const std::string &name);
-	static Model* FindModel(const std::string &name);
+	static void LoadShader(const std::string &name);
+	static void LoadTexture(const std::string &name);
+	static void LoadModel(const std::string &name);
+	static void LoadMaterial(const std::string &name);
+	static std::weak_ptr<AShader> GetShader(const std::string &name);
+	static std::weak_ptr<Texture> GetTexture(const std::string &name);
+	static std::weak_ptr<Model> GetModel(const std::string &name);
+	static std::weak_ptr<Material> GetMaterial(const std::string &name);
 	static void Clear();
 
 private:
-	static std::unordered_map<std::string, std::unique_ptr<AShader>> m_Shaders;
-	static std::unordered_map<std::string, std::unique_ptr<Texture>> m_Textures;
-	static std::unordered_map<std::string, std::unique_ptr<Model>> m_Models;
+	static std::unordered_map<std::string, std::shared_ptr<AShader>> m_Shaders;
+	static std::unordered_map<std::string, std::shared_ptr<Texture>> m_Textures;
+	static std::unordered_map<std::string, std::shared_ptr<Model>> m_Models;
+	static std::unordered_map<std::string, std::shared_ptr<Material>> m_Materials;
 };
 
 template<class T>
-bool ResourceManager::LoadShader(const std::string &name)
+void ResourceManager::LoadShader(const std::string &name)
 {
-	if (utility::JudgeBase<AShader, T>())
+#ifdef _DEBUG
+	if (!utility::JudgeBase<AShader, T>())
 	{
-		m_Shaders[name] = std::make_unique<T>(name);
-		return true;
+		std::string type = typeid(T).name();
+		debug::Log("\"" + type + "\"" + "is not Shader");
+		return;
 	}
-	utility::DebugLog(name + "“Ç‚Ýž‚ÝŽ¸”s");
-	return false;
+#endif
+
+	if (m_Shaders.count(name) > 0)
+	{
+		debug::Log("\"" + name + "\"" + " is loaded");
+		return;
+	}
+
+	auto shader = std::make_unique<T>();
+	try
+	{
+		shader->load(name);
+	}
+	catch (std::exception& e)
+	{
+		debug::Log(e.what());
+		return;
+	}
+
+	m_Shaders.emplace(name, std::move(shader));
 }

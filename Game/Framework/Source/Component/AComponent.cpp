@@ -34,6 +34,11 @@ void AComponent::init(bool isActive)
 	else deActive();
 }
 
+std::weak_ptr<Entity> AComponent::getEntity()
+{
+	return m_entity;
+}
+
 void AComponent::setEntity(const std::weak_ptr<Entity>& entity)
 {
 	m_entity = entity;
