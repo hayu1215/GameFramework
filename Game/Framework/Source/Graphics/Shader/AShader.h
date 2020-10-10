@@ -4,26 +4,24 @@
 #include<d3d11.h>
 #include<string>
 
-//using namespace Microsoft::WRL;
 using Microsoft::WRL::ComPtr;
 
-class AShader
-{
+class AShader {
 public:
-	AShader();
-	virtual ~AShader();
+    AShader();
+    virtual ~AShader();
 
-	virtual void load(const std::string&) = 0;
+    virtual void load(const std::string&) = 0;
 
-	ComPtr<ID3D11VertexShader> getVertexShader();
-	ComPtr<ID3D11PixelShader> getPixelShader();
-	ComPtr<ID3D11GeometryShader> getGeometryShader();
-	ComPtr<ID3D11InputLayout> getInputLayout();
+    ComPtr<ID3D11VertexShader> getVertexShader();
+    ComPtr<ID3D11PixelShader> getPixelShader();
+    ComPtr<ID3D11GeometryShader> getGeometryShader();
+    ComPtr<ID3D11InputLayout> getInputLayout();
 
 protected:
-	ComPtr<ID3D11VertexShader> m_vertexShader;
-	ComPtr<ID3D11PixelShader> m_pixelShader;
-	ComPtr<ID3D11GeometryShader> m_geometryShader;
-	ComPtr<ID3D11InputLayout> m_vertexLayout;
+    ComPtr<ID3D11VertexShader> m_vertexShader;
+    ComPtr<ID3D11PixelShader> m_pixelShader;
+    ComPtr<ID3D11GeometryShader> m_geometryShader;
+    ComPtr<ID3D11InputLayout> m_vertexLayout;
 };
 

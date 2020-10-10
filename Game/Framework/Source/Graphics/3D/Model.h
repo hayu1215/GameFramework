@@ -9,23 +9,22 @@
 
 using Microsoft::WRL::ComPtr;
 
-class Model
-{
+class Model {
 public:
-	Model();
-	Model(const std::string &name);
-	~Model();
+    Model();
+    Model(const std::string &name);
+    ~Model();
 
-	void load(const std::string &name);
-	ComPtr<ID3D11Buffer> getVertexBuffer();
-	ComPtr<ID3D11Buffer> getIndexBuffer();
-	unsigned int getIndexCount();
+    void load(const std::string &name);
+    ComPtr<ID3D11Buffer> getVertexBuffer();
+    ComPtr<ID3D11Buffer> getIndexBuffer();
+    unsigned int getIndexCount();
 
 private:
-	//std::vector<ObjVertex> m_Vertexes;
-	//std::vector<unsigned int> m_Indexes;
+    //std::vector<ObjVertex> m_Vertexes;
+    //std::vector<unsigned int> m_Indexes;
 
-	ComPtr<ID3D11Buffer> m_vertexBuffer;
-	ComPtr<ID3D11Buffer> m_indexBuffer;
-	unsigned int m_indexCount = 0;
+    ComPtr<ID3D11Buffer> m_vertexBuffer;
+    ComPtr<ID3D11Buffer> m_indexBuffer;
+    unsigned int m_indexCount = 0;
 };

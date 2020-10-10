@@ -8,44 +8,41 @@ class UpdateComponent;
 class DrawComponent;
 class SystemComponent;
 
-class TaskManager
-{
+class TaskManager {
 public:
-	TaskManager() = delete;
+    TaskManager() = delete;
 
-	template<class T>
-	static std::weak_ptr<T> GetSystemTask();
+    template<class T>
+    static std::weak_ptr<T> GetSystemTask();
 
-	static void AddTask(const std::weak_ptr<UpdateComponent>&);
-	static void AddTask(const std::weak_ptr<DrawComponent>&);
-	static void AddTask(const std::weak_ptr<SystemComponent>&);
-	static void AddRemoveTask(const std::weak_ptr<UpdateComponent>&);
-	static void AddRemoveTask(const std::weak_ptr<DrawComponent>&);
-	static void AddRemoveTask(const std::weak_ptr<SystemComponent>&);
-	static void Update();
-	static void Draw();
-	static void SystemUpdate();
-	static void RemoveTask();
-	static void Clear();
+    static void AddTask(const std::weak_ptr<UpdateComponent>&);
+    static void AddTask(const std::weak_ptr<DrawComponent>&);
+    static void AddTask(const std::weak_ptr<SystemComponent>&);
+    static void AddRemoveTask(const std::weak_ptr<UpdateComponent>&);
+    static void AddRemoveTask(const std::weak_ptr<DrawComponent>&);
+    static void AddRemoveTask(const std::weak_ptr<SystemComponent>&);
+    static void Update();
+    static void Draw();
+    static void SystemUpdate();
+    static void RemoveTask();
+    static void Clear();
 
 private:
-	static std::list<std::weak_ptr<UpdateComponent>> m_UpdateComponents;
-	static std::list<std::weak_ptr<UpdateComponent>> m_RemoveUpdateComponents;
-	static std::list<std::weak_ptr<DrawComponent>> m_DrawComponents;
-	static std::list<std::weak_ptr<DrawComponent>> m_RemoveDrawComponents;
-	static std::list<std::weak_ptr<SystemComponent>> m_SystemComponents;
-	static std::list<std::weak_ptr<SystemComponent>> m_RemoveSystemComponents;
- };
+    static std::list<std::weak_ptr<UpdateComponent>> m_UpdateComponents;
+    static std::list<std::weak_ptr<UpdateComponent>> m_RemoveUpdateComponents;
+    static std::list<std::weak_ptr<DrawComponent>> m_DrawComponents;
+    static std::list<std::weak_ptr<DrawComponent>> m_RemoveDrawComponents;
+    static std::list<std::weak_ptr<SystemComponent>> m_SystemComponents;
+    static std::list<std::weak_ptr<SystemComponent>> m_RemoveSystemComponents;
+};
 
 template<class T>
-std::weak_ptr<T> TaskManager::GetSystemTask()
-{
-	std::shared_ptr<T> task = nullptr;
+std::weak_ptr<T> TaskManager::GetSystemTask() {
+    std::shared_ptr<T> task = nullptr;
 
-	for (auto& v : m_SystemComponents)
-	{
-		task = std::dynamic_pointer_cast<T>(v.lock());
-		if (task != nullptr) return task;
-	}
-	return std::weak_ptr<T>();
+    for (auto& v : m_SystemComponents) {
+        task = std::dynamic_pointer_cast<T>(v.lock());
+        if (task != nullptr) return task;
+    }
+    return std::weak_ptr<T>();
 }

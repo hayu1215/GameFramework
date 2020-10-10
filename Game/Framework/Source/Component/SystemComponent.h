@@ -4,11 +4,10 @@
 #include<memory>
 #include<Framework/Source/Component/Entity.h>
 
-class SystemComponent : public AComponent
-{
+class SystemComponent : public AComponent {
 public:
-	SystemComponent();
-	~SystemComponent();
+    SystemComponent();
+    ~SystemComponent();
 
-	virtual void update() = 0;
+    virtual void update() = 0;
 };

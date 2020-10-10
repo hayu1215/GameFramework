@@ -2,18 +2,17 @@
 
 #include<Windows.h>
 
-class Application
-{
+class Application {
 public:
-	Application();
-	~Application();
+    Application();
+    ~Application();
 
-	void run(HINSTANCE hInstance);
+    void run(HINSTANCE hInstance);
 
 private:
-	bool init(HINSTANCE hInstance);
-	void loop();
-	void finalize();
+    bool init(HINSTANCE hInstance);
+    void loop();
+    void finalize();
 
-	HWND m_hWnd;
+    HWND m_hWnd;
 };

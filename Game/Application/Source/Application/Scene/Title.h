@@ -7,12 +7,11 @@
 #include<Framework/Source/Utility/Judge.h>
 #include<Framework/Source/Application/Scene/AScene.h>
 
-class Title :public AScene
-{
+class Title : public AScene {
 public:
-	Title(const std::string name);
-	~Title();
+    Title(const std::string name);
+    ~Title();
 
-	void start()override;
-	void end()override;
+    void start()override;
+    void end()override;
 };

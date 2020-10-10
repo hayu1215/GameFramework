@@ -4,13 +4,12 @@
 #include<memory>
 #include<Framework/Source/Component/Entity.h>
 
-class UpdateComponent : public AComponent
-{
+class UpdateComponent : public AComponent {
 public:
-	UpdateComponent();
-	~UpdateComponent();
+    UpdateComponent();
+    ~UpdateComponent();
 
-	virtual void update() = 0;
-	void active()override;
-	void deActive()override;
+    virtual void update() = 0;
+    void active()override;
+    void deActive()override;
 };

@@ -6,18 +6,17 @@
 #include<Framework/Source/Utility/Math/XMath.h>
 #include<Framework/Source/Component/Graphics/MeshRendererComponent.h>
 
-class B2ParticleComponent : public UpdateComponent
-{
+class B2ParticleComponent : public UpdateComponent {
 public:
-	B2ParticleComponent();
-	~B2ParticleComponent();
+    B2ParticleComponent();
+    ~B2ParticleComponent();
 
-	void onCreate(const std::weak_ptr<Entity>& world);
-	void update()override;
+    void onCreate(const std::weak_ptr<Entity>& world);
+    void update()override;
 
-	void destroyParticles();
+    void destroyParticles();
 
 private:
-	b2ParticleSystem* m_particleSystem;
-	std::weak_ptr<MeshRendererComponent> m_meshRenderer;
+    b2ParticleSystem* m_particleSystem;
+    std::weak_ptr<MeshRendererComponent> m_meshRenderer;
 };

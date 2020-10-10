@@ -3,32 +3,32 @@
 #include"ChronoTimer.h"
 #include<thread>
 
-namespace utility
-{
-	class FpsTimer
-	{
-	public:
-		FpsTimer();
-		FpsTimer(int sampleNum, int targetFps);
-		~FpsTimer();
+namespace utility {
 
-		void update();
-		void wait();
-		float getFps();
+class FpsTimer {
+public:
+    FpsTimer();
+    FpsTimer(int sampleNum, int targetFps);
+    ~FpsTimer();
 
-	private:
-		ChronoTimer m_timer;
+    void update();
+    void wait();
+    float getFps();
 
-		//現在のフレーム
-		int m_count;
+private:
+    ChronoTimer m_timer;
 
-		//現在のFPS
-		float m_fps;
+    //現在のフレーム
+    int m_count;
 
-		//平均をとるサンプルの数
-		const int m_sampleNum;
+    //現在のFPS
+    float m_fps;
 
-		//目標のFPSの値
-		const int m_targetFps;
-	};
+    //平均をとるサンプルの数
+    const int m_sampleNum;
+
+    //目標のFPSの値
+    const int m_targetFps;
+};
+
 }

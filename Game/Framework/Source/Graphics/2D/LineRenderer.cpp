@@ -4,210 +4,197 @@
 #include<Framework/Source/Utility/Constant.h>
 #include<Framework/Source/Component/CameraComponent.h>
 
-LineRenderer::LineRenderer()
-{
-	createVertexBuffer2();
-	createConstantBuffer2();
+LineRenderer::LineRenderer() {
+    createVertexBuffer2();
+    createConstantBuffer2();
 }
 
-LineRenderer::~LineRenderer()
-{
-}
+LineRenderer::~LineRenderer() {}
 
-void LineRenderer::drawLine(const XMFLOAT3 & position1, const XMFLOAT3 & position2, const XMFLOAT4& color1, const XMFLOAT4& color2, float width)
-{
-	auto deviceContext = D3d11::DeviceContext();
+void LineRenderer::drawLine(const XMFLOAT3 & position1, const XMFLOAT3 & position2,
+                            const XMFLOAT4& color1, const XMFLOAT4& color2, float width) {
+    auto deviceContext = D3d11::DeviceContext();
 
-	UINT stride = sizeof(LineVertex);
-	UINT offset = 0;
-	deviceContext->IASetVertexBuffers(0, 1, m_vertexBuffer.GetAddressOf(), &stride, &offset);
-	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST_ADJ);
+    UINT stride = sizeof(LineVertex);
+    UINT offset = 0;
+    deviceContext->IASetVertexBuffers(0, 1, m_vertexBuffer.GetAddressOf(), &stride, &offset);
+    deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST_ADJ);
 
-	std::string shaderName = "LineShader.hlsl";
-	auto shader = ResourceManager::GetShader(shaderName).lock();
+    std::string shaderName = "LineShader.hlsl";
+    auto shader = ResourceManager::GetShader(shaderName).lock();
 #ifdef _DEBUG
-	if (!shader)
-	{
-		debug::Log(shaderName + "is expired");
-		assert(false && "Failed LineRenderer::drawLine");
-	}
+    if (!shader) {
+        debug::Log(shaderName + "is expired");
+        assert(false && "Failed LineRenderer::drawLine");
+    }
 #endif
-	deviceContext->IASetInputLayout(shader->getInputLayout().Get());
-	deviceContext->GSSetShader(shader->getGeometryShader().Get(), nullptr, 0);
-	deviceContext->VSSetShader(shader->getVertexShader().Get(), nullptr, 0);
-	deviceContext->PSSetShader(shader->getPixelShader().Get(), nullptr, 0);
+    deviceContext->IASetInputLayout(shader->getInputLayout().Get());
+    deviceContext->GSSetShader(shader->getGeometryShader().Get(), nullptr, 0);
+    deviceContext->VSSetShader(shader->getVertexShader().Get(), nullptr, 0);
+    deviceContext->PSSetShader(shader->getPixelShader().Get(), nullptr, 0);
 
-	deviceContext->GSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
-	deviceContext->VSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
-	deviceContext->PSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
+    deviceContext->GSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
+    deviceContext->VSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
+    deviceContext->PSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
 
-	D3D11_MAP mapType = D3D11_MAP_WRITE_DISCARD;
-	D3D11_MAPPED_SUBRESOURCE mappedBuffer;
-	deviceContext->Map(m_vertexBuffer.Get(), 0, mapType, 0, &mappedBuffer);
-	auto vertices = static_cast<LineVertex*>(mappedBuffer.pData);
-	vertices[0].pos = position1;
-	vertices[0].color = color1;
-	vertices[1].pos = position2;
-	vertices[1].color = color2;
-	deviceContext->Unmap(m_vertexBuffer.Get(), 0);
+    D3D11_MAP mapType = D3D11_MAP_WRITE_DISCARD;
+    D3D11_MAPPED_SUBRESOURCE mappedBuffer;
+    deviceContext->Map(m_vertexBuffer.Get(), 0, mapType, 0, &mappedBuffer);
+    auto vertices = static_cast<LineVertex*>(mappedBuffer.pData);
+    vertices[0].pos = position1;
+    vertices[0].color = color1;
+    vertices[1].pos = position2;
+    vertices[1].color = color2;
+    deviceContext->Unmap(m_vertexBuffer.Get(), 0);
 
-	XMMATRIX mView = CameraComponent::GetMainCamera().lock()->getView();
-	XMMATRIX mProj = {
-		2.0f / (float)(WINDOW_WIDTH), 0.0f, 0.0f, 0.0f,
-		0.0f, 2.0f / (float)(WINDOW_HEIGHT), 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f
-	};
+    XMMATRIX mView = CameraComponent::GetMainCamera().lock()->getView();
+    XMMATRIX mProj = {
+        2.0f / (float)(WINDOW_WIDTH), 0.0f, 0.0f, 0.0f,
+        0.0f, 2.0f / (float)(WINDOW_HEIGHT), 0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 1.0f
+    };
 
-	D3D11_MAPPED_SUBRESOURCE pData;
-	LineCBuffer cb;
-	HRESULT result = deviceContext->Map(m_constantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData);
-	if (!utility::CheckError(result, "DeviceContext‚ÌMap‚ÌŽ¸”s"))
-	{
-		XMMATRIX m = XMMatrixMultiplyTranspose(mView, mProj);
-		XMStoreFloat4x4(&cb.wvp,m);
-		cb.width.x = width;
+    D3D11_MAPPED_SUBRESOURCE pData;
+    LineCBuffer cb;
+    HRESULT result = deviceContext->Map(m_constantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData);
+    if (!utility::CheckError(result, "DeviceContext‚ÌMap‚ÌŽ¸”s")) {
+        XMMATRIX m = XMMatrixMultiplyTranspose(mView, mProj);
+        XMStoreFloat4x4(&cb.wvp, m);
+        cb.width.x = width;
 
-		memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
-		deviceContext->Unmap(m_constantBuffer.Get(), 0);
-	}
+        memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
+        deviceContext->Unmap(m_constantBuffer.Get(), 0);
+    }
 
-	D3d11::DeviceContext()->Draw(2, 0);
+    D3d11::DeviceContext()->Draw(2, 0);
 }
 
-void LineRenderer::drawLine(const std::string& name,const std::vector<XMFLOAT3>& vertexes, const std::vector<XMFLOAT4>& clors, float width)
-{
-	auto deviceContext = D3d11::DeviceContext();
+void LineRenderer::drawLine(const std::string& name, const std::vector<XMFLOAT3>& vertexes,
+                            const std::vector<XMFLOAT4>& clors, float width) {
+    auto deviceContext = D3d11::DeviceContext();
 
-	UINT stride = sizeof(LineVertex);
-	UINT offset = 0;
-	deviceContext->IASetVertexBuffers(0, 1, m_vertexBuffer.GetAddressOf(), &stride, &offset);
-	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP_ADJ);
+    UINT stride = sizeof(LineVertex);
+    UINT offset = 0;
+    deviceContext->IASetVertexBuffers(0, 1, m_vertexBuffer.GetAddressOf(), &stride, &offset);
+    deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP_ADJ);
 
-	std::string shaderName = name;
-	auto shader = ResourceManager::GetShader(shaderName).lock();
+    std::string shaderName = name;
+    auto shader = ResourceManager::GetShader(shaderName).lock();
 #ifdef _DEBUG
-	if (!shader)
-	{
-		debug::Log(shaderName + "is expired");
-		assert(false && "Failed LineRenderer::drawLine");
-	}
+    if (!shader) {
+        debug::Log(shaderName + "is expired");
+        assert(false && "Failed LineRenderer::drawLine");
+    }
 #endif
-	deviceContext->IASetInputLayout(shader->getInputLayout().Get());
-	deviceContext->GSSetShader(shader->getGeometryShader().Get(), nullptr, 0);
-	deviceContext->VSSetShader(shader->getVertexShader().Get(), nullptr, 0);
-	deviceContext->PSSetShader(shader->getPixelShader().Get(), nullptr, 0);
+    deviceContext->IASetInputLayout(shader->getInputLayout().Get());
+    deviceContext->GSSetShader(shader->getGeometryShader().Get(), nullptr, 0);
+    deviceContext->VSSetShader(shader->getVertexShader().Get(), nullptr, 0);
+    deviceContext->PSSetShader(shader->getPixelShader().Get(), nullptr, 0);
 
-	deviceContext->GSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
-	deviceContext->VSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
-	deviceContext->PSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
+    deviceContext->GSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
+    deviceContext->VSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
+    deviceContext->PSSetConstantBuffers(0, 1, m_constantBuffer.GetAddressOf());
 
-	D3D11_MAP mapType = D3D11_MAP_WRITE_DISCARD;
-	D3D11_MAPPED_SUBRESOURCE mappedBuffer;
-	deviceContext->Map(m_vertexBuffer.Get(), 0, mapType, 0, &mappedBuffer);
-	auto vertices = static_cast<LineVertex*>(mappedBuffer.pData);
+    D3D11_MAP mapType = D3D11_MAP_WRITE_DISCARD;
+    D3D11_MAPPED_SUBRESOURCE mappedBuffer;
+    deviceContext->Map(m_vertexBuffer.Get(), 0, mapType, 0, &mappedBuffer);
+    auto vertices = static_cast<LineVertex*>(mappedBuffer.pData);
 
-	std::vector<XMFLOAT3> v = vertexes;
+    std::vector<XMFLOAT3> v = vertexes;
 
-	auto xmv0 = DirectX::XMLoadFloat3(&v[0]);
-	auto xmv1 = DirectX::XMLoadFloat3(&v[1]);
-	XMFLOAT3 vm0;
-	DirectX::XMStoreFloat3(&vm0, DirectX::XMVectorAdd(xmv0, DirectX::XMVectorSubtract(xmv0, xmv1)));
+    auto xmv0 = DirectX::XMLoadFloat3(&v[0]);
+    auto xmv1 = DirectX::XMLoadFloat3(&v[1]);
+    XMFLOAT3 vm0;
+    DirectX::XMStoreFloat3(&vm0, DirectX::XMVectorAdd(xmv0, DirectX::XMVectorSubtract(xmv0, xmv1)));
 
-	auto xmv2 = DirectX::XMLoadFloat3(&v[v.size() - 2]);
-	auto xmv3 = DirectX::XMLoadFloat3(&v[v.size() - 1]);
-	XMFLOAT3 vm1;
-	DirectX::XMStoreFloat3(&vm1, DirectX::XMVectorAdd(xmv3, DirectX::XMVectorSubtract(xmv3, xmv2)));
-	
-	v.insert(v.begin(), vm0);
-	v.emplace_back(vm1);
+    auto xmv2 = DirectX::XMLoadFloat3(&v[v.size() - 2]);
+    auto xmv3 = DirectX::XMLoadFloat3(&v[v.size() - 1]);
+    XMFLOAT3 vm1;
+    DirectX::XMStoreFloat3(&vm1, DirectX::XMVectorAdd(xmv3, DirectX::XMVectorSubtract(xmv3, xmv2)));
 
-	std::vector<XMFLOAT4> c = clors;
-	c.insert(c.begin(), XMFLOAT4(0, 0, 0, 0));
-	c.emplace_back(XMFLOAT4(0, 0, 0, 0));
+    v.insert(v.begin(), vm0);
+    v.emplace_back(vm1);
 
-	if (v.size() == c.size()) 
-	{
-		for (int i = 0; i < v.size(); i++) {
-			vertices[i].pos = v[i];
-			vertices[i].color = c[i];
-		}
-	}
-	else {
-		for (int i = 0; i < v.size(); i++) {
-			vertices[i].pos = v[i];
-			vertices[i].color = c[1];
-		}
-	}
+    std::vector<XMFLOAT4> c = clors;
+    c.insert(c.begin(), XMFLOAT4(0, 0, 0, 0));
+    c.emplace_back(XMFLOAT4(0, 0, 0, 0));
 
-	deviceContext->Unmap(m_vertexBuffer.Get(), 0);
+    if (v.size() == c.size()) {
+        for (int i = 0; i < v.size(); i++) {
+            vertices[i].pos = v[i];
+            vertices[i].color = c[i];
+        }
+    } else {
+        for (int i = 0; i < v.size(); i++) {
+            vertices[i].pos = v[i];
+            vertices[i].color = c[1];
+        }
+    }
 
-	XMMATRIX mView = CameraComponent::GetMainCamera().lock()->getView();
-	XMMATRIX mProj = {
-		2.0f / (float)(WINDOW_WIDTH), 0.0f, 0.0f, 0.0f,
-		0.0f, 2.0f / (float)(WINDOW_HEIGHT), 0.0f, 0.0f,
-		0.0f, 0.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 0.0f, 1.0f
-	};
+    deviceContext->Unmap(m_vertexBuffer.Get(), 0);
 
-	D3D11_MAPPED_SUBRESOURCE pData;
-	LineCBuffer cb;
-	HRESULT result = deviceContext->Map(m_constantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData);
-	if (!utility::CheckError(result, "DeviceContext‚ÌMap‚ÌŽ¸”s"))
-	{
-		XMMATRIX m = XMMatrixMultiplyTranspose(mView, mProj);
-		XMStoreFloat4x4(&cb.wvp, m);
-		cb.width.x = width;
+    XMMATRIX mView = CameraComponent::GetMainCamera().lock()->getView();
+    XMMATRIX mProj = {
+        2.0f / (float)(WINDOW_WIDTH), 0.0f, 0.0f, 0.0f,
+        0.0f, 2.0f / (float)(WINDOW_HEIGHT), 0.0f, 0.0f,
+        0.0f, 0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 1.0f
+    };
 
-		memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
-		deviceContext->Unmap(m_constantBuffer.Get(), 0);
-	}
+    D3D11_MAPPED_SUBRESOURCE pData;
+    LineCBuffer cb;
+    HRESULT result = deviceContext->Map(m_constantBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &pData);
+    if (!utility::CheckError(result, "DeviceContext‚ÌMap‚ÌŽ¸”s")) {
+        XMMATRIX m = XMMatrixMultiplyTranspose(mView, mProj);
+        XMStoreFloat4x4(&cb.wvp, m);
+        cb.width.x = width;
 
-	D3d11::DeviceContext()->Draw(v.size(), 0);
+        memcpy_s(pData.pData, pData.RowPitch, (void*)(&cb), sizeof(cb));
+        deviceContext->Unmap(m_constantBuffer.Get(), 0);
+    }
+
+    D3d11::DeviceContext()->Draw(v.size(), 0);
 }
 
-void LineRenderer::createVertexBuffer()
-{
-	D3D11_BUFFER_DESC bd;
-	bd.Usage = D3D11_USAGE_DYNAMIC;
-	bd.ByteWidth = sizeof(LineVertex) * 2;
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	bd.MiscFlags = 0;
-	D3d11::Device()->CreateBuffer(&bd, nullptr, m_vertexBuffer.GetAddressOf());
+void LineRenderer::createVertexBuffer() {
+    D3D11_BUFFER_DESC bd;
+    bd.Usage = D3D11_USAGE_DYNAMIC;
+    bd.ByteWidth = sizeof(LineVertex) * 2;
+    bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+    bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+    bd.MiscFlags = 0;
+    D3d11::Device()->CreateBuffer(&bd, nullptr, m_vertexBuffer.GetAddressOf());
 }
 
-void LineRenderer::createConstantBuffer()
-{
-	D3D11_BUFFER_DESC bd;
-	bd.ByteWidth = sizeof(LineCBuffer);
-	bd.Usage = D3D11_USAGE_DYNAMIC;
-	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	bd.MiscFlags = 0;
-	bd.StructureByteStride = 0;
-	D3d11::Device()->CreateBuffer(&bd, nullptr, m_constantBuffer.GetAddressOf());
+void LineRenderer::createConstantBuffer() {
+    D3D11_BUFFER_DESC bd;
+    bd.ByteWidth = sizeof(LineCBuffer);
+    bd.Usage = D3D11_USAGE_DYNAMIC;
+    bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+    bd.MiscFlags = 0;
+    bd.StructureByteStride = 0;
+    D3d11::Device()->CreateBuffer(&bd, nullptr, m_constantBuffer.GetAddressOf());
 }
 
-void LineRenderer::createVertexBuffer2()
-{
-	D3D11_BUFFER_DESC bd;
-	bd.Usage = D3D11_USAGE_DYNAMIC;
-	bd.ByteWidth = sizeof(LineVertex) * 8192;
-	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	bd.MiscFlags = 0;
-	D3d11::Device()->CreateBuffer(&bd, nullptr, m_vertexBuffer.GetAddressOf());
+void LineRenderer::createVertexBuffer2() {
+    D3D11_BUFFER_DESC bd;
+    bd.Usage = D3D11_USAGE_DYNAMIC;
+    bd.ByteWidth = sizeof(LineVertex) * 8192;
+    bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+    bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+    bd.MiscFlags = 0;
+    D3d11::Device()->CreateBuffer(&bd, nullptr, m_vertexBuffer.GetAddressOf());
 }
 
-void LineRenderer::createConstantBuffer2()
-{
-	D3D11_BUFFER_DESC bd;
-	bd.ByteWidth = sizeof(LineCBuffer);
-	bd.Usage = D3D11_USAGE_DYNAMIC;
-	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	bd.MiscFlags = 0;
-	bd.StructureByteStride = 0;
-	D3d11::Device()->CreateBuffer(&bd, nullptr, m_constantBuffer.GetAddressOf());
+void LineRenderer::createConstantBuffer2() {
+    D3D11_BUFFER_DESC bd;
+    bd.ByteWidth = sizeof(LineCBuffer);
+    bd.Usage = D3D11_USAGE_DYNAMIC;
+    bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+    bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+    bd.MiscFlags = 0;
+    bd.StructureByteStride = 0;
+    D3d11::Device()->CreateBuffer(&bd, nullptr, m_constantBuffer.GetAddressOf());
 }

@@ -14,33 +14,32 @@
 //using namespace Microsoft::WRL;
 using Microsoft::WRL::ComPtr;
 
-struct LineVertex
-{
-	XMFLOAT3 pos;
-	XMFLOAT4 color;
+struct LineVertex {
+    XMFLOAT3 pos;
+    XMFLOAT4 color;
 };
 
-struct LineCBuffer
-{
-	XMFLOAT4X4 wvp;
-	XMFLOAT4 width;
+struct LineCBuffer {
+    XMFLOAT4X4 wvp;
+    XMFLOAT4 width;
 };
 
-class LineRenderer
-{
+class LineRenderer {
 public:
-	LineRenderer();
-	~LineRenderer();
+    LineRenderer();
+    ~LineRenderer();
 
-	void drawLine(const XMFLOAT3& position1, const XMFLOAT3& position2, const XMFLOAT4& color1, const XMFLOAT4& color2, float width);
-	void drawLine(const std::string& name,const std::vector<XMFLOAT3>& vertexes, const std::vector<XMFLOAT4>& clors, float width);
+    void drawLine(const XMFLOAT3& position1, const XMFLOAT3& position2, const XMFLOAT4& color1,
+                  const XMFLOAT4& color2, float width);
+    void drawLine(const std::string& name, const std::vector<XMFLOAT3>& vertexes,
+                  const std::vector<XMFLOAT4>& clors, float width);
 
 private:
-	void createVertexBuffer();
-	void createConstantBuffer();
-	void createVertexBuffer2();
-	void createConstantBuffer2();
+    void createVertexBuffer();
+    void createConstantBuffer();
+    void createVertexBuffer2();
+    void createConstantBuffer2();
 
-	ComPtr<ID3D11Buffer> m_constantBuffer;
-	ComPtr<ID3D11Buffer> m_vertexBuffer;
+    ComPtr<ID3D11Buffer> m_constantBuffer;
+    ComPtr<ID3D11Buffer> m_vertexBuffer;
 };

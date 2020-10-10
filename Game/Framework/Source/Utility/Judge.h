@@ -10,15 +10,13 @@
 #define assert_msg(msg,expr)
 #endif // !NDEBUG
 
-namespace internal 
-{
+namespace internal {
 
 void AssertMsg(bool expr, const char* file, int line, const char* msg);
 
 }
 
-namespace utility 
-{
+namespace utility {
 
 #ifdef _DEBUG
 void DebugLog(const std::string&);
@@ -28,9 +26,8 @@ bool CheckError(int, const std::string&);
 bool CheckNull(const void*, const std::string&);
 
 template<class Base, class T>
-bool JudgeBase()
-{
-	return std::is_base_of<Base, T>::value;
+bool JudgeBase() {
+    return std::is_base_of<Base, T>::value;
 };
 
 }

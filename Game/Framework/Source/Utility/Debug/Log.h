@@ -2,8 +2,7 @@
 
 #include<string>
 
-namespace debug
-{
+namespace debug {
 
 void Log(const std::string&);
 

@@ -1,8 +1,7 @@
 #pragma once
 
-class UpdateSystem
-{
+class UpdateSystem {
 public:
-	virtual ~UpdateSystem() {};
-	virtual void update() = 0;
+    virtual ~UpdateSystem() {};
+    virtual void update() = 0;
 };

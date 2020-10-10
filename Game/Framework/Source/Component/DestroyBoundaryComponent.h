@@ -2,11 +2,10 @@
 
 #include<Framework/Source/Component/UpdateComponent.h>
 
-class DestroyBoundaryComponent : public UpdateComponent
-{
+class DestroyBoundaryComponent : public UpdateComponent {
 public:
-	DestroyBoundaryComponent();
-	~DestroyBoundaryComponent();
+    DestroyBoundaryComponent();
+    ~DestroyBoundaryComponent();
 
-	void update()override;
+    void update()override;
 };

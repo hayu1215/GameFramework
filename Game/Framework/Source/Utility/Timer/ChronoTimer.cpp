@@ -1,20 +1,18 @@
-#include "ChronoTimer.h"
+#include"ChronoTimer.h"
 
-namespace utility
-{
-	ChronoTimer::ChronoTimer()
-	{
-		restart();
-	}
+namespace utility {
 
-	void ChronoTimer::restart() 
-	{
-		m_start = system_clock::now();
-	}
+ChronoTimer::ChronoTimer() {
+    restart();
+}
 
-	double ChronoTimer::elapsed() 
-	{
-		auto end = system_clock::now();
-		return duration_cast<milliseconds>(end - m_start).count();
-	}
+void ChronoTimer::restart() {
+    m_start = system_clock::now();
+}
+
+double ChronoTimer::elapsed() {
+    auto end = system_clock::now();
+    return duration_cast<milliseconds>(end - m_start).count();
+}
+
 }

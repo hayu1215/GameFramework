@@ -6,16 +6,15 @@
 
 class Entity;
 
-class AScene
-{
+class AScene {
 public:
-	AScene(const std::string& name);
-	virtual ~AScene();
+    AScene(const std::string& name);
+    virtual ~AScene();
 
-	virtual void start() = 0;
-	virtual void end() = 0;
-	const std::string name();
+    virtual void start() = 0;
+    virtual void end() = 0;
+    const std::string name();
 
 private:
-	const std::string m_name;
+    const std::string m_name;
 };

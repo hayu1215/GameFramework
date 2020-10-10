@@ -5,17 +5,16 @@
 
 class PolygonRenderer;
 
-class MeshRendererComponent : public SystemComponent
-{
+class MeshRendererComponent : public SystemComponent {
 public:
-	MeshRendererComponent();
-	~MeshRendererComponent();
+    MeshRendererComponent();
+    ~MeshRendererComponent();
 
-	void update()override;
-	void onActive()override;
-	void onDeActive()override;
-	PolygonRenderer& polygonRenderer();
+    void update()override;
+    void onActive()override;
+    void onDeActive()override;
+    PolygonRenderer& polygonRenderer();
 
 private:
-	static std::shared_ptr<PolygonRenderer> m_PolygonRenderer;
+    static std::shared_ptr<PolygonRenderer> m_PolygonRenderer;
 };

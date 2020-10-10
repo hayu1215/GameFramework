@@ -20,92 +20,77 @@
 #include<Framework/Source/Utility/Timer/FpsTimer.h>
 #include<Framework/Source/Component/Entity.h>
 
+Application::Application() {}
 
-Application::Application()
-{
+Application::~Application() {}
+
+bool Application::init(HINSTANCE hInstance) {
+    Window window;
+    if (!window.initWindow(hInstance, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, APP_NAME))utility::DebugLog("ウィンドウ初期化失敗");
+    m_hWnd = window.m_hWnd;
+
+    if (!D3d11::Init(m_hWnd)) {
+        utility::DebugLog("D3d11の初期化失敗");
+        return false;
+    }
+
+    ResourceManager::LoadShader<SpriteShader>("SpritebatchShader.hlsl");
+    ResourceManager::LoadShader<TestShader>("LineShader.hlsl");
+    ResourceManager::LoadShader<TestShader>("LineShaderTest.hlsl");
+    ResourceManager::LoadShader<PolygonShader>("PolygonShader.hlsl");
+    ResourceManager::LoadTexture("blue.png");
+    ResourceManager::LoadTexture("red.png");
+    ResourceManager::LoadTexture("green_pepper.png");
+    ResourceManager::LoadModel("mesh.obj");
+    ResourceManager::LoadMaterial("mesh.mtl");
+    ResourceManager::LoadModel("ico_sphere.obj");
+    ResourceManager::LoadMaterial("ico_sphere.mtl");
+    //ResourceManager::LoadModel("cube.obj");
+    //ResourceManager::LoadMaterial("cube.mtl");
+
+
+    SceneManager::Add(std::make_unique<Title>("title"));
+    SceneManager::Add(std::make_unique<TestScene>("test"));
+    SceneManager::Change("title");
+
+    DeviceLocator::ProvideKeyboard(std::make_unique<Keyboard>(m_hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND));
+    //DeviceLocator::ProvideAudio(std::make_unique<XactAudio>());
+
+    return true;
 }
 
-Application::~Application()
-{
+void Application::run(HINSTANCE hInstance) {
+    init(hInstance);
+    utility::FpsTimer fpsTimer = utility::FpsTimer(100, 60);
+    ShowWindow(m_hWnd, SW_SHOW);
+    UpdateWindow(m_hWnd);
+
+    // メッセージループ
+    MSG msg = { 0 };
+    ZeroMemory(&msg, sizeof(msg));
+    while (msg.message != WM_QUIT) {
+        if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+        } else {
+            fpsTimer.update();
+            loop();
+            fpsTimer.wait();
+        }
+    }
+    finalize();
 }
 
-bool Application::init(HINSTANCE hInstance)
-{
-	Window window;
-	if (!window.initWindow(hInstance, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, APP_NAME))utility::DebugLog("ウィンドウ初期化失敗");
-	m_hWnd = window.m_hWnd;
+void Application::loop() {
+    D3d11::Clear();
+    TaskManager::Update();
+    TaskManager::Draw();
+    TaskManager::SystemUpdate();
+    D3d11::Present();
 
-	if (!D3d11::Init(m_hWnd)) 
-	{ 
-		utility::DebugLog("D3d11の初期化失敗");
-		return false; 
-	}
-
-	ResourceManager::LoadShader<SpriteShader>("SpritebatchShader.hlsl");
-	ResourceManager::LoadShader<TestShader>("LineShader.hlsl");
-	ResourceManager::LoadShader<TestShader>("LineShaderTest.hlsl");
-	ResourceManager::LoadShader<PolygonShader>("PolygonShader.hlsl");
-	ResourceManager::LoadTexture("blue.png");
-	ResourceManager::LoadTexture("red.png"); 
-	ResourceManager::LoadTexture("green_pepper.png");
-	ResourceManager::LoadModel("mesh.obj");
-	ResourceManager::LoadMaterial("mesh.mtl");
-	ResourceManager::LoadModel("ico_sphere.obj");
-	ResourceManager::LoadMaterial("ico_sphere.mtl");
-	//ResourceManager::LoadModel("cube.obj");
-	//ResourceManager::LoadMaterial("cube.mtl");
-
-
-	SceneManager::Add(std::make_unique<Title>("title"));
-	SceneManager::Add(std::make_unique<TestScene>("test"));
-	SceneManager::Change("title");
-
-	DeviceLocator::ProvideKeyboard(std::make_unique<Keyboard>(m_hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND));
-	//DeviceLocator::ProvideAudio(std::make_unique<XactAudio>());
-
-	return true;
+    DeviceLocator::Keyboard().update();
+    TaskManager::RemoveTask();
+    Entity::Remove();
 }
 
-void Application::run(HINSTANCE hInstance)
-{
-	init(hInstance);
-	utility::FpsTimer fpsTimer = utility::FpsTimer(100, 60);
-	ShowWindow(m_hWnd, SW_SHOW);
-	UpdateWindow(m_hWnd);
-
-	// メッセージループ
-	MSG msg = { 0 };
-	ZeroMemory(&msg, sizeof(msg));
-	while (msg.message != WM_QUIT)
-	{
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-		else
-		{
-			fpsTimer.update();
-			loop();
-			fpsTimer.wait();
-		}
-	}
-	finalize();
-}
-
-void Application::loop()
-{
-	D3d11::Clear();
-	TaskManager::Update();
-	TaskManager::Draw();
-	TaskManager::SystemUpdate();
-	D3d11::Present();
-
-	DeviceLocator::Keyboard().update();
-	TaskManager::RemoveTask();
-	Entity::Remove();
-}
-
-void Application::finalize()
-{
-}
+void Application::finalize() {}

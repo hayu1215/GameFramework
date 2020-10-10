@@ -4,17 +4,17 @@
 
 using namespace std::chrono;
 
-namespace utility 
-{
-	class ChronoTimer
-	{
-	public:
-		ChronoTimer();
+namespace utility {
 
-		void restart();
-		double elapsed();
+class ChronoTimer {
+public:
+    ChronoTimer();
 
-	private:
-		system_clock::time_point m_start;
-	};
+    void restart();
+    double elapsed();
+
+private:
+    system_clock::time_point m_start;
+};
+
 }

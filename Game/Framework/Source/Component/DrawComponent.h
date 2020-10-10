@@ -4,13 +4,12 @@
 #include<memory>
 #include<Framework/Source/Component/Entity.h>
 
-class DrawComponent :public AComponent
-{
+class DrawComponent : public AComponent {
 public:
-	DrawComponent();
-	~DrawComponent();
+    DrawComponent();
+    ~DrawComponent();
 
-	virtual void draw() = 0;
-	void active()override;
-	void deActive()override;
+    virtual void draw() = 0;
+    void active()override;
+    void deActive()override;
 };

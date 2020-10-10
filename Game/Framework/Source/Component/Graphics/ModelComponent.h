@@ -8,22 +8,21 @@ class MeshRendererComponent;
 class Model;
 class Material;
 
-class ModelComponent :public DrawComponent
-{
+class ModelComponent : public DrawComponent {
 public:
-	ModelComponent();
-	~ModelComponent();
+    ModelComponent();
+    ~ModelComponent();
 
-	void onCreate(const std::string &name);
-	void draw()override;
+    void onCreate(const std::string& name);
+    void draw()override;
 
-	std::weak_ptr<Model> getModel();
-	std::weak_ptr<Material> getMaterial();
-	const std::string& getName();
+    std::weak_ptr<Model> getModel();
+    std::weak_ptr<Material> getMaterial();
+    const std::string& getName();
 
 private:
-	std::weak_ptr<MeshRendererComponent> m_polygonRenderer;
-	std::weak_ptr<Model> m_model;
-	std::weak_ptr<Material> m_material;
-	std::string m_name = "";
+    std::weak_ptr<MeshRendererComponent> m_polygonRenderer;
+    std::weak_ptr<Model> m_model;
+    std::weak_ptr<Material> m_material;
+    std::string m_name = "";
 };

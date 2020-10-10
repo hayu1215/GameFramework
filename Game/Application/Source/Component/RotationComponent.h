@@ -3,14 +3,13 @@
 #include<memory>
 #include<Framework/Source/Component/UpdateComponent.h>
 
-class RotationComponent :public UpdateComponent
-{
+class RotationComponent : public UpdateComponent {
 public:
-	RotationComponent();
-	~RotationComponent();
+    RotationComponent();
+    ~RotationComponent();
 
-	void onCreate()override;
-	void update()override;
+    void onCreate()override;
+    void update()override;
 
 private:
 };

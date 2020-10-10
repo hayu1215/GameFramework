@@ -3,10 +3,9 @@
 #include"AShader.h"
 #include<string>
 
-class SpriteShader :public AShader
-{
+class SpriteShader : public AShader {
 public:
-	SpriteShader();
-	SpriteShader(const std::string&);
-	void load(const std::string&) override;
+    SpriteShader();
+    SpriteShader(const std::string&);
+    void load(const std::string&) override;
 };

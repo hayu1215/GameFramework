@@ -1,23 +1,15 @@
-#include "TestScene.h"
+#include"TestScene.h"
 #include<Framework/Source/Device/DeviceLocator.h>
 #include<Framework/Source/Component/Entity.h>
 #include<Source/Component/TestComponent.h>
 
-TestScene::TestScene(const std::string name)
-	:AScene(name)
-{
+TestScene::TestScene(const std::string name) :AScene(name) {}
+
+TestScene::~TestScene() {}
+
+void TestScene::start() {
+    //addEntity(std::make_shared<Entity>("test", "test"))
+    //	->addComponent(std::make_shared<TestComponent>());
 }
 
-TestScene::~TestScene()
-{
-}
-
-void TestScene::start()
-{
-	//addEntity(std::make_shared<Entity>("test", "test"))
-	//	->addComponent(std::make_shared<TestComponent>());
-}
-
-void TestScene::end()
-{
-}
+void TestScene::end() {}
