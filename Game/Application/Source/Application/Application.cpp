@@ -16,7 +16,7 @@
 #include<Framework/Source/Device/Input/Keyboard.h>
 #include<Framework/Source/Graphics/2D/Texture.h>
 #include<Framework/Source/Application/Task/TaskManager.h>
-#include<Framework/Source/Application/Scene/SceneManager.h>
+#include<Framework/Source/Application/Scene/Scene.h>
 #include<Framework/Source/Utility/Timer/FpsTimer.h>
 #include<Framework/Source/Component/Entity.h>
 
@@ -49,9 +49,9 @@ bool Application::init(HINSTANCE hInstance) {
     //ResourceManager::LoadMaterial("cube.mtl");
 
 
-    SceneManager::Add(std::make_unique<Title>("title"));
-    SceneManager::Add(std::make_unique<TestScene>("test"));
-    SceneManager::Change("title");
+    Scene::Add(std::make_unique<Title>("title"));
+    Scene::Add(std::make_unique<TestScene>("test"));
+    Scene::Change("title");
 
     DeviceLocator::ProvideKeyboard(std::make_unique<Keyboard>(m_hWnd, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND));
     //DeviceLocator::ProvideAudio(std::make_unique<XactAudio>());

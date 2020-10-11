@@ -2,7 +2,7 @@
 #include<Framework/Source/Utility/Judge.h>
 #include<Framework/Source/Component/Component.h>
 #include<Framework/Source/Application/Task/TaskManager.h>
-#include<Framework/Source/Application/Scene/SceneManager.h>
+#include<Framework/Source/Application/Scene/Scene.h>
 
 std::list<std::shared_ptr<Entity>> Entity::m_Entities = {};
 std::list<std::weak_ptr<Entity>> Entity::m_RemoveEntities = {};
