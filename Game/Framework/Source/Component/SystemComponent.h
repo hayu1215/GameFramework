@@ -1,10 +1,10 @@
 #pragma once
 
-#include"AComponent.h"
+#include"Component.h"
 #include<memory>
 #include<Framework/Source/Component/Entity.h>
 
-class SystemComponent : public AComponent {
+class SystemComponent : public Component {
 public:
     SystemComponent();
     ~SystemComponent();

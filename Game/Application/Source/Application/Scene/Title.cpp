@@ -16,7 +16,8 @@
 #include<Framework/Source/Graphics/3D/Material.h>
 #include<Application/Source/Component/RotationComponent.h>
 
-Title::Title(const std::string name) : AScene(name) {}
+Title::Title(const std::string name)
+    : Scene(name) {}
 
 Title::~Title() {}
 

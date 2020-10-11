@@ -1,12 +1,12 @@
-#include"AScene.h"
+#include"Scene.h"
 #include<Framework/Source/Component/Entity.h>
 #include<Framework/Source/Utility/Judge.h>
 
-AScene::AScene(const std::string& name)
+Scene::Scene(const std::string& name)
     : m_name(name) {}
 
-AScene::~AScene() {}
+Scene::~Scene() {}
 
-const std::string AScene::name() {
+const std::string Scene::name() {
     return m_name;
 }

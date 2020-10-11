@@ -5,7 +5,7 @@
 #include<memory>
 #include<string>
 
-class AScene;
+class Scene;
 class Entity;
 
 class SceneManager {
@@ -13,9 +13,9 @@ public:
     SceneManager() = delete;
 
     static void Change(const std::string&);
-    static void Add(std::unique_ptr<AScene>);
+    static void Add(std::unique_ptr<Scene>);
 
 private:
-    static std::unordered_map<std::string, std::unique_ptr<AScene>> m_Scenes;
+    static std::unordered_map<std::string, std::unique_ptr<Scene>> m_Scenes;
     static std::string m_CurrentName;
 };

@@ -6,7 +6,7 @@
 #include<string>
 #include<type_traits>
 #include<Framework/Source/Utility/Math/XMath.h>
-#include<Framework/Source/Component/AComponent.h>
+#include<Framework/Source/Component/Component.h>
 
 class Entity : public std::enable_shared_from_this<Entity> {
 public:
@@ -31,7 +31,7 @@ public:
     template<class T, class ...Args>
     void addComponent(bool isActive, const Args&... args);
 
-    void addRemoveComponent(const std::weak_ptr<AComponent>&);
+    void addRemoveComponent(const std::weak_ptr<Component>&);
     void removeComponent();
     void active();
     void deActive();
@@ -51,8 +51,8 @@ public:
 private:
     static std::list<std::shared_ptr<Entity>> m_Entities;
     static std::list<std::weak_ptr<Entity>> m_RemoveEntities;
-    std::list<std::shared_ptr<AComponent>> m_components;
-    std::list<std::weak_ptr<AComponent>> m_removeComponents;
+    std::list<std::shared_ptr<Component>> m_components;
+    std::list<std::weak_ptr<Component>> m_removeComponents;
     std::vector<std::shared_ptr<Entity>> m_children;
     XMFLOAT3 m_position;
     XMFLOAT3 m_rotate;
@@ -103,7 +103,7 @@ std::vector<std::weak_ptr<T>> Entity::getComponents() {
 
 template<class T, class ...Args>
 void Entity::addComponent(bool isActive, const Args&... args) {
-    if (!std::is_base_of<AComponent, T>::value) return;//デバッグ時だけでいいかも
+    if (!std::is_base_of<Component, T>::value) return;//デバッグ時だけでいいかも
     auto component = std::make_shared<T>();
     m_components.emplace_back(component);
     component->setEntity(shared_from_this());

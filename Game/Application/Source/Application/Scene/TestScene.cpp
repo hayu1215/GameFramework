@@ -3,7 +3,8 @@
 #include<Framework/Source/Component/Entity.h>
 #include<Source/Component/TestComponent.h>
 
-TestScene::TestScene(const std::string name) :AScene(name) {}
+TestScene::TestScene(const std::string name)
+    : Scene(name) {}
 
 TestScene::~TestScene() {}
 

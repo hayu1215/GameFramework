@@ -4,10 +4,10 @@
 
 class Entity;
 
-class AComponent : public std::enable_shared_from_this<AComponent> {
+class Component : public std::enable_shared_from_this<Component> {
 public:
-    AComponent();
-    virtual ~AComponent();
+    Component();
+    virtual ~Component();
 
     virtual void onCreate();
     virtual void onDestory();

@@ -1,6 +1,6 @@
 #include"Entity.h"
 #include<Framework/Source/Utility/Judge.h>
-#include<Framework/Source/Component/AComponent.h>
+#include<Framework/Source/Component/Component.h>
 #include<Framework/Source/Application/Task/TaskManager.h>
 #include<Framework/Source/Application/Scene/SceneManager.h>
 
@@ -41,13 +41,13 @@ std::list<std::weak_ptr<Entity>> Entity::GetEntities() {
     return entities;
 }
 
-void Entity::addRemoveComponent(const std::weak_ptr<AComponent>& component) {
+void Entity::addRemoveComponent(const std::weak_ptr<Component>& component) {
     m_removeComponents.emplace_back(component);
 }
 
 void Entity::removeComponent() {
     for (auto& v : m_removeComponents) {
-        m_components.remove_if([&](const std::weak_ptr<AComponent>& x) {
+        m_components.remove_if([&](const std::weak_ptr<Component>& x) {
             return x.lock().get() == v.lock().get();
         });
     }

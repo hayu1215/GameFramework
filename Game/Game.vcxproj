@@ -98,11 +98,11 @@
     <ClCompile Include="Framework\Source\Graphics\3D\Model.cpp" />
     <ClCompile Include="Framework\Source\Graphics\Shader\AShader.cpp" />
     <ClCompile Include="Framework\Source\Application\Resource\ResourceManager.cpp" />
-    <ClCompile Include="Framework\Source\Application\Scene\AScene.cpp" />
+    <ClCompile Include="Framework\Source\Application\Scene\Scene.cpp" />
     <ClCompile Include="Framework\Source\Application\Scene\SceneManager.cpp" />
     <ClCompile Include="Framework\Source\Application\Task\TaskManager.cpp" />
     <ClCompile Include="Framework\Source\Application\Window\Window.cpp" />
-    <ClCompile Include="Framework\Source\Component\AComponent.cpp" />
+    <ClCompile Include="Framework\Source\Component\Component.cpp" />
     <ClCompile Include="Framework\Source\Component\Entity.cpp" />
     <ClCompile Include="Framework\Source\Component\UpdateComponent.cpp" />
     <ClCompile Include="Framework\Source\Graphics\D3d11.cpp" />
@@ -246,11 +246,11 @@
     </ClInclude>
     <ClInclude Include="Framework\Source\Graphics\Shader\AShader.h" />
     <ClInclude Include="Framework\Source\Application\Resource\ResourceManager.h" />
-    <ClInclude Include="Framework\Source\Application\Scene\AScene.h" />
+    <ClInclude Include="Framework\Source\Application\Scene\Scene.h" />
     <ClInclude Include="Framework\Source\Application\Scene\SceneManager.h" />
     <ClInclude Include="Framework\Source\Application\Task\TaskManager.h" />
     <ClInclude Include="Framework\Source\Application\Window\Window.h" />
-    <ClInclude Include="Framework\Source\Component\AComponent.h" />
+    <ClInclude Include="Framework\Source\Component\Component.h" />
     <ClInclude Include="Framework\Source\Component\Entity.h" />
     <ClInclude Include="Framework\Source\Component\UpdateComponent.h" />
     <ClInclude Include="Framework\Source\Graphics\D3d11.h" />
