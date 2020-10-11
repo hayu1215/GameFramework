@@ -1,9 +1,9 @@
 #pragma once
 
-#include"AShader.h"
+#include"Shader.h"
 #include<string>
 
-class PolygonShader : public AShader {
+class PolygonShader : public Shader {
 public:
     PolygonShader();
     PolygonShader(const std::string&);

@@ -96,7 +96,7 @@
     <ClCompile Include="Framework\Source\Graphics\2D\PolygonRenderer.cpp" />
     <ClCompile Include="Framework\Source\Graphics\3D\Material.cpp" />
     <ClCompile Include="Framework\Source\Graphics\3D\Model.cpp" />
-    <ClCompile Include="Framework\Source\Graphics\Shader\AShader.cpp" />
+    <ClCompile Include="Framework\Source\Graphics\Shader\Shader.cpp" />
     <ClCompile Include="Framework\Source\Application\Resource\ResourceManager.cpp" />
     <ClCompile Include="Framework\Source\Application\Scene\Scene.cpp" />
     <ClCompile Include="Framework\Source\Application\Scene\SceneManager.cpp" />
@@ -244,7 +244,7 @@
       <SubType>
       </SubType>
     </ClInclude>
-    <ClInclude Include="Framework\Source\Graphics\Shader\AShader.h" />
+    <ClInclude Include="Framework\Source\Graphics\Shader\Shader.h" />
     <ClInclude Include="Framework\Source\Application\Resource\ResourceManager.h" />
     <ClInclude Include="Framework\Source\Application\Scene\Scene.h" />
     <ClInclude Include="Framework\Source\Application\Scene\SceneManager.h" />

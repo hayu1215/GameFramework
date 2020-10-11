@@ -1,9 +1,9 @@
 #pragma once
 
-#include"AShader.h"
+#include"Shader.h"
 #include<string>
 
-class SpriteShader : public AShader {
+class SpriteShader : public Shader {
 public:
     SpriteShader();
     SpriteShader(const std::string&);

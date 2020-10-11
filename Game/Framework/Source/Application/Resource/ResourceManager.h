@@ -4,7 +4,7 @@
 #include<memory>
 #include<unordered_map>
 #include<Framework/Source/Utility/Judge.h>
-#include<Framework/Source/Graphics/Shader/AShader.h>
+#include<Framework/Source/Graphics/Shader/Shader.h>
 #include<Framework/Source/Graphics/VertexType.h>
 #include<Framework/Source/Utility/Debug/Log.h>
 
@@ -21,14 +21,14 @@ public:
     static void LoadTexture(const std::string& name);
     static void LoadModel(const std::string& name);
     static void LoadMaterial(const std::string& name);
-    static std::weak_ptr<AShader> GetShader(const std::string& name);
+    static std::weak_ptr<Shader> GetShader(const std::string& name);
     static std::weak_ptr<Texture> GetTexture(const std::string& name);
     static std::weak_ptr<Model> GetModel(const std::string& name);
     static std::weak_ptr<Material> GetMaterial(const std::string& name);
     static void Clear();
 
 private:
-    static std::unordered_map<std::string, std::shared_ptr<AShader>> m_Shaders;
+    static std::unordered_map<std::string, std::shared_ptr<Shader>> m_Shaders;
     static std::unordered_map<std::string, std::shared_ptr<Texture>> m_Textures;
     static std::unordered_map<std::string, std::shared_ptr<Model>> m_Models;
     static std::unordered_map<std::string, std::shared_ptr<Material>> m_Materials;
@@ -37,7 +37,7 @@ private:
 template<class T>
 void ResourceManager::LoadShader(const std::string &name) {
 #ifdef _DEBUG
-    if (!utility::JudgeBase<AShader, T>()) {
+    if (!utility::JudgeBase<Shader, T>()) {
         std::string type = typeid(T).name();
         debug::Log("\"" + type + "\"" + "is not Shader");
         return;

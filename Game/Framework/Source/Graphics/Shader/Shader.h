@@ -6,10 +6,10 @@
 
 using Microsoft::WRL::ComPtr;
 
-class AShader {
+class Shader {
 public:
-    AShader();
-    virtual ~AShader();
+    Shader();
+    virtual ~Shader();
 
     virtual void load(const std::string&) = 0;
 

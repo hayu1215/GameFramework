@@ -96,9 +96,6 @@
     <ClCompile Include="Framework\Source\Graphics\Shader\SpriteShader.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Framework\Source\Graphics\Shader\AShader.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Framework\Source\Graphics\Shader\TestShader.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -339,6 +336,9 @@
     <ClCompile Include="Framework\Source\Component\Component.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Framework\Source\Graphics\Shader\Shader.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\Source\Application\Window\Window.h">
@@ -435,9 +435,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Framework\Source\Graphics\Shader\SpriteShader.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Framework\Source\Graphics\Shader\AShader.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Framework\Source\Graphics\Shader\TestShader.h">
@@ -702,6 +699,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Framework\Source\Component\Component.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\Source\Graphics\Shader\Shader.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

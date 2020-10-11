@@ -4,7 +4,7 @@
 #include<Framework/Source/Graphics/3D/Material.h>
 #include<Framework/Source/Utility/Debug/Log.h>
 
-std::unordered_map<std::string, std::shared_ptr<AShader>> ResourceManager::m_Shaders = {};
+std::unordered_map<std::string, std::shared_ptr<Shader>> ResourceManager::m_Shaders = {};
 std::unordered_map<std::string, std::shared_ptr<Texture>> ResourceManager::m_Textures = {};
 std::unordered_map<std::string, std::shared_ptr<Model>> ResourceManager::m_Models = {};
 std::unordered_map<std::string, std::shared_ptr<Material>> ResourceManager::m_Materials = {};
@@ -60,7 +60,7 @@ void ResourceManager::LoadMaterial(const std::string & name) {
     m_Materials.emplace(name, std::move(material));
 }
 
-std::weak_ptr<AShader> ResourceManager::GetShader(const std::string & name) {
+std::weak_ptr<Shader> ResourceManager::GetShader(const std::string & name) {
 #ifdef _DEBUG
     if (m_Shaders.count(name) == 0) {
         debug::Log("\"" + name + "\"" + " not found");
