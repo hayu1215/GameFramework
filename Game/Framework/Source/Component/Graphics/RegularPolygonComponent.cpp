@@ -1,4 +1,4 @@
-#include "RegularPolygonComponent.h"
+#include"RegularPolygonComponent.h"
 #include<Framework/Source/Utility/Math/XMath.h>
 #include<Framework/Source/Utility/Math/Mathf.h>
 

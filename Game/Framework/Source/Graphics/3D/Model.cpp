@@ -1,9 +1,9 @@
-#include "Model.h"
+#include"Model.h"
 #include<algorithm>
 #include<fstream>
-#include <sstream>
+#include<sstream>
 #include<iostream>
-#include <string>
+#include<string>
 #include<array>
 #include<Framework/Source/Utility/Debug/Log.h>
 #include<Framework/Source/Utility/Judge.h>

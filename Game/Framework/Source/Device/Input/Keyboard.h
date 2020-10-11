@@ -7,7 +7,6 @@
 #pragma comment(lib,"dxguid.lib")
 #pragma comment(lib,"dinput8.lib")
 
-//using namespace Microsoft::WRL;
 using Microsoft::WRL::ComPtr;
 
 class Keyboard : public IKeyboard {

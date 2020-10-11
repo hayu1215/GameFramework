@@ -10,7 +10,6 @@
 #include<Framework/Source/Utility/Math/XMath.h>
 #include<Framework/Source/Graphics/2D/Camera.h>
 
-
 enum struct SortMode {
     //Draw‚ğŒÄ‚ñ‚¾‡‚Å•`‰æ
     Deferred = 0,

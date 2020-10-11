@@ -1,4 +1,4 @@
-#include "Title.h"
+#include"Title.h"
 #include<Framework/Source/Device/DeviceLocator.h>
 #include<Framework/Source/Component/Entity.h>
 #include<Source/Component/TestComponent.h>
@@ -101,9 +101,9 @@ void Title::start() {
     //	pos2 += 8;
     //}
 
-    int posx = -400;
+    float posx = -400;
     for (int i = 0; i < 25; i++) {
-        int posy = -300;
+        float posy = -300;
         for (int j = 0; j < 25; j++) {
             auto mesh = Entity::Add(XMFLOAT3(posx, posy, 0), XMFLOAT3(0, 0, 0), XMFLOAT3(25, 25, 1), "test", "test");
             mesh->addComponent<MeshRendererComponent>(true);

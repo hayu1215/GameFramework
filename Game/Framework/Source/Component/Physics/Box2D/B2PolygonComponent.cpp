@@ -1,4 +1,4 @@
-#include "B2PolygonComponent.h"
+#include"B2PolygonComponent.h"
 #include<Framework/Source/Utility/Judge.h>
 #include<Framework/Source/Graphics/2D/Spritebatch.h>
 #include<Framework/Source/Component/Graphics/MeshComponent.h>

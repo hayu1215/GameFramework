@@ -11,7 +11,6 @@
 #include<Framework/Source/Utility/Math/XMath.h>
 #include<Framework/Source/Utility/Math/XMath.h>
 
-//using namespace Microsoft::WRL;
 using Microsoft::WRL::ComPtr;
 
 struct LineVertex {

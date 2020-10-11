@@ -6,10 +6,6 @@ CameraComponent::CameraComponent() = default;
 
 CameraComponent::~CameraComponent() = default;
 
-//void CameraComponent::onCreate(bool isActive, int num)
-//{
-//}
-
 void CameraComponent::update() {
     m_camera.setPosition(m_entity.lock()->position());
 }

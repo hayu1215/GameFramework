@@ -7,7 +7,6 @@ namespace utility {
 FpsTimer::FpsTimer()
     : m_sampleNum(100), m_targetFps(60), m_count(0), m_fps(0) {}
 
-
 FpsTimer::FpsTimer(int sampleNum, int targetFps)
     : m_sampleNum(sampleNum), m_targetFps(targetFps), m_count(0), m_fps(0) {}
 

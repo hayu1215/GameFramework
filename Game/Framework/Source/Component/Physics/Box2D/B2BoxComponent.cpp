@@ -1,4 +1,4 @@
-#include "B2BoxComponent.h"
+#include"B2BoxComponent.h"
 #include<Framework/Source/Utility/Judge.h>
 #include<Framework/Source/Graphics/2D/Spritebatch.h>
 #include<Framework/Source/Component/Physics/Box2D/B2WorldComponent.h>

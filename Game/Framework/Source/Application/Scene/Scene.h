@@ -5,8 +5,6 @@
 #include<string>
 #include<unordered_map>
 
-class Entity;
-
 class Scene {
 public:
     Scene(const std::string& name);

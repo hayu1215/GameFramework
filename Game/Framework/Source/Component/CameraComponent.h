@@ -10,7 +10,6 @@ public:
     CameraComponent();
     ~CameraComponent();
 
-    //void onCreate(bool isActive, int num);
     void update()override;
     void onActive()override;
     void onDeActive()override;
